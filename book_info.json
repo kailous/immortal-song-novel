@@ -1,0 +1,10 @@
+{
+  "title": "新书名称",
+  "author": "作者名称",
+  "language": "zh-CN",
+  "identifier": "urn:uuid:new-book",
+  "output_filename": "新书名称.epub",
+  "cover_image": "",
+  "cover_image_base64": "",
+  "version": "1.0"
+}
