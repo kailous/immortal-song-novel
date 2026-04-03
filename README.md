@@ -15,3 +15,5 @@
 ## 配置与脚本
 - `book_info.json`: 书籍的基本元数据信息，如书名、作者、UUID。
 - `build_epub.py` / `generate_base64_cover.py`: 自动生成和构建 EPUB 的脚本。
+
+## 网站部署
