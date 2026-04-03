@@ -12,8 +12,9 @@ except ImportError:
 
 def main():
     deliver_dir = "交付"
-    # 获取脚本所在的当前目录，确保路径正确
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    # 获取脚本所在的当前目录，通过向上跳转 4 级到达项目根目录
+    current_script_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_script_dir))))
     deliver_path = os.path.join(base_dir, deliver_dir)
     
     if not os.path.exists(deliver_path):

@@ -3,8 +3,14 @@ import base64
 import sys
 import json
 
-base_dir = "/Users/lipeng/Documents/Repository/ceshi new"
-book_info_path = os.path.join(base_dir, "book_info.json")
+# 动态获取项目根目录 (该脚本位于 .agents/skills/novel_creator/scripts/)
+current_script_dir = os.path.dirname(os.path.abspath(__file__))
+base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_script_dir))))
+book_info_path = os.path.join(base_dir, "设定库", "00_项目配置", "book_info.json")
+
+# 兼容性检查：如果移动后的脚本目录下没有 book_info.json，则回退到 scripts 目录自身
+if not os.path.exists(book_info_path):
+    book_info_path = os.path.join(current_script_dir, "book_info.json")
 
 cover_filename = "my_real_cover.jpg"
 output_filename = "title.cover"
