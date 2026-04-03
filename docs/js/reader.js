@@ -104,4 +104,61 @@
     div.textContent = str;
     return div.innerHTML;
   }
+
+  // --- Floating Catalog Logic ---
+  const catalogOverlay = document.getElementById('reader-catalog-overlay');
+  const openCatalogBtn = document.getElementById('reader-open-catalog');
+  const closeCatalogBtn = document.getElementById('close-catalog');
+  const catalogIndexContainer = document.getElementById('reader-catalog-index');
+
+  if (openCatalogBtn && catalogOverlay) {
+    openCatalogBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      catalogOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+      loadCatalogIndex();
+    });
+  }
+
+  if (closeCatalogBtn && catalogOverlay) {
+    closeCatalogBtn.addEventListener('click', function() {
+      catalogOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+    
+    // Close on backdrop click
+    catalogOverlay.addEventListener('click', function(e) {
+      if (e.target === catalogOverlay) {
+        catalogOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  function loadCatalogIndex() {
+    if (!catalogIndexContainer) return;
+    
+    fetch('chapters/index.json')
+      .then(res => res.json())
+      .then(data => {
+        let html = '<ul class="overlay-chapter-list">';
+        data.forEach(ch => {
+          const isActive = ch.id === chapterId ? 'active' : '';
+          html += `
+            <li class="overlay-chapter-item ${isActive}">
+              <a href="reader.html?ch=${ch.id}">
+                <span class="ch-id">${ch.id.padStart(2, '0')}</span>
+                <span class="ch-name">${ch.title}</span>
+              </a>
+            </li>
+          `;
+        });
+        html += '</ul>';
+        catalogIndexContainer.innerHTML = html;
+      })
+      .catch(err => {
+        catalogIndexContainer.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem;">加载失败</p>';
+        console.error(err);
+      });
+  }
 })();

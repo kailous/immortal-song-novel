@@ -41,7 +41,7 @@
 
     <div class="reader-nav">
       <a href="#" id="prev-chapter" class="disabled">← 没有上一章</a>
-      <a href="catalog.html">目录</a>
+      <a href="catalog.html" id="reader-open-catalog">目录</a>
       <a href="#" id="next-chapter" class="disabled">敬请期待 →</a>
     </div>
   </div>
@@ -57,6 +57,19 @@
     </ul>
     <p class="footer-copy">© 2026 kailous. All rights reserved.</p>
   </footer>
+
+  <!-- Floating Catalog Overlay -->
+  <div class="reader-catalog-overlay" id="reader-catalog-overlay">
+    <div class="reader-catalog-content">
+      <div class="reader-catalog-header">
+        <h2>查看目录</h2>
+        <button class="close-overlay" id="close-catalog">✕</button>
+      </div>
+      <div class="reader-catalog-index" id="reader-catalog-index">
+        <p style="text-align:center;padding:2rem;">正在加载目录…</p>
+      </div>
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
   <script src="js/reader.js"></script>

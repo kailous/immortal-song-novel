@@ -113,6 +113,17 @@ def main():
         print(f"✅ 已生成: {output_file}")
 
     print(f"\n🚀 发布任务完成！共处理 {total} 个章节。")
+
+    # 生成章节全局索引 (用于目录悬浮窗)
+    index_file = os.path.join(output_dir, "index.json")
+    catalog_index = [
+        {"id": d["id"], "title": d["title"], "wordCount": d["wordCount"]}
+        for d in chapter_data_list
+    ]
+    with open(index_file, "w", encoding="utf-8") as idx_out:
+        json.dump(catalog_index, idx_out, ensure_ascii=False, indent=2)
+    print(f"📦 已更新目录索引: {index_file}")
+
     print("💡 提示：请确保 docs/catalog.html 已手动更新以匹配最新章节列表。")
 
 if __name__ == "__main__":
