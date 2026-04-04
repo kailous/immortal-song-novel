@@ -868,12 +868,36 @@ img {
   border: 1px solid var(--border-glass);
   border-radius: 16px;
   overflow: hidden;
-  transition: transform var(--transition-medium), border-color var(--transition-medium);
+  transition: transform var(--transition-medium), border-color var(--transition-medium), box-shadow var(--transition-medium);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.character-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(200, 168, 110, 0.3) 0%, transparent 50%, rgba(200, 168, 110, 0.1) 100%) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.5;
+  transition: opacity var(--transition-medium);
 }
 
 .character-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(200, 170, 110, 0.3);
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(200, 170, 110, 0.45);
+  box-shadow: 0 12px 40px rgba(200, 168, 110, 0.15);
+}
+
+.character-card:hover::before {
+  opacity: 1;
 }
 
 .character-card-image {
@@ -934,19 +958,23 @@ img {
   max-width: 600px;
   margin: 3rem auto 0;
   background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border-glass);
   border-radius: 16px;
   overflow: hidden;
   display: flex;
   align-items: center;
   gap: 2rem;
-  padding: 2rem;
-  transition: transform var(--transition-medium), border-color var(--transition-medium);
+  padding: 2.5rem;
+  transition: transform var(--transition-medium), border-color var(--transition-medium), box-shadow var(--transition-medium);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 .item-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(200, 170, 110, 0.3);
+  transform: translateY(-6px);
+  border-color: rgba(200, 170, 110, 0.4);
+  box-shadow: 0 10px 40px rgba(200, 168, 110, 0.1);
 }
 
 .item-card-image {
@@ -1301,7 +1329,104 @@ img {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  padding: 1rem 1.5rem;
+  padding: 0.85rem 1.25rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* --- Timeline (Story Log) --- */
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 2rem 0;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0;
+  left: 7px;
+  width: 2px;
+  background: linear-gradient(180deg, 
+    var(--accent-gold) 0%, 
+    var(--accent-gold-dim) 40%, 
+    rgba(200, 168, 110, 0.05) 80%, 
+    transparent 100%);
+  box-shadow: 0 0 10px rgba(200, 168, 110, 0.1);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.6s var(--ease-out);
+}
+
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.timeline-node {
+  position: absolute;
+  left: -29px;
+  top: 0.4rem;
+  width: 12px;
+  height: 12px;
+  background: var(--bg-primary);
+  border: 2px solid var(--accent-gold);
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 0 8px var(--accent-gold-dim);
+}
+
+.timeline-item.active .timeline-node {
+  background: var(--accent-gold);
+  box-shadow: 0 0 15px var(--accent-gold);
+  animation: pulse 2s infinite;
+}
+
+.timeline-content {
+  background: var(--bg-glass);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  padding: 1.25rem 1.75rem;
+  transition: transform var(--transition-medium), border-color var(--transition-medium);
+}
+
+.timeline-content:hover {
+  transform: translateX(5px);
+  border-color: rgba(200, 168, 110, 0.3);
+}
+
+.timeline-time {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-gold-light);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 15px rgba(224, 201, 138, 0.2);
+}
+
+.timeline-body {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+.timeline-item.active .timeline-body {
+  color: var(--text-primary);
 }
 
 .overlay-chapter-item:hover {

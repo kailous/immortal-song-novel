@@ -35,98 +35,22 @@
   </div>
 
   <!-- Character Cards -->
-  <div class="characters-grid">
-
-    <!-- 主角 -->
-    <div class="character-card reveal">
-      <div class="character-card-image">
-        <img src="images/陆辰.png" alt="陆辰（林默）">
-      </div>
-      <div class="character-card-body">
-        <h3 class="char-name">陆辰</h3>
-        <p class="char-alias">孙满仓 → 林默 → 陆辰 · 不死兵王 · 文明导师</p>
-        <p class="char-desc">
-          本名孙满仓，1933年生于东北。1945年在731部队焚化炉中异变获得量子态重置能力——不死。
-          在2056年人类末日之际，作为唯一能承受超时空跃迁的碳基生物，被送入时间通道。
-          经历七万四千G潮汐力的无尽撕裂后，坠入南宋绍兴年间的深山。
-          肉体从零重建，记忆断层，但2056年极道特种兵的杀戮本能刻入了每一根肌纤维。
-          被寡妇陆晓晓所救后，以"陆辰"之名开始了改写文明轨迹的征程。
-        </p>
-      </div>
-    </div>
-
-    <!-- 第一女主 -->
-    <div class="character-card reveal">
-      <div class="character-card-image">
-        <img src="images/陆晓晓.png" alt="陆晓晓">
-      </div>
-      <div class="character-card-body">
-        <h3 class="char-name">陆晓晓</h3>
-        <p class="char-alias">第一女主 · 南宋寡妇 · 绝境豪赌者 · 商贾千金</p>
-        <p class="char-desc">
-          十九岁。落魄商贾千金，父母早亡后被村里"吃绝户"。
-          因被嫉妒与垂涎，新婚之日新郎被恶人设计引来官兵抓走充军，从此背负"克夫"恶名，沦为活死人般的"张寡妇"。
-          在深山中发现浑身赤裸、满地是血却毫无伤痕的陆辰，出于绝境中对"一个男人"的疯狂渴求，将他背回了家。
-          她的实用主义与不屈意志，是推动主角融入大宋的第一把钥匙。
-        </p>
-      </div>
-    </div>
-
-    <!-- 第二女主 -->
-    <div class="character-card reveal">
-      <div class="character-card-image">
-        <img src="images/赵嬛嬛.png" alt="赵嬛嬛">
-      </div>
-      <div class="character-card-body">
-        <h3 class="char-name">赵嬛嬛</h3>
-        <p class="char-alias">第二女主 · 帝国棋子 · 凤凰涅槃</p>
-        <p class="char-desc">
-          大宋皇室的和亲工具，被送往异族的政治献祭品。
-          在看似柔弱的公主身份下，隐藏着不逊于任何帝王的野心与智略。
-          当她与陆辰的命运交汇，帝国的权力格局将迎来前所未有的震荡。
-          她是棋盘上最危险的棋子——因为她随时可能成为执棋之人。
-        </p>
-      </div>
-    </div>
-
-    <!-- 核心配角：张宪 -->
-    <div class="character-card reveal">
-      <div class="character-card-image">
-        <img src="images/张宪.png" alt="张宪">
-      </div>
-      <div class="character-card-body">
-        <h3 class="char-name">张宪</h3>
-        <p class="char-alias">【真实历史人物】 · 岳家军副统制 · 第一猛将 · 陆辰导师</p>
-        <p class="char-desc">
-          南宋抗金名将，岳飞最倚仗的副手。
-          他是一位纯粹且极其专业的职业军人，以严明的军纪与沉稳的战术眼光著称。
-          在绍兴十年的漫天大雪中，他识破了陆辰那超越时代的杀戮效能，并将其引入大宋的宏观博弈之中。
-          他是陆辰的军事导师，也是主角在旧文明中见证过最坚挺、也最悲壮的灵魂。
-        </p>
-      </div>
-    </div>
+  <div class="characters-grid" id="characters-grid">
+    <!-- Grid Skeletons -->
+    <div class="character-card reveal" style="height: 500px; background: var(--bg-card); opacity: 0.3;"></div>
+    <div class="character-card reveal" style="height: 500px; background: var(--bg-card); opacity: 0.3;"></div>
+    <div class="character-card reveal" style="height: 500px; background: var(--bg-card); opacity: 0.3;"></div>
   </div>
 
-  <!-- 次元手环 -->
+  <!-- Items -->
   <div style="padding: 0 2rem 4rem;">
     <div class="section-header reveal" style="margin-top: 4rem;">
-      <p class="section-label">KEY ITEM</p>
+      <p class="section-label">KEY ITEMS</p>
       <h2 class="section-title">关键道具</h2>
     </div>
 
-    <div class="item-card reveal">
-      <div class="item-card-image">
-        <img src="images/次元手环.png" alt="次元手环">
-      </div>
-      <div class="item-card-body">
-        <h3>次元手环</h3>
-        <p class="item-type">外星高维折叠空间器物 · 人类文明最后的赌注</p>
-        <p>
-          从外星人手中缴获的绝对刚体。内部折叠了一个独立的高维空间，保守估计容积相当于一栋二十层写字楼。
-          温度：绝对零度。气压：绝对真空。时间流速：零。
-          人类将最后的科技结晶——最高精度车床、冷核聚变电池、超级算力服务器、全人类文明的数字化遗产——全部封存其中。
-        </p>
-      </div>
+    <div id="items-grid">
+      <!-- Dynamic Content -->
     </div>
   </div>
 
@@ -143,6 +67,61 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const charGrid = document.getElementById('characters-grid');
+      const itemGrid = document.getElementById('items-grid');
+
+      fetch('data/characters.json')
+        .then(res => res.json())
+        .then(data => {
+          let charHtml = '';
+          let itemHtml = '';
+
+          for (const id in data) {
+            const item = data[id];
+            if (item.type === 'character') {
+              charHtml += `
+                <a href="character-detail.html?id=${id}" class="character-card reveal">
+                  <div class="character-card-image">
+                    <img src="images/${item.image}" alt="${item.title}">
+                  </div>
+                  <div class="character-card-body">
+                    <h3 class="char-name">${item.title}</h3>
+                    <p class="char-alias">${item.alias}</p>
+                    <p class="char-desc">${item.intro.substring(0, 120)}...</p>
+                  </div>
+                </a>
+              `;
+            } else {
+              itemHtml += `
+                <a href="character-detail.html?id=${id}" class="item-card reveal">
+                  <div class="item-card-image">
+                    <img src="images/${item.image}" alt="${item.title}">
+                  </div>
+                  <div class="item-card-body">
+                    <h3>${item.title}</h3>
+                    <p class="item-type">${item.alias}</p>
+                    <p>${item.intro.substring(0, 120)}...</p>
+                  </div>
+                </a>
+              `;
+            }
+          }
+
+          charGrid.innerHTML = charHtml;
+          itemGrid.innerHTML = itemHtml;
+
+          // Simple reveal trigger for dynamic content
+          setTimeout(() => {
+            document.querySelectorAll('.reveal').forEach(el => {
+              el.classList.add('visible');
+            });
+          }, 100);
+        });
+    })();
+  </script>
 </body>
 
 </html>
