@@ -1,0 +1,36 @@
+# 长生不死 · 小说工程 Makefile
+# 用法: make <target>
+
+.PHONY: publish sync-chars sync-chapters check report help
+
+## 将正文 Markdown 同步发布到网站 JSON（章节定稿后必须执行）
+publish:
+	python3 .agents/skills/novel_creator/scripts/publish_to_docs.py
+
+## 同步角色设定库到网站 characters.json
+sync-chars:
+	python3 .agents/skills/docs_ui_optimizer/scripts/sync_characters.py
+
+## 同步章节到网站（等效 publish）
+sync-chapters:
+	python3 .agents/skills/docs_ui_optimizer/scripts/sync_chapters.py
+
+## 检查正文与设定库之间的逻辑冲突
+check:
+	python3 .agents/skills/novel_creator/scripts/context_manager.py --check
+
+## 生成设定库简要报告
+report:
+	python3 .agents/skills/novel_creator/scripts/context_manager.py --summary
+
+## 一键完整发布（同步章节 + 同步角色）
+all: publish sync-chars
+
+help:
+	@echo ""
+	@echo "  make publish      将正文同步到网站（定稿后必须执行）"
+	@echo "  make sync-chars   同步角色设定到网站"
+	@echo "  make check        扫描设定冲突"
+	@echo "  make report       生成设定库报告"
+	@echo "  make all          publish + sync-chars"
+	@echo ""

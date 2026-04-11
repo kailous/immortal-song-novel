@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make help:*)",
+      "Bash(python3 .agents/skills/novel_creator/scripts/context_manager.py --check)"
+    ]
+  }
+}
