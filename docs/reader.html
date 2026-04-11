@@ -58,6 +58,33 @@
     <p class="footer-copy">© 2026 kailous. All rights reserved.</p>
   </footer>
 
+  <!-- Reader Toolbar (floating right) -->
+  <div class="reader-toolbar" id="reader-toolbar">
+    <button class="toolbar-btn" id="font-decrease" title="缩小字号">A<sup>−</sup></button>
+    <button class="toolbar-btn" id="font-increase" title="放大字号">A<sup>+</sup></button>
+    <div class="toolbar-divider"></div>
+    <button class="toolbar-btn" id="toolbar-catalog" title="目录">
+      <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0"  width="6"  height="1.8" rx="0.9" fill="currentColor"/>
+        <rect x="0" y="6"  width="16" height="1.8" rx="0.9" fill="currentColor"/>
+        <rect x="0" y="12" width="16" height="1.8" rx="0.9" fill="currentColor"/>
+      </svg>
+    </button>
+    <div class="toolbar-divider"></div>
+    <button class="toolbar-btn" id="bookmark-save" title="保存书签">&#128278;</button>
+    <div class="toolbar-divider"></div>
+    <button class="toolbar-btn" id="tts-toggle" title="朗读">&#9654;</button>
+    <button class="toolbar-btn tts-extra" id="tts-stop" title="停止朗读">&#9632;</button>
+    <button class="toolbar-btn tts-extra" id="tts-speed" title="朗读速度">1x</button>
+  </div>
+
+  <!-- Bookmark Restore Toast -->
+  <div class="bookmark-toast" id="bookmark-toast">
+    <span>&#128204; 发现上次书签</span>
+    <button id="bookmark-jump">跳转</button>
+    <button id="bookmark-dismiss">&#10005;</button>
+  </div>
+
   <!-- Floating Catalog Overlay -->
   <div class="reader-catalog-overlay" id="reader-catalog-overlay">
     <div class="reader-catalog-content">

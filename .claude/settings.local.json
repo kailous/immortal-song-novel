@@ -4,7 +4,8 @@
       "Bash(make help:*)",
       "Bash(python3 .agents/skills/novel_creator/scripts/context_manager.py --check)",
       "Bash(make publish:*)",
-      "Bash(make all:*)"
+      "Bash(make all:*)",
+      "Bash(node --check /Users/lipeng/Documents/Repository/immortal-song-novel/docs/js/reader.js)"
     ]
   }
 }

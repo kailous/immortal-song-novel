@@ -1,10 +1,12 @@
 /**
- * 阅读页逻辑 — 加载章节JSON、渲染正文、进度条
+ * 阅读页逻辑 — 章节加载、进度条、字号、书签、朗读
  */
 (function () {
   'use strict';
 
-  // --- Reading progress bar ---
+  // ============================================================
+  // Reading progress bar
+  // ============================================================
   const progressBar = document.querySelector('.reader-progress');
   if (progressBar) {
     window.addEventListener('scroll', function () {
@@ -14,17 +16,18 @@
     }, { passive: true });
   }
 
-  // --- Load chapter content ---
+  // ============================================================
+  // Chapter load
+  // ============================================================
   const container = document.getElementById('chapter-content');
   if (!container) return;
 
-  // Get chapter from URL param, default to 1
   const params = new URLSearchParams(window.location.search);
   const chapterId = params.get('ch') || '1';
-
-  // Update header
   const headerEl = document.getElementById('chapter-header-title');
-  const metaEl = document.getElementById('chapter-meta-info');
+  const metaEl   = document.getElementById('chapter-meta-info');
+
+  let chapterTitle = '';
 
   fetch('chapters/chapter-' + chapterId + '.json')
     .then(function (res) {
@@ -32,16 +35,18 @@
       return res.json();
     })
     .then(function (data) {
-      // Update page info
+      chapterTitle = data.title;
       document.title = data.title + ' — 长生不死的我，在南宋点歪了科技树';
       if (headerEl) headerEl.textContent = data.title;
-      if (metaEl) metaEl.textContent = '约 ' + data.wordCount + ' 字';
+      if (metaEl)   metaEl.textContent   = '约 ' + data.wordCount + ' 字';
 
-      // Render content
       container.innerHTML = renderContent(data.sections);
 
-      // Update nav
       updateNav(data.prevChapter, data.nextChapter);
+
+      // After render: collect TTS paragraphs & check bookmark
+      if (window._collectTtsParagraphs) window._collectTtsParagraphs();
+      checkBookmarkToast();
     })
     .catch(function (err) {
       container.innerHTML = '<p style="text-align:center;color:var(--text-muted);">章节内容加载失败，请稍后再试。</p>';
@@ -51,20 +56,13 @@
   function renderContent(sections) {
     let html = '';
     sections.forEach(function (section) {
-      // Section heading
       if (section.heading) {
         html += '<h2>' + escapeHtml(section.heading) + '</h2>';
       }
-
-      // Section break ornament
       html += '<div class="section-break"><span class="diamond"></span></div>';
-
-      // Paragraphs
       section.paragraphs.forEach(function (p) {
         if (p.trim() === '') return;
-        // Handle bold text
         let processed = escapeHtml(p);
-        // Re-apply bold markers **text** -> <strong>text</strong>
         processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         html += '<p>' + processed + '</p>';
       });
@@ -75,22 +73,22 @@
   function updateNav(prev, next) {
     const prevEl = document.getElementById('prev-chapter');
     const nextEl = document.getElementById('next-chapter');
-
     if (prevEl) {
       if (prev) {
         prevEl.href = 'reader.html?ch=' + prev.id;
         prevEl.textContent = '← ' + prev.title;
+        prevEl.className = '';
       } else {
         prevEl.removeAttribute('href');
         prevEl.className = 'disabled';
         prevEl.textContent = '← 没有上一章';
       }
     }
-
     if (nextEl) {
       if (next) {
         nextEl.href = 'reader.html?ch=' + next.id;
         nextEl.textContent = next.title + ' →';
+        nextEl.className = '';
       } else {
         nextEl.removeAttribute('href');
         nextEl.className = 'disabled';
@@ -105,60 +103,360 @@
     return div.innerHTML;
   }
 
-  // --- Floating Catalog Logic ---
-  const catalogOverlay = document.getElementById('reader-catalog-overlay');
-  const openCatalogBtn = document.getElementById('reader-open-catalog');
-  const closeCatalogBtn = document.getElementById('close-catalog');
-  const catalogIndexContainer = document.getElementById('reader-catalog-index');
+  // ============================================================
+  // Floating Catalog
+  // ============================================================
+  const catalogOverlay   = document.getElementById('reader-catalog-overlay');
+  const openCatalogBtn   = document.getElementById('reader-open-catalog');
+  const closeCatalogBtn  = document.getElementById('close-catalog');
+  const catalogIndexEl   = document.getElementById('reader-catalog-index');
+
+  function openCatalog(e) {
+    if (e) e.preventDefault();
+    catalogOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    loadCatalogIndex();
+  }
 
   if (openCatalogBtn && catalogOverlay) {
-    openCatalogBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      catalogOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden'; // Prevent scrolling
-      loadCatalogIndex();
-    });
+    openCatalogBtn.addEventListener('click', openCatalog);
+  }
+
+  // 工具栏"目录"按钮复用同一逻辑
+  const toolbarCatalogBtn = document.getElementById('toolbar-catalog');
+  if (toolbarCatalogBtn && catalogOverlay) {
+    toolbarCatalogBtn.addEventListener('click', openCatalog);
   }
 
   if (closeCatalogBtn && catalogOverlay) {
-    closeCatalogBtn.addEventListener('click', function() {
-      catalogOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-    
-    // Close on backdrop click
-    catalogOverlay.addEventListener('click', function(e) {
-      if (e.target === catalogOverlay) {
-        catalogOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
+    closeCatalogBtn.addEventListener('click', closeCatalog);
+    catalogOverlay.addEventListener('click', function (e) {
+      if (e.target === catalogOverlay) closeCatalog();
     });
   }
 
+  function closeCatalog() {
+    catalogOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
   function loadCatalogIndex() {
-    if (!catalogIndexContainer) return;
-    
+    if (!catalogIndexEl) return;
     fetch('chapters/index.json')
       .then(res => res.json())
       .then(data => {
         let html = '<ul class="overlay-chapter-list">';
         data.forEach(ch => {
           const isActive = ch.id === chapterId ? 'active' : '';
-          html += `
-            <li class="overlay-chapter-item ${isActive}">
-              <a href="reader.html?ch=${ch.id}">
-                <span class="ch-id">${ch.id.padStart(2, '0')}</span>
-                <span class="ch-name">${ch.title}</span>
-              </a>
-            </li>
-          `;
+          html += `<li class="overlay-chapter-item ${isActive}">
+            <a href="reader.html?ch=${ch.id}">
+              <span class="ch-id">${ch.id.padStart(2, '0')}</span>
+              <span class="ch-name">${ch.title}</span>
+            </a></li>`;
         });
         html += '</ul>';
-        catalogIndexContainer.innerHTML = html;
+        catalogIndexEl.innerHTML = html;
       })
       .catch(err => {
-        catalogIndexContainer.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem;">加载失败</p>';
+        catalogIndexEl.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem;">加载失败</p>';
         console.error(err);
       });
   }
+
+  // ============================================================
+  // Font Size
+  // ============================================================
+  const FONT_SIZES     = [0.88, 0.95, 1.0, 1.05, 1.12, 1.22, 1.35];
+  const DEFAULT_IDX    = 3; // 1.05rem
+  const STORAGE_FONT   = 'reader-font-index';
+
+  let fontIndex = parseInt(localStorage.getItem(STORAGE_FONT) || DEFAULT_IDX, 10);
+  if (isNaN(fontIndex) || fontIndex < 0 || fontIndex >= FONT_SIZES.length) fontIndex = DEFAULT_IDX;
+
+  function applyFontSize() {
+    document.documentElement.style.setProperty('--reader-font-size', FONT_SIZES[fontIndex] + 'rem');
+    localStorage.setItem(STORAGE_FONT, fontIndex);
+    const decBtn = document.getElementById('font-decrease');
+    const incBtn = document.getElementById('font-increase');
+    if (decBtn) decBtn.classList.toggle('toolbar-btn-disabled', fontIndex <= 0);
+    if (incBtn) incBtn.classList.toggle('toolbar-btn-disabled', fontIndex >= FONT_SIZES.length - 1);
+  }
+
+  applyFontSize();
+
+  const fontDecBtn = document.getElementById('font-decrease');
+  const fontIncBtn = document.getElementById('font-increase');
+
+  if (fontDecBtn) {
+    fontDecBtn.addEventListener('click', function () {
+      if (fontIndex > 0) { fontIndex--; applyFontSize(); }
+    });
+  }
+  if (fontIncBtn) {
+    fontIncBtn.addEventListener('click', function () {
+      if (fontIndex < FONT_SIZES.length - 1) { fontIndex++; applyFontSize(); }
+    });
+  }
+
+  // ============================================================
+  // Bookmark
+  // ============================================================
+  const STORAGE_BOOKMARK = 'reader-bookmark';
+  let savedToastTimer = null;
+
+  // 更新书签按钮高亮状态
+  function updateBookmarkBtn() {
+    const btn = document.getElementById('bookmark-save');
+    if (!btn) return;
+    const raw = localStorage.getItem(STORAGE_BOOKMARK);
+    try {
+      const bm = raw ? JSON.parse(raw) : null;
+      if (bm && bm.chapterId === chapterId) {
+        btn.classList.add('toolbar-btn-active');
+        btn.title = '书签：第 ' + bm.percent + '% 处（点击重新标记）';
+      } else {
+        btn.classList.remove('toolbar-btn-active');
+        btn.title = '保存书签';
+      }
+    } catch (e) {}
+  }
+
+  // 保存成功时弹出瞬时提示（2.5s 自动消失）
+  function showSavedSnack(pct) {
+    let snack = document.getElementById('bookmark-snack');
+    if (!snack) {
+      snack = document.createElement('div');
+      snack.id = 'bookmark-snack';
+      snack.className = 'bookmark-snack';
+      document.body.appendChild(snack);
+    }
+    snack.textContent = '📌 书签已保存  第 ' + pct + '% 处';
+    snack.classList.add('active');
+    clearTimeout(savedToastTimer);
+    savedToastTimer = setTimeout(function () {
+      snack.classList.remove('active');
+    }, 2500);
+  }
+
+  function saveBookmark() {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct   = total > 0 ? Math.round((window.scrollY / total) * 100) : 0;
+    const bm = {
+      chapterId : chapterId,
+      title     : chapterTitle,
+      scrollY   : Math.round(window.scrollY),
+      percent   : pct,
+      timestamp : Date.now()
+    };
+    localStorage.setItem(STORAGE_BOOKMARK, JSON.stringify(bm));
+    updateBookmarkBtn();
+    showSavedSnack(pct);
+    // 隐藏「跳转」toast（保存后不必再提示跳转）
+    const restoreToast = document.getElementById('bookmark-toast');
+    if (restoreToast) restoreToast.classList.remove('active');
+  }
+
+  // 进入章节时：如有书签则提示跳转
+  function checkBookmarkToast() {
+    updateBookmarkBtn();
+    const raw = localStorage.getItem(STORAGE_BOOKMARK);
+    if (!raw) return;
+    try {
+      const bm = JSON.parse(raw);
+      if (bm.chapterId !== chapterId) return;
+      if (bm.scrollY < 200) return;
+      // 稍作延迟，让页面渲染完再弹出
+      setTimeout(function () {
+        const toast = document.getElementById('bookmark-toast');
+        if (toast) toast.classList.add('active');
+      }, 800);
+    } catch (e) {}
+  }
+
+  const bookmarkSaveBtn    = document.getElementById('bookmark-save');
+  const bookmarkToast      = document.getElementById('bookmark-toast');
+  const bookmarkJumpBtn    = document.getElementById('bookmark-jump');
+  const bookmarkDismissBtn = document.getElementById('bookmark-dismiss');
+
+  if (bookmarkSaveBtn) {
+    bookmarkSaveBtn.addEventListener('click', saveBookmark);
+  }
+
+  if (bookmarkJumpBtn) {
+    bookmarkJumpBtn.addEventListener('click', function () {
+      const raw = localStorage.getItem(STORAGE_BOOKMARK);
+      if (!raw) return;
+      try {
+        const bm = JSON.parse(raw);
+        window.scrollTo({ top: bm.scrollY, behavior: 'smooth' });
+      } catch (e) {}
+      if (bookmarkToast) bookmarkToast.classList.remove('active');
+    });
+  }
+
+  if (bookmarkDismissBtn) {
+    bookmarkDismissBtn.addEventListener('click', function () {
+      if (bookmarkToast) bookmarkToast.classList.remove('active');
+    });
+  }
+
+  // ============================================================
+  // TTS — Web Speech API (free, browser-native)
+  // ============================================================
+  if (!('speechSynthesis' in window)) {
+    // Hide TTS buttons if not supported
+    ['tts-toggle', 'tts-stop', 'tts-speed'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    const div = document.querySelector('.toolbar-divider:last-of-type');
+    if (div) div.style.display = 'none';
+  } else {
+    const synth      = window.speechSynthesis;
+    const toggleBtn  = document.getElementById('tts-toggle');
+    const stopBtn    = document.getElementById('tts-stop');
+    const speedBtn   = document.getElementById('tts-speed');
+
+    const SPEEDS     = [0.8, 1.0, 1.3];
+    const SPEED_LBLS = ['慢', '1x', '快'];
+    let speedIdx     = 1;
+    let ttsParas     = []; // [{el, text}]
+    let ttsIdx       = 0;
+    let ttsPlaying   = false;
+    let chineseVoice = null;
+
+    // Load voices
+    function loadVoices() {
+      const voices = synth.getVoices();
+      chineseVoice =
+        voices.find(v => v.lang === 'zh-CN') ||
+        voices.find(v => v.lang === 'zh-TW') ||
+        voices.find(v => v.lang.startsWith('zh')) ||
+        null;
+    }
+    loadVoices();
+    if (synth.onvoiceschanged !== undefined) {
+      synth.addEventListener('voiceschanged', loadVoices);
+    }
+
+    function collectTtsParagraphs() {
+      ttsParas = Array.from(container.querySelectorAll('p')).map(el => ({
+        el: el,
+        text: el.innerText.trim()
+      })).filter(item => item.text.length > 0);
+    }
+
+    // Expose so it can be called after chapter loads
+    window._collectTtsParagraphs = collectTtsParagraphs;
+
+    function ttsHighlight(idx) {
+      container.querySelectorAll('.tts-active').forEach(e => e.classList.remove('tts-active'));
+      if (ttsParas[idx]) {
+        ttsParas[idx].el.classList.add('tts-active');
+        ttsParas[idx].el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function playFrom(idx) {
+      if (idx >= ttsParas.length) { ttsStop(); return; }
+      ttsIdx = idx;
+      ttsHighlight(idx);
+
+      const utt = new SpeechSynthesisUtterance(ttsParas[idx].text);
+      utt.lang  = 'zh-CN';
+      utt.rate  = SPEEDS[speedIdx];
+      if (chineseVoice) utt.voice = chineseVoice;
+
+      utt.onend = function () {
+        if (ttsPlaying) playFrom(ttsIdx + 1);
+      };
+      utt.onerror = function (e) {
+        if (e.error !== 'interrupted' && e.error !== 'canceled') {
+          console.warn('TTS error:', e.error);
+          ttsStop();
+        }
+      };
+
+      synth.speak(utt);
+    }
+
+    function ttsPlay() {
+      if (ttsPlaying) return;
+      if (ttsParas.length === 0) return;
+      ttsPlaying = true;
+
+      // Start from the paragraph closest to viewport center
+      if (ttsIdx === 0) {
+        const mid = window.scrollY + window.innerHeight / 2;
+        let closest = 0, minDist = Infinity;
+        ttsParas.forEach(function (item, i) {
+          const rect = item.el.getBoundingClientRect();
+          const dist = Math.abs(rect.top + rect.height / 2 - window.innerHeight / 2);
+          if (dist < minDist) { minDist = dist; closest = i; }
+        });
+        ttsIdx = closest;
+      }
+
+      playFrom(ttsIdx);
+      updateTtsUI();
+    }
+
+    function ttsPause() {
+      ttsPlaying = false;
+      synth.cancel(); // more reliable than pause() across browsers
+      // ttsIdx stays where it is, next play() resumes from same para
+      updateTtsUI();
+    }
+
+    function ttsStop() {
+      ttsPlaying = false;
+      ttsIdx = 0;
+      synth.cancel();
+      container.querySelectorAll('.tts-active').forEach(e => e.classList.remove('tts-active'));
+      updateTtsUI();
+    }
+
+    function updateTtsUI() {
+      if (!toggleBtn || !stopBtn) return;
+      if (ttsPlaying) {
+        toggleBtn.innerHTML = '&#9646;&#9646;'; // ⏸
+        toggleBtn.title = '暂停朗读';
+        stopBtn.style.display = 'flex';
+        if (speedBtn) speedBtn.style.display = 'flex';
+      } else {
+        toggleBtn.innerHTML = '&#9654;'; // ▶
+        toggleBtn.title = '开始朗读';
+        stopBtn.style.display  = ttsIdx > 0 ? 'flex' : 'none';
+        if (speedBtn) speedBtn.style.display = ttsIdx > 0 ? 'flex' : 'none';
+      }
+    }
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function () {
+        if (ttsPlaying) ttsPause(); else ttsPlay();
+      });
+    }
+    if (stopBtn) {
+      stopBtn.addEventListener('click', ttsStop);
+      stopBtn.style.display = 'none';
+    }
+    if (speedBtn) {
+      speedBtn.style.display = 'none';
+      speedBtn.addEventListener('click', function () {
+        speedIdx = (speedIdx + 1) % SPEEDS.length;
+        speedBtn.textContent = SPEED_LBLS[speedIdx];
+        // If playing, restart current para with new rate
+        if (ttsPlaying) {
+          const cur = ttsIdx;
+          synth.cancel();
+          setTimeout(() => { if (ttsPlaying) playFrom(cur); }, 100);
+        }
+      });
+    }
+
+    // Stop TTS on page navigation
+    window.addEventListener('beforeunload', function () { synth.cancel(); });
+    window.addEventListener('pagehide',     function () { synth.cancel(); });
+  }
+
 })();
