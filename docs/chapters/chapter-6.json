@@ -254,5 +254,8 @@
     "id": "5",
     "title": "第五章 识骨"
   },
-  "nextChapter": null
+  "nextChapter": {
+    "id": "7",
+    "title": "第七章 旗下"
+  }
 }
