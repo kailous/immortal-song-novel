@@ -1495,13 +1495,30 @@ img {
   font-weight: 700;
   transition: background var(--transition-fast), color var(--transition-fast);
   min-width: 34px;
-  text-align: center;
-  line-height: 1.2;
+  /* 让按钮成为 flex 容器，图标居中且不会被拉伸 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   user-select: none;
 }
 
-.toolbar-btn sup {
-  font-size: 0.6em;
+/* 图标尺寸锁定，防止 flex 拉伸变形 */
+.toolbar-btn .iconify,
+.toolbar-btn svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* play/pause 切换用的包装 span */
+.toolbar-btn .tts-icon-play,
+.toolbar-btn .tts-icon-pause {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .toolbar-btn:hover {
@@ -1638,16 +1655,32 @@ img {
   }
 }
 
-/* On very narrow screens, hide if overlapping */
+/* On very narrow screens */
 @media (max-width: 480px) {
   .reader-toolbar {
-    bottom: 4.5rem;
     font-size: 0.78rem;
   }
 
   .toolbar-btn {
     min-width: 28px;
     padding: 0.4rem;
+  }
+}
+
+/* PWA 桌面模式（Safari 添加到主屏）：紧贴底部安全区，无额外浮动间距 */
+@media (display-mode: standalone) and (max-width: 900px) {
+  .reader-toolbar {
+    bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    border-radius: 16px 16px 0 0;
+  }
+
+  .reader-container {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+
+  .bookmark-toast {
+    bottom: calc(5rem + env(safe-area-inset-bottom));
   }
 }
 

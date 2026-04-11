@@ -418,16 +418,34 @@
 
     function updateTtsUI() {
       if (!toggleBtn || !stopBtn) return;
+      const startIcon  = toggleBtn.querySelector('.tts-icon-start');
+      const resumeIcon = toggleBtn.querySelector('.tts-icon-resume');
+      const pauseIcon  = toggleBtn.querySelector('.tts-icon-pause');
+
       if (ttsPlaying) {
-        toggleBtn.innerHTML = '&#9646;&#9646;'; // ⏸
+        // 播放中：显示 pause-one
+        if (startIcon)  startIcon.style.display  = 'none';
+        if (resumeIcon) resumeIcon.style.display = 'none';
+        if (pauseIcon)  pauseIcon.style.display  = 'flex';
         toggleBtn.title = '暂停朗读';
         stopBtn.style.display = 'flex';
         if (speedBtn) speedBtn.style.display = 'flex';
+      } else if (ttsIdx > 0) {
+        // 暂停中：显示 play-one
+        if (startIcon)  startIcon.style.display  = 'none';
+        if (resumeIcon) resumeIcon.style.display = 'flex';
+        if (pauseIcon)  pauseIcon.style.display  = 'none';
+        toggleBtn.title = '继续朗读';
+        stopBtn.style.display = 'flex';
+        if (speedBtn) speedBtn.style.display = 'flex';
       } else {
-        toggleBtn.innerHTML = '&#9654;'; // ▶
+        // 停止状态：显示 acoustic
+        if (startIcon)  startIcon.style.display  = 'flex';
+        if (resumeIcon) resumeIcon.style.display = 'none';
+        if (pauseIcon)  pauseIcon.style.display  = 'none';
         toggleBtn.title = '开始朗读';
-        stopBtn.style.display  = ttsIdx > 0 ? 'flex' : 'none';
-        if (speedBtn) speedBtn.style.display = ttsIdx > 0 ? 'flex' : 'none';
+        stopBtn.style.display = 'none';
+        if (speedBtn) speedBtn.style.display = 'none';
       }
     }
 
