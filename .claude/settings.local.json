@@ -5,7 +5,14 @@
       "Bash(python3 .agents/skills/novel_creator/scripts/context_manager.py --check)",
       "Bash(make publish:*)",
       "Bash(make all:*)",
-      "Bash(node --check /Users/lipeng/Documents/Repository/immortal-song-novel/docs/js/reader.js)"
+      "Bash(node --check /Users/lipeng/Documents/Repository/immortal-song-novel/docs/js/reader.js)",
+      "Bash(python3 -c \" import sys, json for line in sys.stdin: line = line.strip\\(\\) if not line: continue try: obj = json.loads\\(line\\) role = obj.get\\('role',''\\) content = obj.get\\('content',''\\) if isinstance\\(content, list\\): for c in content: if isinstance\\(c, dict\\) and c.get\\('type'\\) == 'text': text = c.get\\('text',''\\) if text: print\\(f'[{role}] {text[:300]}'\\) elif isinstance\\(content, str\\): print\\(f'[{role}] {content[:300]}'\\) except: pass \")",
+      "Bash(python3 -c \"import sys,json; d=json.loads\\(sys.stdin.read\\(\\)\\); print\\(json.dumps\\(d, ensure_ascii=False\\)[:2000]\\)\")",
+      "Bash(python3:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(make sync-chars:*)"
     ]
   }
 }
