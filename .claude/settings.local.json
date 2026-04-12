@@ -12,7 +12,26 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(make sync-chars:*)"
+      "Bash(make sync-chars:*)",
+      "WebSearch",
+      "WebFetch(domain:m.maigoo.com)",
+      "WebFetch(domain:www.maigoo.com)",
+      "WebFetch(domain:weread.qq.com)",
+      "WebFetch(domain:www.hetushu.com)",
+      "WebFetch(domain:quanben-xiaoshuo.com)",
+      "WebFetch(domain:www.quanben.io)",
+      "WebFetch(domain:www.dubuxiaoshuo.com)",
+      "WebFetch(domain:m.chuangshi.qq.com)",
+      "WebFetch(domain:www.keleshuba.com)",
+      "WebFetch(domain:www.zhihu.com)",
+      "WebFetch(domain:zhuanlan.zhihu.com)",
+      "WebFetch(domain:www.douban.com)",
+      "WebFetch(domain:www.hongxiu.com)",
+      "WebFetch(domain:jingyan.baidu.com)",
+      "WebFetch(domain:www.beqege.cc)",
+      "WebFetch(domain:www.kanunu8.com)",
+      "WebFetch(domain:tw.hjwzw.com)",
+      "WebFetch(domain:t.shuqi.com)"
     ]
   }
 }
