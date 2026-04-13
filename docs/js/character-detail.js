@@ -160,10 +160,19 @@
     });
 
     // 链接 [文字](url)
-    // 本地文件路径（不以 http 开头）→ 只保留文字，不生成链接
+    // 本地 .md 文件 → 映射到图鉴详情页；其余本地路径 → 只保留文字
+    const localMdMap = {
+      '01_初始外挂_次元手环.md': 'bracelet',
+      '07_核心机制_量子重置与时空变异.md': 'quantum-reset',
+    };
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, url) => {
       if (/^https?:\/\//i.test(url)) {
         return `<a href="${url}" target="_blank" rel="noopener">${label}</a>`;
+      }
+      const filename = url.split('/').pop();
+      const pageId = localMdMap[filename];
+      if (pageId) {
+        return `<a href="character-detail.html?id=${pageId}" class="md-local-link">${label}</a>`;
       }
       return `<span class="md-local-ref">${label}</span>`;
     });
