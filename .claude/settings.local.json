@@ -34,7 +34,9 @@
       "WebFetch(domain:t.shuqi.com)",
       "Bash(grep -n '\\\\[.*\\\\]\\(.*\\)\\\\|`.*`' /Users/lipeng/Documents/Repository/immortal-song-novel/正文/*.md)",
       "Bash(grep:*)",
-      "Bash(npx plugins:*)"
+      "Bash(npx plugins:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }
