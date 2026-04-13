@@ -137,6 +137,14 @@
     // 去掉任务标记 [/] [ ] [x]
     html = html.replace(/\[[\/\sxX]\]\s*/g, '');
 
+    // 标题 # / ## / ###
+    html = html.replace(/^######\s+(.*)$/gm, '<h6>$1</h6>');
+    html = html.replace(/^#####\s+(.*)$/gm,  '<h5>$1</h5>');
+    html = html.replace(/^####\s+(.*)$/gm,   '<h4>$1</h4>');
+    html = html.replace(/^###\s+(.*)$/gm,    '<h3>$1</h3>');
+    html = html.replace(/^##\s+(.*)$/gm,     '<h2>$1</h2>');
+    html = html.replace(/^#\s+(.*)$/gm,      '<h1>$1</h1>');
+
     // 水平分割线 ---（独立行）
     html = html.replace(/^---+$/gm, '<hr class="md-hr">');
 
