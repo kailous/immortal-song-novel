@@ -53,6 +53,20 @@
       console.error(err);
     });
 
+  function renderInline(escaped) {
+    // 处理行内 Markdown 语法（在 escapeHtml 之后调用，安全）
+    // **加粗**
+    escaped = escaped.replace(/\*\*([\s\S]*?)\*\*/g, '<strong>$1</strong>');
+    // *斜体* 或 _斜体_（不与加粗冲突）
+    escaped = escaped.replace(/(?<!\*)\*(?!\*)([\s\S]*?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+    escaped = escaped.replace(/_([\s\S]*?)_/g, '<em>$1</em>');
+    // `行内代码`
+    escaped = escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // [链接文字](url)
+    escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    return escaped;
+  }
+
   function renderContent(sections) {
     let html = '';
     sections.forEach(function (section) {
@@ -61,9 +75,15 @@
       }
       html += '<div class="section-break"><span class="diamond"></span></div>';
       section.paragraphs.forEach(function (p) {
-        if (p.trim() === '') return;
-        let processed = escapeHtml(p);
-        processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        var trimmed = p.trim();
+        if (trimmed === '') return;
+        // 独立的 --- 水平分割线（Python脚本已将其转为空heading section，
+        // 但段落里如果残留 --- 也兜底处理）
+        if (trimmed === '---') {
+          html += '<hr class="section-hr">';
+          return;
+        }
+        var processed = renderInline(escapeHtml(p));
         html += '<p>' + processed + '</p>';
       });
     });

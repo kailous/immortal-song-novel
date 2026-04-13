@@ -1713,3 +1713,30 @@ img {
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ============================================================
+   Markdown 渲染补充样式
+   ============================================================ */
+/* 本地文件引用（不生成死链，仅显示文字提示样式）*/
+.md-local-ref {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+/* 图鉴/阅读页 blockquote */
+.detail-body blockquote {
+  border-left: 3px solid var(--accent-gold);
+  margin: 0.8em 0;
+  padding: 0.5em 1em;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* 图鉴/阅读页 水平线 */
+.detail-body .md-hr,
+.section-hr {
+  border: none;
+  border-top: 1px solid rgba(200, 168, 110, 0.2);
+  margin: 1.2em 0;
+}

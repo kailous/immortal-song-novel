@@ -130,31 +130,56 @@
   }
 
   function parseMarkdown(text) {
-    // Very simple MD to HTML converter for specific use case
     if (!text) return "";
 
     let html = text.trim();
 
-    // Strip project task markers like [/] or [ ] or [x]
+    // 去掉任务标记 [/] [ ] [x]
     html = html.replace(/\[[\/\sxX]\]\s*/g, '');
-    
-    // Handle Alerts
+
+    // 水平分割线 ---（独立行）
+    html = html.replace(/^---+$/gm, '<hr class="md-hr">');
+
+    // GitHub Alerts  >  [!NOTE] ...
     html = html.replace(/>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\n>\s*(.*)/g, (match, type, content) => {
-        return `<div class="alert alert-${type.toLowerCase()}"><strong>${type}:</strong> ${content}</div>`;
+      return `<div class="alert alert-${type.toLowerCase()}"><strong>${type}:</strong> ${content}</div>`;
     });
 
-    // Handle Bold
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // 引用块 > 文字（整段）
+    html = html.replace(/^((?:>\s?.*\n?)+)/gm, (match) => {
+      const inner = match.replace(/^>\s?/gm, '').trim();
+      return `<blockquote>${inner}</blockquote>`;
+    });
 
-    // Handle Lists
-    html = html.replace(/^\*\s+(.*)$/gm, '<li>$1</li>');
-    html = html.replace(/(<li>.*<\/li>(\n<li>.*<\/li>)*)/g, '<ul>$1</ul>');
+    // 链接 [文字](url)
+    // 本地文件路径（不以 http 开头）→ 只保留文字，不生成链接
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, url) => {
+      if (/^https?:\/\//i.test(url)) {
+        return `<a href="${url}" target="_blank" rel="noopener">${label}</a>`;
+      }
+      return `<span class="md-local-ref">${label}</span>`;
+    });
 
-    // Handle Newlines (Paragraphs)
+    // 加粗 **text**
+    html = html.replace(/\*\*([\s\S]*?)\*\*/g, '<strong>$1</strong>');
+
+    // 斜体 *text*（不与加粗冲突）
+    html = html.replace(/(?<!\*)\*(?!\*)([\s\S]*?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+
+    // 行内代码 `code`
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    // 无序列表 * item 或 - item
+    html = html.replace(/^[*-]\s+(.*)$/gm, '<li>$1</li>');
+    html = html.replace(/(<li>[\s\S]*?<\/li>(?:\n<li>[\s\S]*?<\/li>)*)/g, '<ul>$1</ul>');
+
+    // 段落分组（双换行分段）
     const paragraphs = html.split(/\n\n+/);
     html = paragraphs.map(p => {
-        if (p.startsWith('<ul>') || p.startsWith('<div')) return p;
-        return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+      const t = p.trim();
+      if (!t) return '';
+      if (/^<(ul|ol|blockquote|div|hr|h[1-6])/.test(t)) return t;
+      return `<p>${t.replace(/\n/g, '<br>')}</p>`;
     }).join('');
 
     return html;
