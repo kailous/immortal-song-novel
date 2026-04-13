@@ -1724,18 +1724,134 @@ img {
   font-size: 0.9em;
 }
 
-/* 本地文件引用 → 图鉴详情页链接 */
+/* 本地文件引用 → 图鉴详情页 / 词典浮窗链接 */
 .md-local-link {
   color: var(--accent-gold);
   text-decoration: none;
-  border-bottom: 1px solid rgba(200, 168, 110, 0.4);
+  border-bottom: 1px dashed rgba(200, 168, 110, 0.5);
   font-size: 0.92em;
+  cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
 }
 .md-local-link:hover {
   color: #e8c87a;
   border-bottom-color: var(--accent-gold);
 }
+/* 词典触发链接加小图标提示 */
+a.glossary-link::after {
+  content: ' ⓘ';
+  font-size: 0.78em;
+  opacity: 0.6;
+  vertical-align: super;
+}
+
+/* ── 词典浮窗 ─────────────────────────────────────────── */
+#glossary-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+#glossary-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+#glossary-panel {
+  background: #12131a;
+  border: 1px solid rgba(200, 168, 110, 0.25);
+  border-radius: 12px;
+  width: min(680px, 92vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.25s ease;
+}
+#glossary-overlay.active #glossary-panel {
+  transform: translateY(0) scale(1);
+}
+#glossary-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.4rem 1.6rem 1rem;
+  border-bottom: 1px solid rgba(200, 168, 110, 0.15);
+  flex-shrink: 0;
+}
+#glossary-panel-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  line-height: 1.3;
+}
+#glossary-panel-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  letter-spacing: 0.04em;
+}
+#glossary-close {
+  background: none;
+  border: 1px solid rgba(200, 168, 110, 0.2);
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+  margin-top: 2px;
+}
+#glossary-close:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+#glossary-panel-body {
+  overflow-y: auto;
+  padding: 1.2rem 1.6rem 1.6rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+#glossary-panel-body::-webkit-scrollbar { width: 4px; }
+#glossary-panel-body::-webkit-scrollbar-thumb {
+  background: rgba(200, 168, 110, 0.3);
+  border-radius: 2px;
+}
+.glossary-section {
+  margin-bottom: 1.4rem;
+}
+.glossary-section:last-child { margin-bottom: 0; }
+.glossary-section h4 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.92rem;
+  color: var(--accent-gold);
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.glossary-section p { margin: 0 0 0.6rem; }
+.glossary-section ul {
+  margin: 0.4rem 0;
+  padding-left: 1.2rem;
+}
+.glossary-section li { margin-bottom: 0.3rem; }
+.glossary-section strong { color: var(--text-primary); }
 
 /* 图鉴/阅读页 blockquote */
 .detail-body blockquote {
