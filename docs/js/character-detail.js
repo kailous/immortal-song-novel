@@ -14,7 +14,14 @@
 
   // 本地 .md 文件名 → 词典词条 key（浮窗）
   const glossaryFileMap = {
-    '07_核心机制_量子重置与时空变异.md': 'quantum-reset',
+    '07_核心机制_量子重置与时空变异.md':   'quantum-reset',
+    '02_量子重置与时空变异起源.md':        'quantum-reset',
+    '01_核心防崩坏法则_反套路铁律.md':    'anti-collapse',
+    '03_基因变异与异能限度_血脉传承.md':  'gene-mutation',
+    '02_技术殖民与和平演变准则.md':       'tech-colonize',
+    '01_千年集权史_社会制度与阶级矛盾.md':'social-system',
+    '03_贪腐危机与血亲审判_法律铁律.md': 'corruption-trial',
+    '04_特殊监察体系_守望者.md':          'watcher-nezha',
   };
 
   // ── 初始化 ──────────────────────────────────────────────
