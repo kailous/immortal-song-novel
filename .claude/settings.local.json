@@ -31,7 +31,9 @@
       "WebFetch(domain:www.beqege.cc)",
       "WebFetch(domain:www.kanunu8.com)",
       "WebFetch(domain:tw.hjwzw.com)",
-      "WebFetch(domain:t.shuqi.com)"
+      "WebFetch(domain:t.shuqi.com)",
+      "Bash(grep -n '\\\\[.*\\\\]\\(.*\\)\\\\|`.*`' /Users/lipeng/Documents/Repository/immortal-song-novel/正文/*.md)",
+      "Bash(grep:*)"
     ]
   }
 }
