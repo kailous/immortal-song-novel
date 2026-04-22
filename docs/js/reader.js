@@ -17,6 +17,48 @@
   }
 
   // ============================================================
+  // Giscus Comments — 填入 giscus.app 生成的 repo-id 和 category-id
+  // 步骤：① repo 开启 Discussions ② 安装 Giscus App ③ 去 giscus.app 获取两个 ID
+  // ============================================================
+  var GISCUS = {
+    repo:       'kailous/immortal-song-novel',
+    repoId:     'GISCUS_REPO_ID',      // ← 替换为 giscus.app 生成的值
+    category:   'General',
+    categoryId: 'GISCUS_CATEGORY_ID',  // ← 替换为 giscus.app 生成的值
+    theme:      'transparent_dark',
+    lang:       'zh-CN'
+  };
+
+  function loadGiscus() {
+    var container = document.getElementById('giscus-container');
+    if (!container) return;
+    // 未配置时显示占位提示
+    if (GISCUS.repoId === 'GISCUS_REPO_ID') {
+      container.innerHTML = '<p class="giscus-pending">评论功能即将开放，敬请期待。</p>';
+      return;
+    }
+    // 清除旧实例（章节切换时）
+    container.innerHTML = '';
+    var s = document.createElement('script');
+    s.src = 'https://giscus.app/client.js';
+    s.setAttribute('data-repo',             GISCUS.repo);
+    s.setAttribute('data-repo-id',          GISCUS.repoId);
+    s.setAttribute('data-category',         GISCUS.category);
+    s.setAttribute('data-category-id',      GISCUS.categoryId);
+    s.setAttribute('data-mapping',          'url');
+    s.setAttribute('data-strict',           '0');
+    s.setAttribute('data-reactions-enabled','1');
+    s.setAttribute('data-emit-metadata',    '0');
+    s.setAttribute('data-input-position',   'top');
+    s.setAttribute('data-theme',            GISCUS.theme);
+    s.setAttribute('data-lang',             GISCUS.lang);
+    s.setAttribute('data-loading',          'lazy');
+    s.crossOrigin = 'anonymous';
+    s.async = true;
+    container.appendChild(s);
+  }
+
+  // ============================================================
   // Chapter load
   // ============================================================
   const container = document.getElementById('chapter-content');
@@ -44,9 +86,10 @@
 
       updateNav(data.prevChapter, data.nextChapter);
 
-      // After render: collect TTS paragraphs & check bookmark
+      // After render: collect TTS paragraphs & check bookmark & load comments
       if (window._collectTtsParagraphs) window._collectTtsParagraphs();
       checkBookmarkToast();
+      loadGiscus();
     })
     .catch(function (err) {
       container.innerHTML = '<p style="text-align:center;color:var(--text-muted);">章节内容加载失败，请稍后再试。</p>';

@@ -852,6 +852,56 @@ img {
 }
 
 /* ============================================================
+   READER COMMENTS (Giscus)
+   ============================================================ */
+.reader-comments {
+  max-width: var(--reader-max-width);
+  margin: 0 auto;
+  padding: 2.5rem 2rem 5rem;
+}
+
+.reader-comments-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.reader-comments-header h3 {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.reader-comments-gem {
+  font-size: 0.45rem;
+  color: var(--accent-gold);
+  opacity: 0.4;
+}
+
+/* 占位提示（未配置时显示） */
+.giscus-pending {
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  padding: 2.5rem 1rem;
+  border: 1px dashed var(--border-glass);
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+}
+
+/* Giscus iframe 撑满容器宽度 */
+#giscus-container .giscus,
+#giscus-container .giscus-frame {
+  width: 100% !important;
+}
+
+/* ============================================================
    CHARACTERS PAGE
    ============================================================ */
 .characters-grid {
