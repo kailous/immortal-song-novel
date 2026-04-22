@@ -47,6 +47,7 @@
         return;
       }
       renderDetail(item);
+      document.addEventListener('langchange', function () { renderDetail(item); });
     }).catch(err => {
       console.error('Error loading data:', err);
       document.getElementById('loader').innerHTML =
@@ -133,20 +134,25 @@
     const introEl   = document.getElementById('char-intro');
     const sectionsEl= document.getElementById('char-sections');
 
-    document.title = `${item.title} — 档案公开`;
-    titleEl.textContent = item.title;
-    aliasEl.textContent = item.alias;
+    const lang = window.i18n ? window.i18n.lang() : 'zh';
+    const title = (lang === 'en' && item.title_en) ? item.title_en : item.title;
+    const alias = (lang === 'en' && item.alias_en) ? item.alias_en : item.alias;
+    const intro = (lang === 'en' && item.intro_en) ? item.intro_en : item.intro;
+
+    document.title = title + ' — ' + (lang === 'en' ? 'Profile' : '档案公开');
+    titleEl.textContent = title;
+    aliasEl.textContent = alias;
 
     if (item.image) {
       imgEl.src = `images/${item.image}`;
-      imgEl.alt = item.title;
+      imgEl.alt = title;
       const heroBg = document.getElementById('hero-bg');
       heroBg.style.backgroundImage    = `url(images/${item.image})`;
       heroBg.style.backgroundSize     = 'cover';
       heroBg.style.backgroundPosition = 'center';
     }
 
-    introEl.innerHTML = parseMarkdown(item.intro);
+    introEl.innerHTML = parseMarkdown(intro);
 
     let html = '';
     item.sections.forEach(s => {
