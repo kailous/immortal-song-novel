@@ -41,16 +41,21 @@
     if (!list || !list.length) {
       return '<p class="comments-empty">暂无留言，来做第一个留言的读者吧。</p>';
     }
-    return list.map(function (c) {
-      if (!c.approved) return '';
-      return '<div class="comment-item">' +
-        '<div class="comment-meta">' +
-          '<span class="comment-author">' + escHtml(c.by_nickname || '匿名') + '</span>' +
-          '<span class="comment-date">' + fmtDate(c.createdAt) + '</span>' +
-        '</div>' +
-        '<div class="comment-body">' + escHtml(c.content) + '</div>' +
-      '</div>';
-    }).join('');
+    // open API 已在服务端过滤 approved，直接渲染；兼容 approved 字段存在时也做检查
+    var items = list
+      .filter(function (c) { return c.approved === undefined || c.approved === true || c.approved === 1; })
+      .map(function (c) {
+        return '<div class="comment-item">' +
+          '<div class="comment-meta">' +
+            '<span class="comment-author">' + escHtml(c.by_nickname || c.nickname || '匿名') + '</span>' +
+            '<span class="comment-date">' + fmtDate(c.createdAt) + '</span>' +
+          '</div>' +
+          '<div class="comment-body">' + escHtml(c.content) + '</div>' +
+        '</div>';
+      });
+    return items.length
+      ? items.join('')
+      : '<p class="comments-empty">暂无留言，来做第一个留言的读者吧。</p>';
   }
 
   function loadCusdis(chId, title) {
@@ -79,10 +84,22 @@
     fetch(CUSDIS_HOST + '/api/open/comments?appId=' + CUSDIS_APP_ID + '&pageId=' + encodeURIComponent(pageId))
       .then(function (r) { return r.json(); })
       .then(function (json) {
-        var list = (json.data && json.data.data) ? json.data.data : (json.data || []);
+        // Cusdis open API 返回结构: { data: { data: [...], count: N } }
+        // 兼容 { data: [...] } 直接数组结构
+        var list;
+        if (Array.isArray(json.data)) {
+          list = json.data;
+        } else if (json.data && Array.isArray(json.data.data)) {
+          list = json.data.data;
+        } else if (json.data && Array.isArray(json.data.rows)) {
+          list = json.data.rows;
+        } else {
+          list = [];
+        }
         document.getElementById('comments-list').innerHTML = renderComments(list);
       })
-      .catch(function () {
+      .catch(function (err) {
+        console.error('[comments]', err);
         document.getElementById('comments-list').innerHTML = '<p class="comments-empty">留言加载失败，请稍后再试。</p>';
       });
 
