@@ -5,7 +5,11 @@
 
 ## 将正文 Markdown 同步发布到网站 JSON（章节定稿后必须执行）
 publish:
-	python3 .agents/skills/novel_creator/scripts/publish_to_docs.py
+	python3 .agents/skills/novel_creator/scripts/md_to_json.py
+
+## 仅校验引号，不写文件
+validate:
+	python3 .agents/skills/novel_creator/scripts/md_to_json.py --check
 
 ## 同步角色设定库到网站 characters.json
 sync-chars:
@@ -13,7 +17,7 @@ sync-chars:
 
 ## 同步章节到网站（等效 publish）
 sync-chapters:
-	python3 .agents/skills/docs_ui_optimizer/scripts/sync_chapters.py
+	python3 .agents/skills/novel_creator/scripts/md_to_json.py
 
 ## 检查正文与设定库之间的逻辑冲突
 check:
