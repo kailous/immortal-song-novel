@@ -17,29 +17,119 @@
   }
 
   // ============================================================
-  // Cusdis Comments — 无需 GitHub 账号，填写名字即可留言
+  // Comments — 基于 Cusdis REST API 自渲染，样式完全匹配站点
   // ============================================================
   var CUSDIS_APP_ID = '2f184b19-aabe-4e89-a58e-b33a8b123403';
+  var CUSDIS_HOST   = 'https://cusdis.com';
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function fmtDate(iso) {
+    var d = new Date(iso);
+    return d.getFullYear() + '.' +
+           String(d.getMonth() + 1).padStart(2, '0') + '.' +
+           String(d.getDate()).padStart(2, '0');
+  }
+
+  function renderComments(list) {
+    if (!list || !list.length) {
+      return '<p class="comments-empty">暂无留言，来做第一个留言的读者吧。</p>';
+    }
+    return list.map(function (c) {
+      if (!c.approved) return '';
+      return '<div class="comment-item">' +
+        '<div class="comment-meta">' +
+          '<span class="comment-author">' + escHtml(c.by_nickname || '匿名') + '</span>' +
+          '<span class="comment-date">' + fmtDate(c.createdAt) + '</span>' +
+        '</div>' +
+        '<div class="comment-body">' + escHtml(c.content) + '</div>' +
+      '</div>';
+    }).join('');
+  }
 
   function loadCusdis(chId, title) {
-    var container = document.getElementById('giscus-container');
-    if (!container) return;
-    container.innerHTML = '';
+    var wrap = document.getElementById('giscus-container');
+    if (!wrap) return;
+    var pageId  = 'chapter-' + chId;
+    var pageUrl = window.location.href;
+    var pageTitle = title || ('第' + chId + '章');
 
-    var div = document.createElement('div');
-    div.id = 'cusdis_thread';
-    div.setAttribute('data-host',       'https://cusdis.com');
-    div.setAttribute('data-app-id',     CUSDIS_APP_ID);
-    div.setAttribute('data-page-id',    'chapter-' + chId);
-    div.setAttribute('data-page-url',   window.location.href);
-    div.setAttribute('data-page-title', title || ('第' + chId + '章'));
-    div.setAttribute('data-theme',      'dark');
-    container.appendChild(div);
+    wrap.innerHTML =
+      '<div class="comments-list" id="comments-list"><p class="comments-empty">留言加载中…</p></div>' +
+      '<form class="comment-form" id="comment-form">' +
+        '<div class="comment-form-row">' +
+          '<input class="comment-input" id="c-name" type="text" placeholder="你的名字（必填）" maxlength="50">' +
+          '<input class="comment-input" id="c-email" type="email" placeholder="邮箱（选填，不公开）" maxlength="100">' +
+        '</div>' +
+        '<textarea class="comment-textarea" id="c-content" placeholder="写下你的留言…" rows="4" maxlength="1000"></textarea>' +
+        '<div class="comment-form-footer">' +
+          '<span class="comment-hint">留言需审核后显示</span>' +
+          '<button class="comment-submit" type="submit">发送留言</button>' +
+        '</div>' +
+        '<p class="comment-status" id="c-status"></p>' +
+      '</form>';
 
-    var s = document.createElement('script');
-    s.src = 'https://cusdis.com/js/cusdis.es.js';
-    s.defer = true;
-    container.appendChild(s);
+    // 拉取已有留言
+    fetch(CUSDIS_HOST + '/api/open/comments?appId=' + CUSDIS_APP_ID + '&pageId=' + encodeURIComponent(pageId))
+      .then(function (r) { return r.json(); })
+      .then(function (json) {
+        var list = (json.data && json.data.data) ? json.data.data : (json.data || []);
+        document.getElementById('comments-list').innerHTML = renderComments(list);
+      })
+      .catch(function () {
+        document.getElementById('comments-list').innerHTML = '<p class="comments-empty">留言加载失败，请稍后再试。</p>';
+      });
+
+    // 提交留言
+    document.getElementById('comment-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name    = document.getElementById('c-name').value.trim();
+      var email   = document.getElementById('c-email').value.trim();
+      var content = document.getElementById('c-content').value.trim();
+      var status  = document.getElementById('c-status');
+
+      if (!name)    { status.textContent = '请填写名字。'; status.className = 'comment-status error'; return; }
+      if (!content) { status.textContent = '请填写留言内容。'; status.className = 'comment-status error'; return; }
+
+      var btn = this.querySelector('.comment-submit');
+      btn.disabled = true;
+      status.textContent = '提交中…';
+      status.className = 'comment-status';
+
+      fetch(CUSDIS_HOST + '/api/open/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          appId:     CUSDIS_APP_ID,
+          pageId:    pageId,
+          pageUrl:   pageUrl,
+          pageTitle: pageTitle,
+          content:   content,
+          nickname:  name,
+          email:     email || undefined
+        })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function () {
+          status.textContent = '留言已提交，审核通过后将显示。感谢你的留言！';
+          status.className = 'comment-status success';
+          document.getElementById('c-name').value = '';
+          document.getElementById('c-email').value = '';
+          document.getElementById('c-content').value = '';
+          btn.disabled = false;
+        })
+        .catch(function () {
+          status.textContent = '提交失败，请稍后再试。';
+          status.className = 'comment-status error';
+          btn.disabled = false;
+        });
+    });
   }
 
   // ============================================================
