@@ -17,44 +17,28 @@
   }
 
   // ============================================================
-  // Giscus Comments — 填入 giscus.app 生成的 repo-id 和 category-id
-  // 步骤：① repo 开启 Discussions ② 安装 Giscus App ③ 去 giscus.app 获取两个 ID
+  // Cusdis Comments — 无需 GitHub 账号，填写名字即可留言
   // ============================================================
-  var GISCUS = {
-    repo:       'kailous/immortal-song-novel',
-    repoId:     'R_kgDOR16kDQ',
-    category:   'General',
-    categoryId: 'DIC_kwDOR16kDc4C7a7O',
-    theme:      'transparent_dark',
-    lang:       'zh-CN'
-  };
+  var CUSDIS_APP_ID = '2f184b19-aabe-4e89-a58e-b33a8b123403';
 
-  function loadGiscus() {
+  function loadCusdis(chId, title) {
     var container = document.getElementById('giscus-container');
     if (!container) return;
-    // 未配置时显示占位提示
-    if (GISCUS.repoId === 'GISCUS_REPO_ID') {
-      container.innerHTML = '<p class="giscus-pending">评论功能即将开放，敬请期待。</p>';
-      return;
-    }
-    // 清除旧实例（章节切换时）
     container.innerHTML = '';
+
+    var div = document.createElement('div');
+    div.id = 'cusdis_thread';
+    div.setAttribute('data-host',       'https://cusdis.com');
+    div.setAttribute('data-app-id',     CUSDIS_APP_ID);
+    div.setAttribute('data-page-id',    'chapter-' + chId);
+    div.setAttribute('data-page-url',   window.location.href);
+    div.setAttribute('data-page-title', title || ('第' + chId + '章'));
+    div.setAttribute('data-theme',      'dark');
+    container.appendChild(div);
+
     var s = document.createElement('script');
-    s.src = 'https://giscus.app/client.js';
-    s.setAttribute('data-repo',             GISCUS.repo);
-    s.setAttribute('data-repo-id',          GISCUS.repoId);
-    s.setAttribute('data-category',         GISCUS.category);
-    s.setAttribute('data-category-id',      GISCUS.categoryId);
-    s.setAttribute('data-mapping',          'url');
-    s.setAttribute('data-strict',           '0');
-    s.setAttribute('data-reactions-enabled','1');
-    s.setAttribute('data-emit-metadata',    '0');
-    s.setAttribute('data-input-position',   'top');
-    s.setAttribute('data-theme',            GISCUS.theme);
-    s.setAttribute('data-lang',             GISCUS.lang);
-    s.setAttribute('data-loading',          'lazy');
-    s.crossOrigin = 'anonymous';
-    s.async = true;
+    s.src = 'https://cusdis.com/js/cusdis.es.js';
+    s.defer = true;
     container.appendChild(s);
   }
 
@@ -89,7 +73,7 @@
       // After render: collect TTS paragraphs & check bookmark & load comments
       if (window._collectTtsParagraphs) window._collectTtsParagraphs();
       checkBookmarkToast();
-      loadGiscus();
+      loadCusdis(chapterId, data.title);
     })
     .catch(function (err) {
       container.innerHTML = '<p style="text-align:center;color:var(--text-muted);">章节内容加载失败，请稍后再试。</p>';
