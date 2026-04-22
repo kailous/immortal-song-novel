@@ -5,49 +5,60 @@
 (function () {
   'use strict';
 
-  const list = document.getElementById('vol1-chapter-list');
+  var list = document.getElementById('vol1-chapter-list');
   if (!list) return;
 
-  fetch('chapters/index.json')
-    .then(r => r.json())
-    .then(chapters => {
-      list.innerHTML = '';
+  var cachedChapters = null;
 
-      chapters.forEach(ch => {
-        // 从 title 里提取章节名（去掉"第N章 "前缀）
-        const titleText = ch.title.replace(/^第.+?章\s*/, '');
-        const num = String(ch.id).padStart(2, '0');
+  function t(key) {
+    return (window.i18n && window.i18n.t) ? window.i18n.t(key) : key;
+  }
 
-        const li = document.createElement('li');
-        li.className = 'chapter-item';
-        li.innerHTML = `
-          <a href="reader.html?ch=${ch.id}">
-            <div class="chapter-meta">
-              <span class="chapter-num">${num}</span>
-              <span class="chapter-title-text">${titleText}</span>
-            </div>
-            <span class="chapter-status-badge available">可阅读</span>
-          </a>
-        `;
-        list.appendChild(li);
-      });
+  function render(chapters) {
+    list.innerHTML = '';
 
-      // 末尾追加「即将更新」占位条
-      const next = String(chapters.length + 1).padStart(2, '0');
-      const placeholder = document.createElement('li');
-      placeholder.className = 'chapter-item';
-      placeholder.innerHTML = `
-        <div class="chapter-locked">
-          <div class="chapter-meta">
-            <span class="chapter-num">${next}</span>
-            <span class="chapter-title-text">——</span>
-          </div>
-          <span class="chapter-status-badge locked">即将更新</span>
-        </div>
-      `;
-      list.appendChild(placeholder);
-    })
-    .catch(() => {
-      list.innerHTML = '<li class="chapter-item" style="opacity:.5;">章节数据加载失败，请刷新重试。</li>';
+    chapters.forEach(function (ch) {
+      var titleText = ch.title.replace(/^第.+?章\s*/, '');
+      var num = String(ch.id).padStart(2, '0');
+
+      var li = document.createElement('li');
+      li.className = 'chapter-item';
+      li.innerHTML =
+        '<a href="reader.html?ch=' + ch.id + '">' +
+          '<div class="chapter-meta">' +
+            '<span class="chapter-num">' + num + '</span>' +
+            '<span class="chapter-title-text">' + titleText + '</span>' +
+          '</div>' +
+          '<span class="chapter-status-badge available">' + t('catalog.badge.avail') + '</span>' +
+        '</a>';
+      list.appendChild(li);
     });
+
+    var next = String(chapters.length + 1).padStart(2, '0');
+    var placeholder = document.createElement('li');
+    placeholder.className = 'chapter-item';
+    placeholder.innerHTML =
+      '<div class="chapter-locked">' +
+        '<div class="chapter-meta">' +
+          '<span class="chapter-num">' + next + '</span>' +
+          '<span class="chapter-title-text">——</span>' +
+        '</div>' +
+        '<span class="chapter-status-badge locked">' + t('catalog.badge.next') + '</span>' +
+      '</div>';
+    list.appendChild(placeholder);
+  }
+
+  fetch('chapters/index.json')
+    .then(function (r) { return r.json(); })
+    .then(function (chapters) {
+      cachedChapters = chapters;
+      render(chapters);
+    })
+    .catch(function () {
+      list.innerHTML = '<li class="chapter-item" style="opacity:.5;">' + t('catalog.fail') + '</li>';
+    });
+
+  document.addEventListener('langchange', function () {
+    if (cachedChapters) render(cachedChapters);
+  });
 })();

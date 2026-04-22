@@ -172,6 +172,27 @@ img {
   width: 100%;
 }
 
+/* Language toggle */
+.lang-toggle {
+  background: none;
+  border: 1px solid var(--border-glass);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+.lang-toggle:hover {
+  color: var(--accent-gold);
+  border-color: rgba(200, 168, 110, 0.4);
+}
+
 /* Mobile menu toggle */
 .nav-toggle {
   display: none;

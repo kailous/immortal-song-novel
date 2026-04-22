@@ -7,7 +7,6 @@
   <title>阅读 — 长生不死的我，在南宋点歪了科技树</title>
   <meta name="description" content="在线阅读《长生不死的我，在南宋点歪了科技树》正文章节。">
   <link rel="stylesheet" href="css/style.css">
-  <!-- IconPark 图标（via Iconify CDN） -->
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js" defer></script>
 </head>
 
@@ -18,35 +17,34 @@
 
   <!-- Navigation -->
   <nav class="site-nav" id="site-nav">
-    <a href="index.html" class="nav-brand">长生不死</a>
+    <a href="index.html" class="nav-brand" data-i18n="nav.brand">长生不死</a>
     <ul class="nav-links" id="nav-links">
-      <li><a href="index.html">首页</a></li>
-      <li><a href="catalog.html">目录</a></li>
-      <li><a href="characters.html">图鉴</a></li>
-      <li><a href="about.html">关于</a></li>
+      <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+      <li><a href="catalog.html" data-i18n="nav.catalog">目录</a></li>
+      <li><a href="characters.html" data-i18n="nav.characters">图鉴</a></li>
+      <li><a href="about.html" data-i18n="nav.about">关于</a></li>
     </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="菜单">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="lang-toggle" id="lang-toggle" title="Switch Language">EN</button>
+    <button class="nav-toggle" id="nav-toggle" data-i18n-aria="nav.menu">
+      <span></span><span></span><span></span>
     </button>
   </nav>
 
   <!-- Reader -->
   <div class="reader-container">
     <div class="reader-chapter-header">
-      <h1 id="chapter-header-title">加载中…</h1>
+      <h1 id="chapter-header-title" data-i18n="reader.header.loading">加载中…</h1>
       <p class="chapter-meta-info" id="chapter-meta-info"></p>
     </div>
 
     <div class="reader-content" id="chapter-content">
-      <p style="text-align:center;color:var(--text-muted);">正在加载章节内容…</p>
+      <p style="text-align:center;color:var(--text-muted);" data-i18n="reader.header.loading">正在加载章节内容…</p>
     </div>
 
     <div class="reader-nav">
-      <a href="#" id="prev-chapter" class="disabled">← 没有上一章</a>
-      <a href="catalog.html" id="reader-open-catalog">目录</a>
-      <a href="#" id="next-chapter" class="disabled">敬请期待 →</a>
+      <a href="#" id="prev-chapter" class="disabled" data-i18n="reader.prev">← 没有上一章</a>
+      <a href="catalog.html" id="reader-open-catalog" data-i18n="reader.catalog.btn">目录</a>
+      <a href="#" id="next-chapter" class="disabled" data-i18n="reader.next">敬请期待 →</a>
     </div>
   </div>
 
@@ -54,7 +52,7 @@
   <section class="reader-comments" id="reader-comments">
     <div class="reader-comments-header">
       <span class="reader-comments-gem">◆</span>
-      <h3>读者留言</h3>
+      <h3 data-i18n="reader.comments.title">读者留言</h3>
       <span class="reader-comments-gem">◆</span>
     </div>
     <div id="giscus-container"></div>
@@ -62,63 +60,48 @@
 
   <!-- Footer -->
   <footer class="site-footer">
-    <p class="footer-brand">长生不死的我，在南宋点歪了科技树</p>
+    <p class="footer-brand" data-i18n="footer.brand">长生不死的我，在南宋点歪了科技树</p>
     <ul class="footer-links">
-      <li><a href="index.html">首页</a></li>
-      <li><a href="catalog.html">目录</a></li>
-      <li><a href="characters.html">图鉴</a></li>
-      <li><a href="about.html">关于</a></li>
+      <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+      <li><a href="catalog.html" data-i18n="nav.catalog">目录</a></li>
+      <li><a href="characters.html" data-i18n="nav.characters">图鉴</a></li>
+      <li><a href="about.html" data-i18n="nav.about">关于</a></li>
     </ul>
-    <p class="footer-copy">© 2026 kailous. All rights reserved.</p>
+    <p class="footer-copy" data-i18n="footer.copy">© 2026 kailous. All rights reserved.</p>
   </footer>
 
   <!-- Reader Toolbar -->
   <div class="reader-toolbar" id="reader-toolbar">
-
-    <!-- 字号 -->
-    <button class="toolbar-btn" id="font-decrease" title="缩小字号">
+    <button class="toolbar-btn" id="font-decrease" data-i18n-aria="toolbar.font.decrease" title="缩小字号">
       <span class="iconify" data-icon="icon-park-outline:zoom-out" data-width="18" data-height="18"></span>
     </button>
-    <button class="toolbar-btn" id="font-increase" title="放大字号">
+    <button class="toolbar-btn" id="font-increase" data-i18n-aria="toolbar.font.increase" title="放大字号">
       <span class="iconify" data-icon="icon-park-outline:zoom-in" data-width="18" data-height="18"></span>
     </button>
-
     <div class="toolbar-divider"></div>
-
-    <!-- 目录 -->
-    <button class="toolbar-btn" id="toolbar-catalog" title="目录">
+    <button class="toolbar-btn" id="toolbar-catalog" data-i18n-aria="nav.catalog" title="目录">
       <span class="iconify" data-icon="icon-park-outline:list" data-width="18" data-height="18"></span>
     </button>
-
     <div class="toolbar-divider"></div>
-
-    <!-- 书签 -->
-    <button class="toolbar-btn" id="bookmark-save" title="保存书签">
+    <button class="toolbar-btn" id="bookmark-save" data-i18n-aria="reader.bookmark.save" title="保存书签">
       <span class="iconify" data-icon="icon-park-outline:bookmark-one" data-width="18" data-height="18"></span>
     </button>
-
     <div class="toolbar-divider"></div>
-
-    <!-- 朗读：play / pause 用两个 span 切换，避免 innerHTML 替换导致 Iconify 重渲染 -->
     <button class="toolbar-btn" id="tts-toggle" title="开始朗读">
-      <!-- 停止状态：acoustic -->
       <span class="tts-icon-start"><span class="iconify" data-icon="icon-park-outline:acoustic" data-width="18" data-height="18"></span></span>
-      <!-- 暂停状态：play-one -->
       <span class="tts-icon-resume" style="display:none"><span class="iconify" data-icon="icon-park-outline:play-one" data-width="18" data-height="18"></span></span>
-      <!-- 播放中：pause-one -->
       <span class="tts-icon-pause" style="display:none"><span class="iconify" data-icon="icon-park-outline:pause-one" data-width="18" data-height="18"></span></span>
     </button>
     <button class="toolbar-btn tts-extra" id="tts-stop" title="停止朗读">
       <span class="iconify" data-icon="icon-park-outline:square" data-width="18" data-height="18"></span>
     </button>
     <button class="toolbar-btn tts-extra" id="tts-speed" title="朗读速度">1x</button>
-
   </div>
 
   <!-- Bookmark Restore Toast -->
   <div class="bookmark-toast" id="bookmark-toast">
-    <span>📌 发现上次书签</span>
-    <button id="bookmark-jump">跳转</button>
+    <span data-i18n="reader.bookmark.toast">📌 发现上次书签</span>
+    <button id="bookmark-jump" data-i18n="reader.bookmark.jump">跳转</button>
     <button id="bookmark-dismiss">✕</button>
   </div>
 
@@ -126,15 +109,16 @@
   <div class="reader-catalog-overlay" id="reader-catalog-overlay">
     <div class="reader-catalog-content">
       <div class="reader-catalog-header">
-        <h2>查看目录</h2>
+        <h2 data-i18n="reader.overlay.title">查看目录</h2>
         <button class="close-overlay" id="close-catalog">✕</button>
       </div>
       <div class="reader-catalog-index" id="reader-catalog-index">
-        <p style="text-align:center;padding:2rem;">正在加载目录…</p>
+        <p style="text-align:center;padding:2rem;" data-i18n="reader.overlay.load">正在加载目录…</p>
       </div>
     </div>
   </div>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
   <script src="js/reader.js"></script>
 </body>

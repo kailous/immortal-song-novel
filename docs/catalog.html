@@ -11,38 +11,37 @@
 
   <!-- Navigation -->
   <nav class="site-nav" id="site-nav">
-    <a href="index.html" class="nav-brand">长生不死</a>
+    <a href="index.html" class="nav-brand" data-i18n="nav.brand">长生不死</a>
     <ul class="nav-links" id="nav-links">
-      <li><a href="index.html">首页</a></li>
-      <li><a href="catalog.html">目录</a></li>
-      <li><a href="characters.html">图鉴</a></li>
-      <li><a href="about.html">关于</a></li>
+      <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+      <li><a href="catalog.html" data-i18n="nav.catalog">目录</a></li>
+      <li><a href="characters.html" data-i18n="nav.characters">图鉴</a></li>
+      <li><a href="about.html" data-i18n="nav.about">关于</a></li>
     </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="菜单">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="lang-toggle" id="lang-toggle" title="Switch Language">EN</button>
+    <button class="nav-toggle" id="nav-toggle" data-i18n-aria="nav.menu">
+      <span></span><span></span><span></span>
     </button>
   </nav>
 
   <!-- Page Header -->
   <div class="page-header">
-    <p class="section-label">CATALOG</p>
-    <h1>章节目录</h1>
-    <p>从坠星深山到星海彼端，一步一步改写文明的轨迹。</p>
+    <p class="section-label" data-i18n="catalog.label">CATALOG</p>
+    <h1 data-i18n="catalog.title">章节目录</h1>
+    <p data-i18n="catalog.desc">从坠星深山到星海彼端，一步一步改写文明的轨迹。</p>
   </div>
 
-  <!-- Volume 1 — 章节列表由 JS 从 chapters/index.json 动态渲染 -->
+  <!-- Volume 1 -->
   <div class="catalog-volume reveal">
     <div class="catalog-volume-header">
-      <span class="catalog-volume-number">卷一</span>
-      <h2>觉醒与立足</h2>
+      <span class="catalog-volume-number" data-i18n="vol1.catalog.num">卷一</span>
+      <h2 data-i18n="vol1.catalog.name">觉醒与立足</h2>
     </div>
     <ul class="chapter-list" id="vol1-chapter-list">
       <li class="chapter-item" style="opacity:.4;pointer-events:none;">
         <div class="chapter-meta">
           <span class="chapter-num">—</span>
-          <span class="chapter-title-text">加载中…</span>
+          <span class="chapter-title-text" data-i18n="catalog.loading">加载中…</span>
         </div>
       </li>
     </ul>
@@ -51,17 +50,17 @@
   <!-- Volume 2 -->
   <div class="catalog-volume reveal">
     <div class="catalog-volume-header">
-      <span class="catalog-volume-number">卷二</span>
-      <h2>五帝横空与乱世狂飙</h2>
+      <span class="catalog-volume-number" data-i18n="vol2.catalog.num">卷二</span>
+      <h2 data-i18n="vol2.catalog.name">五帝横空与乱世狂飙</h2>
     </div>
     <ul class="chapter-list">
       <li class="chapter-item">
         <div class="chapter-locked">
           <div class="chapter-meta">
             <span class="chapter-num">—</span>
-            <span class="chapter-title-text">本卷尚未开始，敬请期待</span>
+            <span class="chapter-title-text" data-i18n="catalog.locked">本卷尚未开始，敬请期待</span>
           </div>
-          <span class="chapter-status-badge locked">未开放</span>
+          <span class="chapter-status-badge locked" data-i18n="catalog.badge.locked">未开放</span>
         </div>
       </li>
     </ul>
@@ -70,17 +69,17 @@
   <!-- Volume 3 -->
   <div class="catalog-volume reveal">
     <div class="catalog-volume-header">
-      <span class="catalog-volume-number">卷三</span>
-      <h2>大一统与降维远征</h2>
+      <span class="catalog-volume-number" data-i18n="vol3.catalog.num">卷三</span>
+      <h2 data-i18n="vol3.catalog.name">大一统与降维远征</h2>
     </div>
     <ul class="chapter-list">
       <li class="chapter-item">
         <div class="chapter-locked">
           <div class="chapter-meta">
             <span class="chapter-num">—</span>
-            <span class="chapter-title-text">本卷尚未开始，敬请期待</span>
+            <span class="chapter-title-text" data-i18n="catalog.locked">本卷尚未开始，敬请期待</span>
           </div>
-          <span class="chapter-status-badge locked">未开放</span>
+          <span class="chapter-status-badge locked" data-i18n="catalog.badge.locked">未开放</span>
         </div>
       </li>
     </ul>
@@ -89,17 +88,17 @@
   <!-- Volume 4 -->
   <div class="catalog-volume reveal">
     <div class="catalog-volume-header">
-      <span class="catalog-volume-number">卷四</span>
-      <h2>世界政府与星海的命运回响</h2>
+      <span class="catalog-volume-number" data-i18n="vol4.catalog.num">卷四</span>
+      <h2 data-i18n="vol4.catalog.name">世界政府与星海的命运回响</h2>
     </div>
     <ul class="chapter-list">
       <li class="chapter-item">
         <div class="chapter-locked">
           <div class="chapter-meta">
             <span class="chapter-num">—</span>
-            <span class="chapter-title-text">本卷尚未开始，敬请期待</span>
+            <span class="chapter-title-text" data-i18n="catalog.locked">本卷尚未开始，敬请期待</span>
           </div>
-          <span class="chapter-status-badge locked">未开放</span>
+          <span class="chapter-status-badge locked" data-i18n="catalog.badge.locked">未开放</span>
         </div>
       </li>
     </ul>
@@ -107,16 +106,17 @@
 
   <!-- Footer -->
   <footer class="site-footer">
-    <p class="footer-brand">长生不死的我，在南宋点歪了科技树</p>
+    <p class="footer-brand" data-i18n="footer.brand">长生不死的我，在南宋点歪了科技树</p>
     <ul class="footer-links">
-      <li><a href="index.html">首页</a></li>
-      <li><a href="catalog.html">目录</a></li>
-      <li><a href="characters.html">图鉴</a></li>
-      <li><a href="about.html">关于</a></li>
+      <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+      <li><a href="catalog.html" data-i18n="nav.catalog">目录</a></li>
+      <li><a href="characters.html" data-i18n="nav.characters">图鉴</a></li>
+      <li><a href="about.html" data-i18n="nav.about">关于</a></li>
     </ul>
-    <p class="footer-copy">© 2026 kailous. All rights reserved.</p>
+    <p class="footer-copy" data-i18n="footer.copy">© 2026 kailous. All rights reserved.</p>
   </footer>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
   <script src="js/catalog.js"></script>
 </body>

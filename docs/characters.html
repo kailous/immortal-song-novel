@@ -13,30 +13,28 @@
 
   <!-- Navigation -->
   <nav class="site-nav" id="site-nav">
-    <a href="index.html" class="nav-brand">长生不死</a>
+    <a href="index.html" class="nav-brand" data-i18n="nav.brand">长生不死</a>
     <ul class="nav-links" id="nav-links">
-      <li><a href="index.html">首页</a></li>
-      <li><a href="catalog.html">目录</a></li>
-      <li><a href="characters.html">图鉴</a></li>
-      <li><a href="about.html">关于</a></li>
+      <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+      <li><a href="catalog.html" data-i18n="nav.catalog">目录</a></li>
+      <li><a href="characters.html" data-i18n="nav.characters">图鉴</a></li>
+      <li><a href="about.html" data-i18n="nav.about">关于</a></li>
     </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="菜单">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="lang-toggle" id="lang-toggle" title="Switch Language">EN</button>
+    <button class="nav-toggle" id="nav-toggle" data-i18n-aria="nav.menu">
+      <span></span><span></span><span></span>
     </button>
   </nav>
 
   <!-- Page Header -->
   <div class="page-header">
-    <p class="section-label">CHARACTERS</p>
-    <h1>角色图鉴</h1>
-    <p>命运棋局中的关键落子</p>
+    <p class="section-label" data-i18n="chars.label">CHARACTERS</p>
+    <h1 data-i18n="chars.title">角色图鉴</h1>
+    <p data-i18n="chars.desc">命运棋局中的关键落子</p>
   </div>
 
   <!-- Character Cards -->
   <div class="characters-grid" id="characters-grid">
-    <!-- Grid Skeletons -->
     <div class="character-card reveal" style="height: 500px; background: var(--bg-card); opacity: 0.3;"></div>
     <div class="character-card reveal" style="height: 500px; background: var(--bg-card); opacity: 0.3;"></div>
     <div class="character-card reveal" style="height: 500px; background: var(--bg-card); opacity: 0.3;"></div>
@@ -45,81 +43,77 @@
   <!-- Items -->
   <div style="padding: 0 2rem 4rem;">
     <div class="section-header reveal" style="margin-top: 4rem;">
-      <p class="section-label">KEY ITEMS</p>
-      <h2 class="section-title">关键道具</h2>
+      <p class="section-label" data-i18n="items.label">KEY ITEMS</p>
+      <h2 class="section-title" data-i18n="items.title">关键道具</h2>
     </div>
-
-    <div id="items-grid">
-      <!-- Dynamic Content -->
-    </div>
+    <div id="items-grid"></div>
   </div>
 
   <!-- Footer -->
   <footer class="site-footer">
-    <p class="footer-brand">长生不死的我，在南宋点歪了科技树</p>
+    <p class="footer-brand" data-i18n="footer.brand">长生不死的我，在南宋点歪了科技树</p>
     <ul class="footer-links">
-      <li><a href="index.html">首页</a></li>
-      <li><a href="catalog.html">目录</a></li>
-      <li><a href="characters.html">图鉴</a></li>
-      <li><a href="about.html">关于</a></li>
+      <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+      <li><a href="catalog.html" data-i18n="nav.catalog">目录</a></li>
+      <li><a href="characters.html" data-i18n="nav.characters">图鉴</a></li>
+      <li><a href="about.html" data-i18n="nav.about">关于</a></li>
     </ul>
-    <p class="footer-copy">© 2026 kailous. All rights reserved.</p>
+    <p class="footer-copy" data-i18n="footer.copy">© 2026 kailous. All rights reserved.</p>
   </footer>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
   <script>
     (function () {
       'use strict';
-      const charGrid = document.getElementById('characters-grid');
-      const itemGrid = document.getElementById('items-grid');
+      var charGrid = document.getElementById('characters-grid');
+      var itemGrid = document.getElementById('items-grid');
 
-      fetch('data/characters.json')
-        .then(res => res.json())
-        .then(data => {
-          let charHtml = '';
-          let itemHtml = '';
-
-          for (const id in data) {
-            const item = data[id];
-            if (item.type === 'character') {
-              charHtml += `
-                <a href="character-detail.html?id=${id}" class="character-card reveal">
-                  <div class="character-card-image">
-                    <img src="images/${item.image}" alt="${item.title}">
-                  </div>
-                  <div class="character-card-body">
-                    <h3 class="char-name">${item.title}</h3>
-                    <p class="char-alias">${item.alias}</p>
-                    <p class="char-desc">${item.intro.substring(0, 120)}...</p>
-                  </div>
-                </a>
-              `;
-            } else {
-              itemHtml += `
-                <a href="character-detail.html?id=${id}" class="item-card reveal">
-                  <div class="item-card-image">
-                    <img src="images/${item.image}" alt="${item.title}">
-                  </div>
-                  <div class="item-card-body">
-                    <h3>${item.title}</h3>
-                    <p class="item-type">${item.alias}</p>
-                    <p>${item.intro.substring(0, 120)}...</p>
-                  </div>
-                </a>
-              `;
-            }
+      function renderChars(data) {
+        var lang = window.i18n ? window.i18n.lang() : 'zh';
+        var charHtml = '';
+        var itemHtml = '';
+        for (var id in data) {
+          var item = data[id];
+          var title = (lang === 'en' && item.title_en) ? item.title_en : item.title;
+          var alias = (lang === 'en' && item.alias_en) ? item.alias_en : item.alias;
+          var intro = (lang === 'en' && item.intro_en) ? item.intro_en : item.intro;
+          if (item.type === 'character') {
+            charHtml += '<a href="character-detail.html?id=' + id + '" class="character-card reveal">' +
+              '<div class="character-card-image"><img src="images/' + item.image + '" alt="' + title + '"></div>' +
+              '<div class="character-card-body">' +
+                '<h3 class="char-name">' + title + '</h3>' +
+                '<p class="char-alias">' + alias + '</p>' +
+                '<p class="char-desc">' + intro.substring(0, 120) + '…</p>' +
+              '</div></a>';
+          } else {
+            itemHtml += '<a href="character-detail.html?id=' + id + '" class="item-card reveal">' +
+              '<div class="item-card-image"><img src="images/' + item.image + '" alt="' + title + '"></div>' +
+              '<div class="item-card-body">' +
+                '<h3>' + title + '</h3>' +
+                '<p class="item-type">' + alias + '</p>' +
+                '<p>' + intro.substring(0, 120) + '…</p>' +
+              '</div></a>';
           }
+        }
+        charGrid.innerHTML = charHtml;
+        itemGrid.innerHTML = itemHtml;
+        setTimeout(function () {
+          document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
+        }, 100);
+      }
 
-          charGrid.innerHTML = charHtml;
-          itemGrid.innerHTML = itemHtml;
-
-          // Simple reveal trigger for dynamic content
-          setTimeout(() => {
-            document.querySelectorAll('.reveal').forEach(el => {
-              el.classList.add('visible');
-            });
-          }, 100);
+      var cachedData = null;
+      fetch('data/characters.json')
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          cachedData = data;
+          renderChars(data);
         });
+
+      document.addEventListener('langchange', function () {
+        if (cachedData) renderChars(cachedData);
+      });
     })();
   </script>
 </body>

@@ -175,10 +175,10 @@
 
 <body>
 
-  <a href="characters.html" class="back-btn">← 返回图鉴</a>
+  <a href="characters.html" class="back-btn" data-i18n="detail.back">← 返回图鉴</a>
 
   <div id="loader" style="position:fixed; inset:0; background:var(--bg-primary); z-index:1100; display:flex; align-items:center; justify-content:center;">
-    <p style="color:var(--accent-gold); letter-spacing:0.2em;">正在读取档案...</p>
+    <p style="color:var(--accent-gold); letter-spacing:0.2em;" data-i18n="detail.loading">正在读取档案...</p>
   </div>
 
   <article id="char-detail-container" style="display:none;">
@@ -202,10 +202,11 @@
 
   <!-- Footer -->
   <footer class="site-footer">
-    <p class="footer-brand">长生不死的我，在南宋点歪了科技树</p>
-    <p class="footer-copy">© 2026 kailous. All rights reserved.</p>
+    <p class="footer-brand" data-i18n="footer.brand">长生不死的我，在南宋点歪了科技树</p>
+    <p class="footer-copy" data-i18n="footer.copy">© 2026 kailous. All rights reserved.</p>
   </footer>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
   <script src="js/character-detail.js"></script>
 </body>

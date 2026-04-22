@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>长生不死的我，在南宋点歪了科技树 — 官方小说站</title>
-  <!-- icon & app_icon -->
   <link rel="icon" href="icon.png">
   <meta name="description" content="公元2056年，人类最后的兵王穿越时空，坠入南宋深山。一枚来自千年后的次元手环，将改写整个文明的命运。硬核科幻×重工大宋，在线阅读。">
   <meta name="keywords" content="小说,科幻,穿越,南宋,长生不死,在线阅读,硬核科幻">
@@ -20,17 +19,16 @@
 
   <!-- Navigation -->
   <nav class="site-nav" id="site-nav">
-    <a href="index.html" class="nav-brand">长生不死</a>
+    <a href="index.html" class="nav-brand" data-i18n="nav.brand">长生不死</a>
     <ul class="nav-links" id="nav-links">
-      <li><a href="index.html">首页</a></li>
-      <li><a href="catalog.html">目录</a></li>
-      <li><a href="characters.html">图鉴</a></li>
-      <li><a href="about.html">关于</a></li>
+      <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+      <li><a href="catalog.html" data-i18n="nav.catalog">目录</a></li>
+      <li><a href="characters.html" data-i18n="nav.characters">图鉴</a></li>
+      <li><a href="about.html" data-i18n="nav.about">关于</a></li>
     </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="菜单">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="lang-toggle" id="lang-toggle" title="Switch Language">EN</button>
+    <button class="nav-toggle" id="nav-toggle" data-i18n-aria="nav.menu">
+      <span></span><span></span><span></span>
     </button>
   </nav>
 
@@ -40,18 +38,17 @@
     <canvas id="particles-canvas"></canvas>
 
     <div class="hero-content">
-      <p class="hero-subtitle-top">硬核科幻 × 重工大宋</p>
-      <h1 class="hero-title">
+      <p class="hero-subtitle-top" data-i18n="hero.label">硬核科幻 × 重工大宋</p>
+      <h1 class="hero-title" data-i18n-html="hero.title">
         长生不死的我<br>在南宋<span class="highlight">点歪了科技树</span>
       </h1>
-      <p class="hero-tagline">
+      <p class="hero-tagline" data-i18n-html="hero.tagline">
         公元二〇五六年，人类最后的兵王穿越时空，坠入南宋深山。<br>
         一枚来自千年后的次元手环，将改写整个文明的命运。
       </p>
       <a href="reader.html?ch=1" class="hero-cta" id="hero-cta">
-        开始阅读
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-          stroke-linejoin="round">
+        <span data-i18n="hero.cta">开始阅读</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </a>
@@ -66,104 +63,100 @@
   <!-- Volume Overview -->
   <section class="section" id="volumes">
     <div class="section-header reveal">
-      <p class="section-label">全卷概览</p>
-      <h2 class="section-title">四卷史诗 · 从乡野到星海</h2>
-      <p class="section-desc">从南宋乡间的坠落与觉醒，到席卷整个大宋的工业革命，再到冲出蓝星的终极反击。</p>
+      <p class="section-label" data-i18n="vol.section.label">全卷概览</p>
+      <h2 class="section-title" data-i18n="vol.section.title">四卷史诗 · 从乡野到星海</h2>
+      <p class="section-desc" data-i18n="vol.section.desc">从南宋乡间的坠落与觉醒，到席卷整个大宋的工业革命，再到冲出蓝星的终极反击。</p>
     </div>
 
     <div class="volumes-grid">
       <div class="volume-card reveal">
-        <div class="volume-number">卷一</div>
-        <h3>觉醒与立足</h3>
-        <p>主角坠入南宋深山，被寡妇陆晓晓所救。在记忆断层与杀戮本能的交织中，从乡野流民到大宋战场传奇。</p>
+        <div class="volume-number" data-i18n="vol1.num">卷一</div>
+        <h3 data-i18n="vol1.title">觉醒与立足</h3>
+        <p data-i18n="vol1.desc">主角坠入南宋深山，被寡妇陆晓晓所救。在记忆断层与杀戮本能的交织中，从乡野流民到大宋战场传奇。</p>
         <div class="volume-status writing">
           <span class="dot"></span>
-          连载中
+          <span data-i18n="vol1.status">连载中</span>
         </div>
       </div>
 
       <div class="volume-card reveal">
-        <div class="volume-number">卷二</div>
-        <h3>五帝横空与乱世狂飙</h3>
-        <p>手环觉醒，工业革命点燃大宋。蒸汽机轰鸣在临安城，燧发枪改写冷兵器时代的铁律。</p>
+        <div class="volume-number" data-i18n="vol2.num">卷二</div>
+        <h3 data-i18n="vol2.title">五帝横空与乱世狂飙</h3>
+        <p data-i18n="vol2.desc">手环觉醒，工业革命点燃大宋。蒸汽机轰鸣在临安城，燧发枪改写冷兵器时代的铁律。</p>
         <div class="volume-status upcoming">
           <span class="dot"></span>
-          即将开启
+          <span data-i18n="vol2.status">即将开启</span>
         </div>
       </div>
 
       <div class="volume-card reveal">
-        <div class="volume-number">卷三</div>
-        <h3>大一统与降维远征</h3>
-        <p>完成全球统一，建立世界政府。面对内部腐败与权力异化，文明法则凌驾于血亲之上。</p>
+        <div class="volume-number" data-i18n="vol3.num">卷三</div>
+        <h3 data-i18n="vol3.title">大一统与降维远征</h3>
+        <p data-i18n="vol3.desc">完成全球统一，建立世界政府。面对内部腐败与权力异化，文明法则凌驾于血亲之上。</p>
         <div class="volume-status upcoming">
           <span class="dot"></span>
-          即将开启
+          <span data-i18n="vol3.status">即将开启</span>
         </div>
       </div>
 
       <div class="volume-card reveal">
-        <div class="volume-number">卷四</div>
-        <h3>世界政府与星海的命运回响</h3>
-        <p>人类文明终于站在了星际的门槛上。当年那个致命信号的倒计时，已经开始。</p>
+        <div class="volume-number" data-i18n="vol4.num">卷四</div>
+        <h3 data-i18n="vol4.title">世界政府与星海的命运回响</h3>
+        <p data-i18n="vol4.desc">人类文明终于站在了星际的门槛上。当年那个致命信号的倒计时，已经开始。</p>
         <div class="volume-status upcoming">
           <span class="dot"></span>
-          即将开启
+          <span data-i18n="vol4.status">即将开启</span>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="ornament-divider">
-    <span class="diamond"></span>
-  </div>
+  <div class="ornament-divider"><span class="diamond"></span></div>
 
   <!-- Character Preview -->
   <section class="section" id="characters-section">
     <div class="section-header reveal">
-      <p class="section-label">核心角色</p>
-      <h2 class="section-title">命运的棋局</h2>
+      <p class="section-label" data-i18n="chars.section.label">核心角色</p>
+      <h2 class="section-title" data-i18n="chars.section.title">命运的棋局</h2>
     </div>
 
     <div class="characters-preview reveal">
       <a href="characters.html" class="char-preview-card">
         <img class="char-avatar" src="images/陆辰.png" alt="陆辰">
-        <h4>陆辰（林默）</h4>
-        <p class="char-role">不死兵王 · 文明导师</p>
+        <h4>陆辰（Lin Mo）</h4>
+        <p class="char-role" data-i18n="char.luchen.role">不死兵王 · 文明导师</p>
       </a>
-
       <a href="characters.html" class="char-preview-card">
         <img class="char-avatar" src="images/陆晓晓.png" alt="陆晓晓">
-        <h4>陆晓晓</h4>
-        <p class="char-role">南宋寡妇 · 绝境豪赌者</p>
+        <h4>陆晓晓（Lu Xiaoxiao）</h4>
+        <p class="char-role" data-i18n="char.xiaoxiao.role">南宋寡妇 · 绝境豪赌者</p>
       </a>
-
       <a href="characters.html" class="char-preview-card">
         <img class="char-avatar" src="images/赵嬛嬛.png" alt="赵嬛嬛">
-        <h4>赵嬛嬛</h4>
-        <p class="char-role">帝国棋子 · 凤凰涅槃</p>
+        <h4>赵嬛嬛（Zhao Huanhuan）</h4>
+        <p class="char-role" data-i18n="char.zhaohuan.role">帝国棋子 · 凤凰涅槃</p>
       </a>
-
       <a href="characters.html" class="char-preview-card">
         <img class="char-avatar" src="images/张宪.png" alt="张宪">
-        <h4>张宪</h4>
-        <p class="char-role">岳家军副统制 · 第一猛将 · 陆辰导师</p>
+        <h4>张宪（Zhang Xian）</h4>
+        <p class="char-role" data-i18n="char.zhangxian.role">岳家军副统制 · 第一猛将 · 陆辰导师</p>
       </a>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="site-footer">
-    <p class="footer-brand">长生不死的我，在南宋点歪了科技树</p>
+    <p class="footer-brand" data-i18n="footer.brand">长生不死的我，在南宋点歪了科技树</p>
     <ul class="footer-links">
-      <li><a href="index.html">首页</a></li>
-      <li><a href="catalog.html">目录</a></li>
-      <li><a href="characters.html">图鉴</a></li>
-      <li><a href="about.html">关于</a></li>
+      <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+      <li><a href="catalog.html" data-i18n="nav.catalog">目录</a></li>
+      <li><a href="characters.html" data-i18n="nav.characters">图鉴</a></li>
+      <li><a href="about.html" data-i18n="nav.about">关于</a></li>
     </ul>
-    <p class="footer-copy">© 2026 kailous. All rights reserved.</p>
+    <p class="footer-copy" data-i18n="footer.copy">© 2026 kailous. All rights reserved.</p>
   </footer>
 
+  <script src="js/i18n.js"></script>
   <script src="js/particles.js"></script>
   <script src="js/main.js"></script>
 </body>
