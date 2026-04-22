@@ -69,30 +69,31 @@
       var charGrid = document.getElementById('characters-grid');
       var itemGrid = document.getElementById('items-grid');
 
+      function dataUrl(lang) {
+        return lang === 'en' ? 'data/characters_en.json' : 'data/characters.json';
+      }
+
       function renderChars(data) {
-        var lang = window.i18n ? window.i18n.lang() : 'zh';
         var charHtml = '';
         var itemHtml = '';
         for (var id in data) {
           var item = data[id];
-          var title = (lang === 'en' && item.title_en) ? item.title_en : item.title;
-          var alias = (lang === 'en' && item.alias_en) ? item.alias_en : item.alias;
-          var intro = (lang === 'en' && item.intro_en) ? item.intro_en : item.intro;
+          var introText = (item.intro || '').replace(/\*+/g, '').replace(/\n/g, ' ').trim();
           if (item.type === 'character') {
             charHtml += '<a href="character-detail.html?id=' + id + '" class="character-card reveal">' +
-              '<div class="character-card-image"><img src="images/' + item.image + '" alt="' + title + '"></div>' +
+              '<div class="character-card-image"><img src="images/' + item.image + '" alt="' + item.title + '"></div>' +
               '<div class="character-card-body">' +
-                '<h3 class="char-name">' + title + '</h3>' +
-                '<p class="char-alias">' + alias + '</p>' +
-                '<p class="char-desc">' + intro.substring(0, 120) + '…</p>' +
+                '<h3 class="char-name">' + item.title + '</h3>' +
+                '<p class="char-alias">' + item.alias + '</p>' +
+                '<p class="char-desc">' + introText.substring(0, 120) + '…</p>' +
               '</div></a>';
           } else {
             itemHtml += '<a href="character-detail.html?id=' + id + '" class="item-card reveal">' +
-              '<div class="item-card-image"><img src="images/' + item.image + '" alt="' + title + '"></div>' +
+              '<div class="item-card-image"><img src="images/' + item.image + '" alt="' + item.title + '"></div>' +
               '<div class="item-card-body">' +
-                '<h3>' + title + '</h3>' +
-                '<p class="item-type">' + alias + '</p>' +
-                '<p>' + intro.substring(0, 120) + '…</p>' +
+                '<h3>' + item.title + '</h3>' +
+                '<p class="item-type">' + item.alias + '</p>' +
+                '<p>' + introText.substring(0, 120) + '…</p>' +
               '</div></a>';
           }
         }
@@ -103,17 +104,16 @@
         }, 100);
       }
 
-      var cachedData = null;
-      fetch('data/characters.json')
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          cachedData = data;
-          renderChars(data);
-        });
+      function loadChars() {
+        var lang = window.i18n ? window.i18n.lang() : 'zh';
+        fetch(dataUrl(lang))
+          .then(function (res) { return res.json(); })
+          .then(renderChars)
+          .catch(function (e) { console.error('[characters]', e); });
+      }
 
-      document.addEventListener('langchange', function () {
-        if (cachedData) renderChars(cachedData);
-      });
+      loadChars();
+      document.addEventListener('langchange', loadChars);
     })();
   </script>
 </body>

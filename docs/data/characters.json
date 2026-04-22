@@ -1,12 +1,9 @@
 {
-  “luchen”: {
-    “title”: “陆辰”,
-    “title_en”: “Lu Chen (Lin Mo)”,
-    “alias”: “孙满仓 → 林默 → 陆辰 · 不死兵王 · 文明导师”,
-    “alias_en”: “Sun Mancang → Lin Mo → Lu Chen · Undying Soldier · Civilizational Mentor”,
-    “image”: “陆辰.png”,
-    “intro”: “本名孙满仓，1933年生于河南。1945年在731部队焚化炉中异变获得量子态重置能力——不死。 在2056年人类末日之际，作为唯一能承受超时空跃迁的碳基生物，被送入时间通道。 经历七万四千G潮汐力的无尽撕裂后，坠入南宋绍兴年间的深山。 肉体从零重建，记忆断层，但2056年极道特种兵的杀戮本能刻入了每一根肌纤维。 被寡妇陆晓晓所救后，以”陆辰”之名开始了改写文明轨迹的征程。”,
-    “intro_en”: “Born Sun Mancang in 1933 in Henan, China. In 1945, burned inside Unit 731's incinerator, he mutated — gaining quantum-state reset: undying. In 2056, as humanity's last stand, the only carbon-based lifeform capable of surviving a spacetime leap was sent through the time corridor. After enduring the endless tearing of 74,000G tidal forces, he crashed into the mountains of the Southern Song Dynasty. His body rebuilt from zero, his memory shattered — but every muscle fiber was carved with the killing instincts of a 2056 extreme special-forces soldier. Rescued by widow Lu Xiaoxiao, he began rewriting the course of civilization under the name 'Lu Chen.'”,
+  "luchen": {
+    "title": "陆辰",
+    "alias": "孙满仓 → 林默 → 陆辰 · 不死兵王 · 文明导师",
+    "image": "陆辰.png",
+    "intro": "本名孙满仓，1933年生于河南。1945年在731部队焚化炉中异变获得量子态重置能力——不死。 在2056年人类末日之际，作为唯一能承受超时空跃迁的碳基生物，被送入时间通道。 经历七万四千G潮汐力的无尽撕裂后，坠入南宋绍兴年间的深山。 肉体从零重建，记忆断层，但2056年极道特种兵的杀戮本能刻入了每一根肌纤维。 被寡妇陆晓晓所救后，以“陆辰”之名开始了改写文明轨迹的征程。",
     "sections": [
       {
         "heading": "〇、 姓名渊源与身份演变",
@@ -41,12 +38,9 @@
   },
   "zhangxian": {
     "title": "张宪",
-    "title_en": "Zhang Xian",
-    "alias": "岳家军副统制 · 第一猛将 · 陆辰军事导师",
-    "alias_en": "Yue Family Army Deputy Commander · First General · Lu Chen's Military Mentor",
+    "alias": "张宪",
     "image": "张宪.png",
     "intro": "南宋抗金名将，岳飞麾下第一猛将。其军事素养极高，是陆辰进入南宋宏观战局的核心桥梁。在极度严谨的军职背后，他是一位真正的职业军人，也是陆辰在冷兵器战场上的引路人。",
-    "intro_en": "A renowned general of the Southern Song's anti-Jin resistance and the foremost warrior under Yue Fei. His military expertise is exceptional — the central bridge through which Lu Chen enters the grand strategic theater of the Southern Song. Behind his extreme military discipline stands a true professional soldier, and Lu Chen's guide on the cold-weapon battlefield.",
     "sections": [
       {
         "heading": "0. 角色定位 (Anchor)",
@@ -79,14 +73,11 @@
     ],
     "type": "character"
   },
-  “luxiaoxiao”: {
-    “title”: “陆晓晓”,
-    “title_en”: “Lu Xiaoxiao”,
-    “alias”: “陆家遗珠 · 山村寡妇 · 工业后勤之魂”,
-    “alias_en”: “Merchant's Lost Pearl · Village Widow · Soul of Industrial Logistics”,
-    “image”: “陆晓晓.png”,
-    “intro”: “19岁的没落商贾千金，在宗族”吃绝户”的逼迫下艰难求生。作为主角降临大宋后的第一个保护者，她以超越时代的坚韧和生存本能，从死人堆里背回了开启新文明的火种。”,
-    “intro_en”: “A 19-year-old daughter of a fallen merchant family, struggling to survive under her clan's predatory pressure. As the protagonist's first protector after arriving in the Song Dynasty, she uses tenacity and survival instincts beyond her era to carry back — from a pile of corpses — the spark that will ignite a new civilization.”,
+  "luxiaoxiao": {
+    "title": "陆晓晓",
+    "alias": "陆家遗珠 · 山村寡妇 · 工业后勤之魂",
+    "image": "陆晓晓.png",
+    "intro": "19岁的没落商贾千金，在宗族“吃绝户”的逼迫下艰难求生。作为主角降临大宋后的第一个保护者，她以超越时代的坚韧和生存本能，从死人堆里背回了开启新文明的火种。",
     "sections": [
       {
         "heading": "〇、 姓名渊源与身份演变",
@@ -117,12 +108,9 @@
   },
   "zhaohuanhuan": {
     "title": "赵嬛嬛",
-    "title_en": "Zhao Huanhuan",
     "alias": "大宋长公主 · 窃国天梯 · 皇权执剑者",
-    "alias_en": "Song Dynasty Imperial Princess · Ladder to the Stolen Throne · Wielder of Imperial Authority",
     "image": "赵嬛嬛.png",
     "intro": "大宋长公主（帝姬），本是皇家最璀璨的琉璃，却在靖康之耻中被父兄当作求和的祭品。在看透旧时代的腐朽后，她选择背叛阶级，成为陆辰最冷酷的政治操盘手，手握传国玉玺，为未来的新文明铺设法理天梯。",
-    "intro_en": "An Imperial Princess of the Song Dynasty — once the most radiant jewel of the royal family, offered as a peace sacrifice by her own father and brothers in the Jingkang Humiliation. After seeing through the rot of the old order, she chose to betray her class, becoming Lu Chen's most ruthless political operator. Holding the imperial seal, she lays the legal groundwork for a new civilization.",
     "sections": [
       {
         "heading": "〇、 姓名渊源与身份演变",
@@ -153,12 +141,9 @@
   },
   "lixianzhong": {
     "title": "李显忠",
-    "title_en": "Li Xianzhong",
-    "alias": "归正人将领 · 延安李氏之后 · 陆辰的狂暴镜像",
-    "alias_en": "Returned General · Yan'an Li Clan · Lu Chen's Fierce Mirror",
+    "alias": "李显忠",
     "image": "李显忠.png",
     "intro": "原名李世辅，归正人将领。身负家仇国恨，从金国杀回大宋。他性格豪放且不拘一格，是陆辰非对称作战最坚定的支持者，也是主角在暴力系统中志同道合的狂暴镜像。",
-    "intro_en": "Born Li Shibo, a 'returned' Song general. Carrying deep vengeance for his family and nation, he fought his way back from Jin territory to the Song. Bold and unconventional, he is the most steadfast supporter of Lu Chen's asymmetric warfare — and the protagonist's fierce, kindred mirror image within the military system.",
     "sections": [
       {
         "heading": "0. 角色定位 (Anchor)",
@@ -193,12 +178,9 @@
   },
   "bracelet": {
     "title": "次元手环",
-    "title_en": "Dimensional Bracelet",
     "alias": "外星高维折叠空间器物 · 人类文明最后的赌注",
-    "alias_en": "Alien High-Dimensional Folded Space Artifact · Humanity's Last Bet",
     "image": "次元手环.png",
     "intro": "*   **称号**：**外星高维折叠空间器物 · 人类文明最后的赌注**\n*   **类型**：**高维折叠空间储备装置**\n\n从外星人手中缴获的绝对刚体。内部折叠了一个独立的高维空间，保守估计容积相当于一栋二十层写字楼。 温度：绝对零度。气压：绝对真空。时间流速：零。 人类将最后的科技结晶——最高精度车床、冷核聚变电池、超级算力服务器、全人类文明的数字化遗产——全部封存其中。",
-    "intro_en": "An absolutely rigid artifact captured from aliens. Inside is folded an independent high-dimensional space — conservatively estimated at the volume of a 20-story office building. Temperature: absolute zero. Pressure: perfect vacuum. Time flow rate: zero. Humanity has sealed within it the crystallization of all its final technology: ultra-precision lathes, cold fusion batteries, supercomputing servers, and the digitized legacy of all human civilization.",
     "sections": [
       {
         "heading": "一、 物理形态与材质 (Physical Form & Material)",
