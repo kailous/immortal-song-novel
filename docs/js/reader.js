@@ -22,6 +22,10 @@
   var CUSDIS_APP_ID = '2f184b19-aabe-4e89-a58e-b33a8b123403';
   var CUSDIS_HOST   = 'https://cusdis.com';
 
+  function t(key) {
+    return window.i18n ? window.i18n.t(key) : key;
+  }
+
   function escHtml(s) {
     return String(s)
       .replace(/&/g, '&amp;')
@@ -63,12 +67,12 @@
 
   function renderComments(list) {
     if (!list || !list.length) {
-      return '<p class="comments-empty">暂无留言，来做第一个留言的读者吧。</p>';
+      return '<p class="comments-empty">' + t('reader.comments.empty') + '</p>';
     }
     var items = list.filter(isApproved).map(function (c) { return renderComment(c, false); });
     return items.length
       ? items.join('')
-      : '<p class="comments-empty">暂无留言，来做第一个留言的读者吧。</p>';
+      : '<p class="comments-empty">' + t('reader.comments.empty') + '</p>';
   }
 
   function loadCusdis(chId, title) {
@@ -79,16 +83,16 @@
     var pageUrl   = window.location.href;
 
     wrap.innerHTML =
-      '<div class="comments-list" id="comments-list"><p class="comments-empty">留言加载中…</p></div>' +
+      '<div class="comments-list" id="comments-list"><p class="comments-empty">' + t('reader.comments.load') + '</p></div>' +
       '<form class="comment-form" id="comment-form">' +
         '<div class="comment-form-row">' +
-          '<input class="comment-input" id="c-name" type="text" placeholder="你的名字（必填）" maxlength="50">' +
-          '<input class="comment-input" id="c-email" type="email" placeholder="邮箱（选填，不公开）" maxlength="100">' +
+          '<input class="comment-input" id="c-name" type="text" placeholder="' + escHtml(t('reader.form.name')) + '" maxlength="50">' +
+          '<input class="comment-input" id="c-email" type="email" placeholder="' + escHtml(t('reader.form.email')) + '" maxlength="100">' +
         '</div>' +
-        '<textarea class="comment-textarea" id="c-content" placeholder="写下你的留言…" rows="4" maxlength="1000"></textarea>' +
+        '<textarea class="comment-textarea" id="c-content" placeholder="' + escHtml(t('reader.form.content')) + '" rows="4" maxlength="1000"></textarea>' +
         '<div class="comment-form-footer">' +
-          '<span class="comment-hint">留言需审核后显示</span>' +
-          '<button class="comment-submit" type="submit">发送留言</button>' +
+          '<span class="comment-hint">' + t('reader.form.hint') + '</span>' +
+          '<button class="comment-submit" type="submit">' + t('reader.form.submit') + '</button>' +
         '</div>' +
         '<p class="comment-status" id="c-status"></p>' +
       '</form>';
@@ -113,7 +117,7 @@
       })
       .catch(function (err) {
         console.error('[comments]', err);
-        document.getElementById('comments-list').innerHTML = '<p class="comments-empty">留言加载失败，请稍后再试。</p>';
+        document.getElementById('comments-list').innerHTML = '<p class="comments-empty">' + t('reader.comments.fail') + '</p>';
       });
 
     // 提交留言
@@ -124,12 +128,12 @@
       var content = document.getElementById('c-content').value.trim();
       var status  = document.getElementById('c-status');
 
-      if (!name)    { status.textContent = '请填写名字。'; status.className = 'comment-status error'; return; }
-      if (!content) { status.textContent = '请填写留言内容。'; status.className = 'comment-status error'; return; }
+      if (!name)    { status.textContent = t('reader.form.err.name');    status.className = 'comment-status error'; return; }
+      if (!content) { status.textContent = t('reader.form.err.content'); status.className = 'comment-status error'; return; }
 
       var btn = this.querySelector('.comment-submit');
       btn.disabled = true;
-      status.textContent = '提交中…';
+      status.textContent = t('reader.form.submitting');
       status.className = 'comment-status';
 
       fetch(CUSDIS_HOST + '/api/open/comments', {
@@ -147,7 +151,7 @@
       })
         .then(function (r) { return r.json(); })
         .then(function () {
-          status.textContent = '留言已提交，审核通过后将显示。感谢你的留言！';
+          status.textContent = t('reader.form.ok');
           status.className = 'comment-status success';
           document.getElementById('c-name').value = '';
           document.getElementById('c-email').value = '';
@@ -155,7 +159,7 @@
           btn.disabled = false;
         })
         .catch(function () {
-          status.textContent = '提交失败，请稍后再试。';
+          status.textContent = t('reader.form.err.fail');
           status.className = 'comment-status error';
           btn.disabled = false;
         });
@@ -209,7 +213,7 @@
         loadCusdis(chapterId, data.title);
       })
       .catch(function (err) {
-        container.innerHTML = '<p style="text-align:center;color:var(--text-muted);">章节内容加载失败，请稍后再试。</p>';
+        container.innerHTML = '<p style="text-align:center;color:var(--text-muted);">' + t('reader.chapter.fail') + '</p>';
         console.error(err);
       });
   }
@@ -269,7 +273,7 @@
       } else {
         prevEl.removeAttribute('href');
         prevEl.className = 'disabled';
-        prevEl.textContent = '← 没有上一章';
+        prevEl.textContent = t('reader.prev');
       }
     }
     if (nextEl) {
@@ -280,7 +284,7 @@
       } else {
         nextEl.removeAttribute('href');
         nextEl.className = 'disabled';
-        nextEl.textContent = '敬请期待 →';
+        nextEl.textContent = t('reader.next');
       }
     }
   }
@@ -346,7 +350,7 @@
         catalogIndexEl.innerHTML = html;
       })
       .catch(err => {
-        catalogIndexEl.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem;">加载失败</p>';
+        catalogIndexEl.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem;">' + t('reader.overlay.load') + '</p>';
         console.error(err);
       });
   }
