@@ -22,9 +22,9 @@
   // ============================================================
   var GISCUS = {
     repo:       'kailous/immortal-song-novel',
-    repoId:     'GISCUS_REPO_ID',      // ← 替换为 giscus.app 生成的值
+    repoId:     'R_kgDOR16kDQ',
     category:   'General',
-    categoryId: 'GISCUS_CATEGORY_ID',  // ← 替换为 giscus.app 生成的值
+    categoryId: 'DIC_kwDOR16kDc4C7a7O',
     theme:      'transparent_dark',
     lang:       'zh-CN'
   };
