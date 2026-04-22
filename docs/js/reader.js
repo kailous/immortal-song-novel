@@ -37,22 +37,35 @@
            String(d.getDate()).padStart(2, '0');
   }
 
+  function isApproved(c) {
+    return c.approved === undefined || c.approved === true || c.approved === 1;
+  }
+
+  function renderComment(c, isReply) {
+    var replies = '';
+    if (!isReply && c.replies && c.replies.data && c.replies.data.length) {
+      var approvedReplies = c.replies.data.filter(isApproved);
+      if (approvedReplies.length) {
+        replies = '<div class="comment-replies">' +
+          approvedReplies.map(function (r) { return renderComment(r, true); }).join('') +
+        '</div>';
+      }
+    }
+    return '<div class="comment-item' + (isReply ? ' comment-reply' : '') + '">' +
+      '<div class="comment-meta">' +
+        (isReply ? '<span class="comment-reply-mark">↳</span>' : '') +
+        '<span class="comment-author">' + escHtml(c.by_nickname || c.nickname || '匿名') + '</span>' +
+        '<span class="comment-date">' + fmtDate(c.createdAt) + '</span>' +
+      '</div>' +
+      '<div class="comment-body">' + escHtml(c.content) + '</div>' +
+    '</div>' + replies;
+  }
+
   function renderComments(list) {
     if (!list || !list.length) {
       return '<p class="comments-empty">暂无留言，来做第一个留言的读者吧。</p>';
     }
-    // open API 已在服务端过滤 approved，直接渲染；兼容 approved 字段存在时也做检查
-    var items = list
-      .filter(function (c) { return c.approved === undefined || c.approved === true || c.approved === 1; })
-      .map(function (c) {
-        return '<div class="comment-item">' +
-          '<div class="comment-meta">' +
-            '<span class="comment-author">' + escHtml(c.by_nickname || c.nickname || '匿名') + '</span>' +
-            '<span class="comment-date">' + fmtDate(c.createdAt) + '</span>' +
-          '</div>' +
-          '<div class="comment-body">' + escHtml(c.content) + '</div>' +
-        '</div>';
-      });
+    var items = list.filter(isApproved).map(function (c) { return renderComment(c, false); });
     return items.length
       ? items.join('')
       : '<p class="comments-empty">暂无留言，来做第一个留言的读者吧。</p>';

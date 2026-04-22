@@ -906,6 +906,25 @@ img {
   border-top: 1px solid var(--border-subtle);
 }
 
+.comment-replies {
+  margin-left: 1.25rem;
+  border-left: 2px solid var(--border-glass);
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.comment-reply {
+  padding: 0.75rem 0;
+  border-bottom: none;
+}
+
+.comment-reply-mark {
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+  opacity: 0.6;
+  margin-right: 0.4rem;
+}
+
 .comment-meta {
   display: flex;
   align-items: baseline;
