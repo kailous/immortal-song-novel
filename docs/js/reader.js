@@ -175,30 +175,51 @@
 
   let chapterTitle = '';
 
-  fetch('chapters/chapter-' + chapterId + '.json')
-    .then(function (res) {
-      if (!res.ok) throw new Error('Chapter not found');
-      return res.json();
-    })
-    .then(function (data) {
-      chapterTitle = data.title;
-      document.title = data.title + ' — 长生不死的我，在南宋点歪了科技树';
-      if (headerEl) headerEl.textContent = data.title;
-      if (metaEl)   metaEl.textContent   = '约 ' + data.wordCount + ' 字';
+  function chapterUrl(lang) {
+    var suffix = lang === 'en' ? '-en' : '';
+    return 'chapters/chapter-' + chapterId + suffix + '.json';
+  }
 
-      container.innerHTML = renderContent(data.sections);
+  function loadChapter(lang) {
+    var url = chapterUrl(lang);
+    fetch(url)
+      .then(function (res) {
+        if (!res.ok) {
+          // Fall back to Chinese if English file not found
+          if (lang === 'en') return fetch(chapterUrl('zh')).then(function (r) { return r.json(); });
+          throw new Error('Chapter not found');
+        }
+        return res.json();
+      })
+      .then(function (data) {
+        chapterTitle = data.title;
+        var siteName = lang === 'en'
+          ? 'Immortal in Southern Song'
+          : '长生不死的我，在南宋点歪了科技树';
+        document.title = data.title + ' — ' + siteName;
+        if (headerEl) headerEl.textContent = data.title;
+        if (metaEl)   metaEl.textContent   = (lang === 'en' ? 'approx. ' : '约 ') + data.wordCount + (lang === 'en' ? ' words' : ' 字');
 
-      updateNav(data.prevChapter, data.nextChapter);
+        container.innerHTML = renderContent(data.sections);
 
-      // After render: collect TTS paragraphs & check bookmark & load comments
-      if (window._collectTtsParagraphs) window._collectTtsParagraphs();
-      checkBookmarkToast();
-      loadCusdis(chapterId, data.title);
-    })
-    .catch(function (err) {
-      container.innerHTML = '<p style="text-align:center;color:var(--text-muted);">章节内容加载失败，请稍后再试。</p>';
-      console.error(err);
-    });
+        updateNav(data.prevChapter, data.nextChapter);
+
+        if (window._collectTtsParagraphs) window._collectTtsParagraphs();
+        checkBookmarkToast();
+        loadCusdis(chapterId, data.title);
+      })
+      .catch(function (err) {
+        container.innerHTML = '<p style="text-align:center;color:var(--text-muted);">章节内容加载失败，请稍后再试。</p>';
+        console.error(err);
+      });
+  }
+
+  var initLang = window.i18n ? window.i18n.lang() : 'zh';
+  loadChapter(initLang);
+
+  document.addEventListener('langchange', function (e) {
+    loadChapter(e.detail);
+  });
 
   function renderInline(escaped) {
     // 处理行内 Markdown 语法（在 escapeHtml 之后调用，安全）
