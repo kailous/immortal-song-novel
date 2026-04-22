@@ -61,9 +61,9 @@
   function loadCusdis(chId, title) {
     var wrap = document.getElementById('giscus-container');
     if (!wrap) return;
-    var pageId    = 'chapter-' + chId;
-    var pageUrl   = window.location.href;
     var pageTitle = title || ('第' + chId + '章');
+    var pageId    = pageTitle;   // 仪表盘直接显示章节名，如"第一章 坠星"
+    var pageUrl   = window.location.href;
 
     wrap.innerHTML =
       '<div class="comments-list" id="comments-list"><p class="comments-empty">留言加载中…</p></div>' +
