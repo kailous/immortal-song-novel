@@ -337,6 +337,55 @@
   .glyph-code { font-size: 8px; color: var(--dim); margin-top: 3px; font-family: monospace; }
 
   /* ── info ── */
+  /* ── 下载区 ── */
+  .download-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .download-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.15s;
+    flex: 1;
+    min-width: 200px;
+  }
+  .download-btn:hover {
+    border-color: var(--gold);
+    background: var(--active);
+  }
+  .download-btn.primary {
+    border-color: var(--gold-d);
+  }
+  .dl-icon {
+    font-size: 1.4rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .dl-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .dl-name {
+    font-size: 0.85rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .dl-sub {
+    font-size: 0.68rem;
+    color: var(--dim);
+  }
+
   .info-box {
     background: var(--panel2);
     border: 1px solid var(--border);
@@ -406,6 +455,25 @@
 <!-- ── 全字形网格 ── -->
 <div class="section-title">全字形一览（U+E000 — U+E12B）</div>
 <div class="glyph-grid" id="glyph-grid"></div>
+
+<!-- ── 下载区 ── -->
+<div class="section-title">下载字体</div>
+<div class="download-row">
+  <a class="download-btn primary" href="fonts/taren.woff2" download="Taren-Regular.woff2">
+    <span class="dl-icon">↓</span>
+    <span class="dl-info">
+      <span class="dl-name">Taren Regular · WOFF2</span>
+      <span class="dl-sub">推荐 · 网页嵌入用</span>
+    </span>
+  </a>
+  <a class="download-btn" href="fonts/taren.otf" download="Taren-Regular.otf">
+    <span class="dl-icon">↓</span>
+    <span class="dl-info">
+      <span class="dl-name">Taren Regular · OTF</span>
+      <span class="dl-sub">桌面安装 / 设计软件</span>
+    </span>
+  </a>
+</div>
 
 <div class="info-box">
   <strong>字体规格</strong><br>
