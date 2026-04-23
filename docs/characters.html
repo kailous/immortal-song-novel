@@ -40,6 +40,15 @@
     <div class="character-card reveal" style="height: 500px; background: var(--bg-card); opacity: 0.3;"></div>
   </div>
 
+  <!-- Factions / Races -->
+  <div style="padding: 0 2rem 0;">
+    <div class="section-header reveal" style="margin-top: 4rem;">
+      <p class="section-label">FACTIONS &amp; RACES</p>
+      <h2 class="section-title">种族 · 势力</h2>
+    </div>
+    <div id="factions-grid"></div>
+  </div>
+
   <!-- Items -->
   <div style="padding: 0 2rem 4rem;">
     <div class="section-header reveal" style="margin-top: 4rem;">
@@ -66,16 +75,18 @@
   <script>
     (function () {
       'use strict';
-      var charGrid = document.getElementById('characters-grid');
-      var itemGrid = document.getElementById('items-grid');
+      var charGrid    = document.getElementById('characters-grid');
+      var factionGrid = document.getElementById('factions-grid');
+      var itemGrid    = document.getElementById('items-grid');
 
       function dataUrl(lang) {
         return lang === 'en' ? 'data/characters_en.json' : 'data/characters.json';
       }
 
       function renderChars(data) {
-        var charHtml = '';
-        var itemHtml = '';
+        var charHtml    = '';
+        var factionHtml = '';
+        var itemHtml    = '';
         for (var id in data) {
           var item = data[id];
           var introText = (item.intro || '').replace(/\*+/g, '').replace(/\n/g, ' ').trim();
@@ -87,6 +98,15 @@
                 '<p class="char-alias">' + item.alias + '</p>' +
                 '<p class="char-desc">' + introText.substring(0, 120) + '…</p>' +
               '</div></a>';
+          } else if (item.type === 'faction') {
+            factionHtml += '<a href="character-detail.html?id=' + id + '" class="faction-card reveal">' +
+              '<div class="faction-card-image"><img src="images/' + item.image + '" alt="' + item.title + '"></div>' +
+              '<div class="faction-card-body">' +
+                '<p class="faction-label">FACTION</p>' +
+                '<h3 class="faction-name">' + item.title + '</h3>' +
+                '<p class="faction-alias">' + item.alias + '</p>' +
+                '<p class="faction-desc">' + introText.substring(0, 160) + '…</p>' +
+              '</div></a>';
           } else {
             itemHtml += '<a href="character-detail.html?id=' + id + '" class="item-card reveal">' +
               '<div class="item-card-image"><img src="images/' + item.image + '" alt="' + item.title + '"></div>' +
@@ -97,8 +117,9 @@
               '</div></a>';
           }
         }
-        charGrid.innerHTML = charHtml;
-        itemGrid.innerHTML = itemHtml;
+        charGrid.innerHTML    = charHtml;
+        factionGrid.innerHTML = factionHtml;
+        itemGrid.innerHTML    = itemHtml;
         setTimeout(function () {
           document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
         }, 100);

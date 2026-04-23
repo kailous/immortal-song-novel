@@ -200,5 +200,34 @@
         "content": "1.  **Cannot function as a 'four-dimensional pocket'**: Items extracted are strictly limited by unlock permission and energy consumption; cannot instantly store enemies in combat or giant objects into the bracelet.\n2.  **Must undergo digestion period**: No matter how advanced the blueprints and mother-machines extracted, they are still constrained by the Song Dynasty's 'basic materials science laws.' (E.g., the mother-machine can cut a gun barrel, but if Song craftsmen haven't smelted steel of sufficient strength for the barrel, it will still explode.)\n3.  **Absolute dead-matter principle**: Vacuum field — no living beings can be stored."
       }
     ]
+  },
+  "taren": {
+    "title": "The Taren",
+    "alias": "Last Colonizers · Iron Desperadoes · Exiles of Gaanan",
+    "image": "塔伦人.jpeg",
+    "type": "faction",
+    "intro": "A carbon-based civilization from the Taren star system, whose origins and evolutionary path closely parallel humanity — yet they chose a far more radical course of self-modification: mass cyborgification, Dyson spheres, and ultimately the exhaustion of their homeworld Gaanan. With nowhere left to turn, they broadcast a distress signal into the cosmos. Only Earth responded — sparking a thirty-year war.",
+    "sections": [
+      {
+        "heading": "I. Biology",
+        "content": "*   **Origin**: Carbon-based, two-sex reproduction; evolutionary path mirrors humanity\n*   **Build**: Comparable to a chimpanzee — no myostatin, high basal metabolism, exceptional natural muscle mass\n*   **Four arms**: A natural trait, not a cybernetic modification\n    *   **Upper arms (×2)**: Mounted at the shoulders; massive, primary for combat and heavy labor\n    *   **Lower arms (×2)**: Mounted at the waist; smaller, used for fine manipulation\n*   **Skin**: Predominantly grey tones; varies greatly with degree of cyborgification\n*   **Head**: Hairless; deep facial features; eyes frequently modified with glowing cybernetic lenses\n"
+      },
+      {
+        "heading": "II. Cyborgification",
+        "content": "*   **Mainstream**: Voluntary mass cyborgification — partial, full-body, and electronic-brain variants\n*   **Tactical backpack**: Standard-issue micro-circulation blood dialysis pump; delivers concentrated glucose, homeworld herbs (Rhodiola-equivalent), vitamins and minerals via body interface — countering the equivalent of high-altitude sickness on Earth\n*   **Weapons**: Energy-based firearms, interfaced directly through cybernetic ports\n*   **Atmosphere**: Taren require hyperoxic environments; prolonged Earth deployment requires circulation support. This environment is lethal to humans — coexistence is biologically impossible\n"
+      },
+      {
+        "heading": "III. Civilization Arc",
+        "content": "*   **Path**: Carbon-based → Cyborgification Age → Dyson Sphere Age → Resource Collapse → Distress Signal\n*   **The Trap**: Energy consumption persistently outpaced cosmic replenishment — a mirror of humanity's potential future\n*   **Civil War Outcome**: War faction seized power; peace faction leadership imprisoned (not executed); entire star system's resources committed to the jump — the fleet arrived shattered\n*   **Stalemate Causes**: Civil war attrition + jump fuel exhaustion + need to preserve Earth's resources intact (no orbital bombardment) + ongoing military losses\n"
+      },
+      {
+        "heading": "IV. Factions",
+        "content": "*   **War Faction**: Dominant; goal is full occupation and terraforming Earth into a hyperoxic environment\n*   **Peace Faction**: Leadership imprisoned; legacy preserved through the dimensional bracer — a civilization seed vault gifted to humanity\n*   **Moderate Faction**: Advocates Earth-sharing with humans; rejected by both sides due to atmospheric incompatibility and human moral refusal\n*   **Defectors**: A rare few Taren have sided with humanity, providing translation and technical aid\n"
+      },
+      {
+        "heading": "V. Relations with Humanity",
+        "content": "*   **Language**: Peace faction Taren have mastered human languages; full mutual translation possible. The Taren spoken tongue is called Velkor; their writing is a logographic ideographic system\n*   **Technology Transfer**: Humanity gained high-density storage chips, compute chips, and neural-network chip technology during the war; spatial technology remains beyond reach due to a fundamental conceptual gap\n*   **Legacy**: The dimensional bracer contains the peace faction's advice on sustainable development; partial energy weapon principles have been absorbed by humanity\n*   **Biological Intersection**: Reproductive systems are analogous to humans; Taren military codes forbid contact — motivated by cross-species disease risk, not morality\n"
+      }
+    ]
   }
 }
