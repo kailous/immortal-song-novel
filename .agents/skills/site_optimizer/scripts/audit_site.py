@@ -114,12 +114,17 @@ def check_character_images():
 
 def check_chapters():
     errors = 0
-    index_path = DOCS / "chapters" / "index.json"
-    chapters = json.loads(index_path.read_text(encoding="utf-8"))
-    for chapter in chapters:
-        path = DOCS / "chapters" / f"chapter-{chapter['id']}.json"
-        if not path.exists():
-            errors += fail(f"chapter index references missing file: {path.relative_to(ROOT)}")
+    for locale in ("zh", "en"):
+        index_path = DOCS / "data" / f"chapters_{locale}.json"
+        chapters = json.loads(index_path.read_text(encoding="utf-8"))
+        for chapter in chapters:
+            source = chapter.get("source", "")
+            if not source:
+                errors += fail(f"chapter index missing source: {index_path.relative_to(ROOT)} -> {chapter.get('id')}")
+                continue
+            path = DOCS / source
+            if not path.exists():
+                errors += fail(f"chapter index references missing file: {path.relative_to(ROOT)}")
     if not errors:
         ok("Chapter index references exist")
     return errors

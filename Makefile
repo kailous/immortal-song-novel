@@ -3,7 +3,7 @@
 
 .PHONY: publish sync-chars sync-chapters check report audit optimize-assets sync-head help
 
-## 将正文 Markdown 同步发布到网站 JSON（章节定稿后必须执行）
+## 将正文 Markdown 同步发布到网站公开目录与章节索引（章节定稿后必须执行）
 publish:
 	python3 .agents/skills/novel_creator/scripts/md_to_json.py
 
@@ -44,7 +44,7 @@ all: publish sync-chars
 
 help:
 	@echo ""
-	@echo "  make publish      将正文同步到网站（定稿后必须执行）"
+	@echo "  make publish      同步正文到 docs/content/chapters 与章节索引"
 	@echo "  make sync-chars   同步角色设定到网站"
 	@echo "  make check        扫描设定冲突"
 	@echo "  make report       生成设定库报告"

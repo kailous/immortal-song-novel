@@ -1,218 +1,242 @@
 #!/usr/bin/env python3
 """
-md_to_json.py — 正文 Markdown → 章节 JSON 转换器
+Chapter publish pipeline.
 
-功能：
-  - 解析 正文/第N章_*.md 为 reader.js 所需的 JSON 结构
-  - 自动修正中文引号方向（"前引号" / "后引号" 配对）
-  - 注入 prevChapter / nextChapter 导航链接
-  - 生成 docs/chapters/index.json 目录索引
-  - ensure_ascii=False 保证汉字直接输出，不产生 \\uXXXX 转义
+Source of truth:
+  - Chinese source chapters live in 正文/*.md
+  - Public chapter markdown lives in docs/content/chapters/zh|en/*.md
+  - Reader/catalog use lightweight indexes in docs/data/chapters_zh.json and chapters_en.json
 
-用法：
-  python3 md_to_json.py              # 转换所有章节
-  python3 md_to_json.py --check      # 仅校验引号，不写文件
-  python3 md_to_json.py 1            # 只转换第 1 章
+Compatibility:
+  - `make publish` still calls this script
+  - `--check` still validates source content without writing files
 """
 
-import os, re, json, sys, glob
+import glob
+import json
+import os
+import re
+import sys
+from pathlib import Path
 
-# ── 路径配置 ────────────────────────────────────────────────────
-SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR))))
-SOURCE_DIR   = os.path.join(PROJECT_ROOT, "正文")
-OUTPUT_DIR   = os.path.join(PROJECT_ROOT, "docs", "chapters")
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parents[3]
+SOURCE_ZH_DIR = PROJECT_ROOT / "正文"
+DOCS_DIR = PROJECT_ROOT / "docs"
+PUBLIC_CONTENT_DIR = DOCS_DIR / "content" / "chapters"
+PUBLIC_ZH_DIR = PUBLIC_CONTENT_DIR / "zh"
+PUBLIC_EN_DIR = PUBLIC_CONTENT_DIR / "en"
+DATA_DIR = DOCS_DIR / "data"
+ZH_INDEX_FILE = DATA_DIR / "chapters_zh.json"
+EN_INDEX_FILE = DATA_DIR / "chapters_en.json"
+LEGACY_JSON_DIR = DOCS_DIR / "chapters"
+LEGACY_EN_JSON_GLOB = "chapter-*-en.json"
 
-# ── 中文数字 → 阿拉伯数字 ───────────────────────────────────────
-_CN = {'零':0,'一':1,'二':2,'两':2,'三':3,'四':4,'五':5,
-       '六':6,'七':7,'八':8,'九':9,'十':10}
+_CN = {
+    "零": 0,
+    "一": 1,
+    "二": 2,
+    "两": 2,
+    "三": 3,
+    "四": 4,
+    "五": 5,
+    "六": 6,
+    "七": 7,
+    "八": 8,
+    "九": 9,
+    "十": 10,
+}
 
-def cn_to_int(s):
-    if len(s) == 1:
-        return _CN.get(s, 0)
-    if s[0] == '十':
-        return 10 + _CN.get(s[1], 0) if len(s) > 1 else 10
-    if len(s) == 2 and s[1] == '十':
-        return _CN[s[0]] * 10
-    if len(s) == 3:
-        return _CN[s[0]] * 10 + _CN.get(s[2], 0)
+
+def cn_to_int(text):
+    if len(text) == 1:
+        return _CN.get(text, 0)
+    if text[0] == "十":
+        return 10 + _CN.get(text[1], 0) if len(text) > 1 else 10
+    if len(text) == 2 and text[1] == "十":
+        return _CN[text[0]] * 10
+    if len(text) == 3:
+        return _CN[text[0]] * 10 + _CN.get(text[2], 0)
     return 0
 
+
 def chapter_num(filepath):
-    m = re.search(r'第([一二三四五六七八九十零]+)章', os.path.basename(filepath))
-    return cn_to_int(m.group(1)) if m else 9999
+    match = re.search(r"第([一二三四五六七八九十零两]+)章", os.path.basename(filepath))
+    return cn_to_int(match.group(1)) if match else 9999
 
-# ── 引号方向修正 ────────────────────────────────────────────────
+
 def normalize_quotes(text):
-    """
-    将段落内所有中文双引号统一为正确的前/后配对。
-    规则：遇到引号时交替分配 U+201C（前）/ U+201D（后）。
-    单引号（' '）同理处理。
-    """
     result = []
-    dq_open = False   # 双引号状态
-    sq_open = False   # 单引号状态
+    dq_open = False
+    sq_open = False
 
-    for ch in text:
-        if ch in ('\u201c', '\u201d'):          # 双引号
-            if not dq_open:
-                result.append('\u201c')
-                dq_open = True
-            else:
-                result.append('\u201d')
-                dq_open = False
-        elif ch in ('\u2018', '\u2019'):         # 单引号
-            if not sq_open:
-                result.append('\u2018')
-                sq_open = True
-            else:
-                result.append('\u2019')
-                sq_open = False
+    for char in text:
+        if char in ("\u201c", "\u201d"):
+            result.append("\u201c" if not dq_open else "\u201d")
+            dq_open = not dq_open
+        elif char in ("\u2018", "\u2019"):
+            result.append("\u2018" if not sq_open else "\u2019")
+            sq_open = not sq_open
         else:
-            result.append(ch)
+            result.append(char)
+    return "".join(result)
 
-    return ''.join(result)
 
-# ── Markdown 解析 ───────────────────────────────────────────────
-def parse_md(filepath, chapter_id):
-    with open(filepath, encoding='utf-8') as f:
-        raw = f.read()
-
-    lines = raw.splitlines()
-
-    # 提取一级标题
-    title = ''
-    for line in lines:
-        if line.startswith('# '):
-            title = line[2:].strip()
-            break
-    if not title:
-        title = os.path.basename(filepath).replace('.md', '')
-
-    # 字数统计（中文字符 + 字母数字）
-    word_count = len(re.findall(r'[\u4e00-\u9fa5a-zA-Z0-9]', raw))
-
-    # 解析小节
-    sections = []
-    cur = None
-    header_done = False
-
-    for line in lines:
+def normalize_markdown(text):
+    lines = []
+    for line in text.replace("\r\n", "\n").split("\n"):
         stripped = line.strip()
-
-        # 跳过一级标题行
-        if not header_done and stripped.startswith('# '):
-            header_done = True
+        if stripped.startswith("#") or stripped.startswith("!["):
+            lines.append(line.rstrip())
             continue
+        lines.append(normalize_quotes(line.rstrip()))
+    normalized = "\n".join(lines).strip()
+    return normalized + "\n"
 
-        # 二级标题 → 新小节
-        if stripped.startswith('## '):
-            cur = {'heading': stripped[3:].strip(), 'paragraphs': []}
-            sections.append(cur)
-            continue
 
-        # 分割线 → 无标题小节
-        if stripped == '---':
-            cur = {'heading': '', 'paragraphs': []}
-            sections.append(cur)
-            continue
+def quick_title(path):
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("# "):
+            return line[2:].strip()
+    return path.stem
 
-        # 空行跳过
-        if not stripped:
-            continue
 
-        # 普通段落
-        if cur is None:
-            cur = {'heading': '', 'paragraphs': []}
-            sections.append(cur)
+def count_words(text):
+    return len(re.findall(r"[\u4e00-\u9fa5a-zA-Z0-9]", text))
 
-        # 修正引号后加入
-        cur['paragraphs'].append(normalize_quotes(stripped))
 
+def write_text_if_changed(path, content):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists() and path.read_text(encoding="utf-8") == content:
+        return
+    path.write_text(content, encoding="utf-8")
+
+
+def write_json_if_changed(path, data):
+    content = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+    write_text_if_changed(path, content)
+
+
+def build_index_entry(chapter_id, title, word_count, source):
     return {
-        'id':        str(chapter_id),
-        'title':     title,
-        'wordCount': str(word_count),
-        'sections':  sections,
+        "id": str(chapter_id),
+        "title": title,
+        "wordCount": str(word_count),
+        "source": source,
     }
 
-# ── 写 JSON ─────────────────────────────────────────────────────
-def write_json(data, path):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
 
-# ── 主流程 ──────────────────────────────────────────────────────
+def collect_zh_entries(target_chapter=None, write_files=True):
+    entries = []
+    md_files = sorted(glob.glob(str(SOURCE_ZH_DIR / "*.md")), key=chapter_num)
+    if not md_files:
+        print("❌ 找不到正文 Markdown 文件。")
+        sys.exit(1)
+
+    for index, filepath in enumerate(md_files, start=1):
+        path = Path(filepath)
+        raw = path.read_text(encoding="utf-8")
+        normalized = normalize_markdown(raw)
+        title = quick_title(path)
+        entry = build_index_entry(
+            chapter_id=index,
+            title=title,
+            word_count=count_words(normalized),
+            source=f"content/chapters/zh/chapter-{index}.md",
+        )
+        entries.append(entry)
+        if write_files and (target_chapter is None or target_chapter == index):
+            write_text_if_changed(PUBLIC_ZH_DIR / f"chapter-{index}.md", normalized)
+            print(f"  ✅ 已同步: docs/content/chapters/zh/chapter-{index}.md")
+    return entries
+
+
+def markdown_from_legacy_json(path):
+    data = json.loads(path.read_text(encoding="utf-8"))
+    lines = [f"# {data['title']}", ""]
+    for section in data.get("sections", []):
+        heading = (section.get("heading") or "").strip()
+        if heading:
+            lines.extend([f"## {heading}", ""])
+        for paragraph in section.get("paragraphs", []):
+            text = str(paragraph).strip()
+            if not text:
+                continue
+            if text == "---":
+                lines.extend(["---", ""])
+            else:
+                lines.extend([text, ""])
+    return "\n".join(lines).strip() + "\n"
+
+
+def bootstrap_legacy_english():
+    PUBLIC_EN_DIR.mkdir(parents=True, exist_ok=True)
+    for path in sorted(LEGACY_JSON_DIR.glob(LEGACY_EN_JSON_GLOB)):
+        chapter_id = re.search(r"chapter-(\d+)-en\.json$", path.name)
+        if not chapter_id:
+            continue
+        target = PUBLIC_EN_DIR / f"chapter-{chapter_id.group(1)}.md"
+        if target.exists():
+            continue
+        content = markdown_from_legacy_json(path)
+        write_text_if_changed(target, content)
+        print(f"  ✅ 已迁移英文正文: {target.relative_to(PROJECT_ROOT)}")
+
+
+def collect_en_entries():
+    entries = []
+    for path in sorted(PUBLIC_EN_DIR.glob("chapter-*.md"), key=lambda item: int(re.search(r"chapter-(\d+)", item.name).group(1))):
+        match = re.search(r"chapter-(\d+)\.md$", path.name)
+        if not match:
+            continue
+        chapter_id = int(match.group(1))
+        raw = path.read_text(encoding="utf-8")
+        entries.append(
+            build_index_entry(
+                chapter_id=chapter_id,
+                title=quick_title(path),
+                word_count=count_words(raw),
+                source=f"content/chapters/en/chapter-{chapter_id}.md",
+            )
+        )
+    return entries
+
+
+def validate_only(target_chapter=None):
+    zh_entries = collect_zh_entries(target_chapter=target_chapter, write_files=False)
+    json.dumps(zh_entries, ensure_ascii=False)
+    bootstrap_legacy_english()
+    en_entries = collect_en_entries()
+    json.dumps(en_entries, ensure_ascii=False)
+    print("\n✅ 校验完成。")
+
+
+def publish(target_chapter=None):
+    bootstrap_legacy_english()
+    zh_entries = collect_zh_entries(target_chapter=target_chapter, write_files=True)
+    en_entries = collect_en_entries()
+
+    if target_chapter is None:
+        write_json_if_changed(ZH_INDEX_FILE, zh_entries)
+        write_json_if_changed(EN_INDEX_FILE, en_entries)
+        print(f"📦 目录索引已更新: {ZH_INDEX_FILE.relative_to(PROJECT_ROOT)}")
+        print(f"📦 目录索引已更新: {EN_INDEX_FILE.relative_to(PROJECT_ROOT)}")
+
+    print(f"\n✅ 完成。共处理 {len(zh_entries)} 个中文章节，{len(en_entries)} 个英文章节。")
+
+
 def main():
-    check_only = '--check' in sys.argv
-    target_ch  = None
+    check_only = "--check" in sys.argv
+    target_chapter = None
     for arg in sys.argv[1:]:
         if arg.isdigit():
-            target_ch = int(arg)
+            target_chapter = int(arg)
 
-    md_files = sorted(glob.glob(os.path.join(SOURCE_DIR, '*.md')), key=chapter_num)
-    if not md_files:
-        print('❌ 找不到正文 Markdown 文件。')
+    if check_only:
+        validate_only(target_chapter=target_chapter)
         return
+    publish(target_chapter=target_chapter)
 
-    all_data = []
-    for i, fp in enumerate(md_files):
-        cid = i + 1
-        if target_ch and cid != target_ch:
-            all_data.append(None)
-            continue
-        print(f'🔄 解析: {os.path.basename(fp)} → 第 {cid} 章')
-        all_data.append(parse_md(fp, cid))
 
-    # 补全缺失的 title/id（用于 prev/next 注入）
-    for i, fp in enumerate(md_files):
-        if all_data[i] is None:
-            all_data[i] = {'id': str(i+1), 'title': _quick_title(fp)}
-
-    # 注入 prev/next 导航
-    total = len(all_data)
-    for i, data in enumerate(all_data):
-        data['prevChapter'] = (
-            {'id': all_data[i-1]['id'], 'title': all_data[i-1]['title']}
-            if i > 0 else None
-        )
-        data['nextChapter'] = (
-            {'id': all_data[i+1]['id'], 'title': all_data[i+1]['title']}
-            if i < total - 1 else None
-        )
-
-    # 输出
-    written = 0
-    for data in all_data:
-        if target_ch and data['id'] != str(target_ch):
-            continue
-        out = os.path.join(OUTPUT_DIR, f"chapter-{data['id']}.json")
-        if check_only:
-            # 仅做 JSON 序列化校验，不写磁盘
-            json.dumps(data, ensure_ascii=False)
-            print(f'  ✅ {out} — 格式正常')
-        else:
-            write_json(data, out)
-            print(f'  ✅ 已写入: {out}')
-            written += 1
-
-    # 更新目录索引（仅全量转换时）
-    if not check_only and not target_ch:
-        index = [{'id': d['id'], 'title': d['title'], 'wordCount': d.get('wordCount', '0')}
-                 for d in all_data]
-        idx_path = os.path.join(OUTPUT_DIR, 'index.json')
-        write_json(index, idx_path)
-        print(f'📦 目录索引已更新: {idx_path}')
-
-    print(f'\n✅ 完成。共处理 {written} 个章节。' if not check_only else '\n✅ 校验完成。')
-
-def _quick_title(filepath):
-    """不做完整解析，只提取标题行。"""
-    with open(filepath, encoding='utf-8') as f:
-        for line in f:
-            if line.startswith('# '):
-                return line[2:].strip()
-    return os.path.basename(filepath).replace('.md', '')
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

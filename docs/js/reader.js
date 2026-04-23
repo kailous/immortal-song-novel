@@ -195,22 +195,126 @@
   const metaEl   = document.getElementById('chapter-meta-info');
 
   let chapterTitle = '';
+  let currentCatalog = [];
 
-  function chapterUrl(lang) {
-    var suffix = lang === 'en' ? '-en' : '';
-    return 'chapters/chapter-' + chapterId + suffix + '.json';
+  function chapterIndexUrl(lang) {
+    return 'data/chapters_' + (lang === 'en' ? 'en' : 'zh') + '.json';
+  }
+
+  function loadChapterIndex(lang) {
+    return fetch(chapterIndexUrl(lang))
+      .then(function (res) {
+        if (!res.ok) {
+          if (lang === 'en') return fetch(chapterIndexUrl('zh'));
+          throw new Error('Chapter index not found');
+        }
+        return res;
+      })
+      .then(function (res) { return res.json(); });
+  }
+
+  function parseMarkdownSections(markdown) {
+    var lines = String(markdown || '').replace(/\r\n/g, '\n').split('\n');
+    var title = '';
+    var sections = [];
+    var currentSection = null;
+
+    function ensureSection() {
+      if (!currentSection) {
+        currentSection = { heading: '', paragraphs: [] };
+        sections.push(currentSection);
+      }
+    }
+
+    function pushParagraph(paragraphLines) {
+      var value = paragraphLines.join('\n').trim();
+      if (!value) return;
+      ensureSection();
+      currentSection.paragraphs.push(value);
+    }
+
+    var paragraphLines = [];
+    lines.forEach(function (line) {
+      var trimmed = line.trim();
+      if (!title && trimmed.indexOf('# ') === 0) {
+        title = trimmed.slice(2).trim();
+        return;
+      }
+      if (trimmed.indexOf('## ') === 0) {
+        pushParagraph(paragraphLines);
+        paragraphLines = [];
+        currentSection = { heading: trimmed.slice(3).trim(), paragraphs: [] };
+        sections.push(currentSection);
+        return;
+      }
+      if (trimmed === '---') {
+        pushParagraph(paragraphLines);
+        paragraphLines = [];
+        currentSection = { heading: '', paragraphs: ['---'] };
+        sections.push(currentSection);
+        currentSection = null;
+        return;
+      }
+      if (!trimmed) {
+        pushParagraph(paragraphLines);
+        paragraphLines = [];
+        return;
+      }
+      paragraphLines.push(line);
+    });
+    pushParagraph(paragraphLines);
+
+    return { title: title, sections: sections };
+  }
+
+  function findChapterEntry(index, id) {
+    return (index || []).find(function (item) { return String(item.id) === String(id); }) || null;
+  }
+
+  function buildChapterData(index, entry, parsed) {
+    var currentIndex = index.findIndex(function (item) { return String(item.id) === String(entry.id); });
+    return {
+      id: String(entry.id),
+      title: parsed.title || entry.title,
+      wordCount: entry.wordCount || '0',
+      sections: parsed.sections,
+      prevChapter: currentIndex > 0 ? {
+        id: String(index[currentIndex - 1].id),
+        title: index[currentIndex - 1].title
+      } : null,
+      nextChapter: currentIndex >= 0 && currentIndex < index.length - 1 ? {
+        id: String(index[currentIndex + 1].id),
+        title: index[currentIndex + 1].title
+      } : null
+    };
   }
 
   function loadChapter(lang) {
-    var url = chapterUrl(lang);
-    fetch(url)
-      .then(function (res) {
-        if (!res.ok) {
-          // Fall back to Chinese if English file not found
-          if (lang === 'en') return fetch(chapterUrl('zh')).then(function (r) { return r.json(); });
-          throw new Error('Chapter not found');
+    loadChapterIndex(lang)
+      .then(function (index) {
+        var activeIndex = index;
+        var entry = findChapterEntry(index, chapterId);
+        if (!entry && lang === 'en') {
+          return loadChapterIndex('zh').then(function (zhIndex) {
+            activeIndex = zhIndex;
+            entry = findChapterEntry(zhIndex, chapterId);
+            if (!entry) throw new Error('Chapter not found');
+            return { entry: entry, index: zhIndex };
+          });
         }
-        return res.json();
+        if (!entry) throw new Error('Chapter not found');
+        return { entry: entry, index: activeIndex };
+      })
+      .then(function (payload) {
+        currentCatalog = payload.index;
+        return fetch(payload.entry.source)
+          .then(function (res) {
+            if (!res.ok) throw new Error('Chapter markdown not found');
+            return res.text();
+          })
+          .then(function (markdown) {
+            return buildChapterData(payload.index, payload.entry, parseMarkdownSections(markdown));
+          });
       })
       .then(function (data) {
         chapterTitle = data.title;
@@ -355,25 +459,34 @@
 
   function loadCatalogIndex() {
     if (!catalogIndexEl) return;
-    fetch('chapters/index.json')
-      .then(res => res.json())
-      .then(data => {
-        let html = '<ul class="overlay-chapter-list">';
-        data.forEach(ch => {
-          const isActive = ch.id === chapterId ? 'active' : '';
-          html += `<li class="overlay-chapter-item ${isActive}">
-            <a href="reader.html?ch=${ch.id}">
-              <span class="ch-id">${ch.id.padStart(2, '0')}</span>
-              <span class="ch-name">${ch.title}</span>
-            </a></li>`;
-        });
-        html += '</ul>';
-        catalogIndexEl.innerHTML = html;
+    if (currentCatalog.length) {
+      renderCatalogIndex(currentCatalog);
+      return;
+    }
+    loadChapterIndex(window.i18n ? window.i18n.lang() : 'zh')
+      .then(function (data) {
+        currentCatalog = data;
+        renderCatalogIndex(data);
       })
-      .catch(err => {
+      .catch(function (err) {
         catalogIndexEl.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem;">' + t('reader.overlay.load') + '</p>';
         console.error(err);
       });
+  }
+
+  function renderCatalogIndex(data) {
+    if (!catalogIndexEl) return;
+    var html = '<ul class="overlay-chapter-list">';
+    data.forEach(function (ch) {
+      var isActive = ch.id === chapterId ? 'active' : '';
+      html += '<li class="overlay-chapter-item ' + isActive + '">' +
+        '<a href="reader.html?ch=' + ch.id + '">' +
+          '<span class="ch-id">' + ch.id.padStart(2, '0') + '</span>' +
+          '<span class="ch-name">' + ch.title + '</span>' +
+        '</a></li>';
+    });
+    html += '</ul>';
+    catalogIndexEl.innerHTML = html;
   }
 
   // ============================================================

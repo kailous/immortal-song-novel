@@ -1,5 +1,5 @@
 /**
- * 目录页 — 从 chapters/index.json 动态渲染卷一章节列表
+ * 目录页 — 从 docs/data/chapters_*.json 动态渲染卷一章节列表
  * 新章节执行 make publish 后自动出现，无需手动修改 HTML
  */
 (function () {
@@ -12,6 +12,11 @@
 
   function t(key) {
     return (window.i18n && window.i18n.t) ? window.i18n.t(key) : key;
+  }
+
+  function indexUrl() {
+    var lang = (window.i18n && window.i18n.lang) ? window.i18n.lang() : 'zh';
+    return 'data/chapters_' + (lang === 'en' ? 'en' : 'zh') + '.json';
   }
 
   function render(chapters) {
@@ -48,7 +53,8 @@
     list.appendChild(placeholder);
   }
 
-  fetch('chapters/index.json')
+  function loadChapters() {
+    fetch(indexUrl())
     .then(function (r) { return r.json(); })
     .then(function (chapters) {
       cachedChapters = chapters;
@@ -57,8 +63,11 @@
     .catch(function () {
       list.innerHTML = '<li class="chapter-item" style="opacity:.5;">' + t('catalog.fail') + '</li>';
     });
+  }
+
+  loadChapters();
 
   document.addEventListener('langchange', function () {
-    if (cachedChapters) render(cachedChapters);
+    loadChapters();
   });
 })();

@@ -68,7 +68,7 @@ make all           # publish + sync-chars
   → 更新 _工作台/当前状态.md
   → 更新 设定库/00_全局时间线.md
   → 更新 相关角色生平志（附节末尾）
-  → make publish   → 生成 docs/chapters/chapter-N.json + index.json
+  → make publish   → 同步 docs/content/chapters/zh|en/*.md + docs/data/chapters_zh.json / chapters_en.json
   → make sync-chars（如有角色变动）
 ```
 
@@ -78,7 +78,7 @@ make all           # publish + sync-chars
 
 纯静态站点，无构建步骤，直接部署 GitHub Pages。
 
-- 章节内容：`docs/chapters/chapter-N.json`，由 `reader.js` 通过 `fetch()` 加载
+- 章节内容：`docs/content/chapters/zh/*.md` / `docs/content/chapters/en/*.md`，由 `reader.js` 先读取 `docs/data/chapters_zh.json` / `docs/data/chapters_en.json` 再 `fetch()` Markdown
 - 角色索引：`docs/data/characters_zh.json` / `docs/data/characters_en.json`，列表页按语言读取；中文详情页直读 `docs/content/profiles/zh/*.md`，英文详情页直读 `docs/content/profiles/en/*.md`
 - 设计主题：深色 `#0a0b0f` + 古金色 `#c8a86e`；正文 `Noto Serif SC`，界面 `Inter`
 
