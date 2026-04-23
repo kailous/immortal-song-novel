@@ -83,36 +83,54 @@
         return lang === 'en' ? 'data/characters_en.json' : 'data/characters.json';
       }
 
+      function escHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function safeImageName(value) {
+        var name = String(value || '').split(/[\\/]/).pop();
+        return /^[\w.\-\u4e00-\u9fa5]+\.(png|jpe?g|webp|gif|svg)$/i.test(name) ? name : '';
+      }
+
       function renderChars(data) {
         var charHtml    = '';
         var factionHtml = '';
         var itemHtml    = '';
         for (var id in data) {
           var item = data[id];
-          var introText = (item.intro || '').replace(/\*+/g, '').replace(/\n/g, ' ').trim();
+          var safeId = encodeURIComponent(id);
+          var image = encodeURIComponent(safeImageName(item.image));
+          var title = escHtml(item.title);
+          var alias = escHtml(item.alias);
+          var introText = escHtml((item.intro || '').replace(/\*+/g, '').replace(/\n/g, ' ').trim());
           if (item.type === 'character') {
-            charHtml += '<a href="character-detail.html?id=' + id + '" class="character-card reveal">' +
-              '<div class="character-card-image"><img src="images/' + item.image + '" alt="' + item.title + '"></div>' +
+            charHtml += '<a href="character-detail.html?id=' + safeId + '" class="character-card reveal">' +
+              '<div class="character-card-image"><img src="images/' + image + '" alt="' + title + '" loading="lazy"></div>' +
               '<div class="character-card-body">' +
-                '<h3 class="char-name">' + item.title + '</h3>' +
-                '<p class="char-alias">' + item.alias + '</p>' +
+                '<h3 class="char-name">' + title + '</h3>' +
+                '<p class="char-alias">' + alias + '</p>' +
                 '<p class="char-desc">' + introText.substring(0, 120) + '…</p>' +
               '</div></a>';
           } else if (item.type === 'faction') {
-            factionHtml += '<a href="character-detail.html?id=' + id + '" class="faction-card reveal">' +
-              '<div class="faction-card-image"><img src="images/' + item.image + '" alt="' + item.title + '"></div>' +
+            factionHtml += '<a href="character-detail.html?id=' + safeId + '" class="faction-card reveal">' +
+              '<div class="faction-card-image"><img src="images/' + image + '" alt="' + title + '" loading="lazy"></div>' +
               '<div class="faction-card-body">' +
                 '<p class="faction-label">FACTION</p>' +
-                '<h3 class="faction-name">' + item.title + '</h3>' +
-                '<p class="faction-alias">' + item.alias + '</p>' +
+                '<h3 class="faction-name">' + title + '</h3>' +
+                '<p class="faction-alias">' + alias + '</p>' +
                 '<p class="faction-desc">' + introText.substring(0, 160) + '…</p>' +
               '</div></a>';
           } else {
-            itemHtml += '<a href="character-detail.html?id=' + id + '" class="item-card reveal">' +
-              '<div class="item-card-image"><img src="images/' + item.image + '" alt="' + item.title + '"></div>' +
+            itemHtml += '<a href="character-detail.html?id=' + safeId + '" class="item-card reveal">' +
+              '<div class="item-card-image"><img src="images/' + image + '" alt="' + title + '" loading="lazy"></div>' +
               '<div class="item-card-body">' +
-                '<h3>' + item.title + '</h3>' +
-                '<p class="item-type">' + item.alias + '</p>' +
+                '<h3>' + title + '</h3>' +
+                '<p class="item-type">' + alias + '</p>' +
                 '<p>' + introText.substring(0, 120) + '…</p>' +
               '</div></a>';
           }

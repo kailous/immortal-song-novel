@@ -31,7 +31,24 @@
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function safeHref(rawUrl) {
+    var value = String(rawUrl || '').trim();
+    if (!value || /[\u0000-\u001f\u007f\s]/.test(value)) return '';
+    if (value[0] === '#') return value;
+    try {
+      var url = new URL(value, window.location.href);
+      if (['http:', 'https:', 'mailto:'].indexOf(url.protocol) !== -1) {
+        return url.href;
+      }
+      if (url.origin === window.location.origin && /^[./\w\u4e00-\u9fa5%-]/.test(value)) {
+        return value;
+      }
+    } catch (e) {}
+    return '';
   }
 
   function fmtDate(iso) {
@@ -235,7 +252,11 @@
     // `行内代码`
     escaped = escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
     // [链接文字](url)
-    escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (match, label, url) {
+      var href = safeHref(url.replace(/&amp;/g, '&'));
+      if (!href) return label;
+      return '<a href="' + escHtml(href) + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+    });
     return escaped;
   }
 

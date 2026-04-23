@@ -67,7 +67,11 @@
       "WebFetch(domain:shuihu.5000yan.com)",
       "WebFetch(domain:word.baidu.com)",
       "Bash(wc -l /Users/lipeng/Documents/Repository/immortal-song-novel/写手/*.md /Users/lipeng/Documents/Repository/immortal-song-novel/智囊团/*.md)",
-      "Bash(wc -l /Users/lipeng/Documents/Repository/immortal-song-novel/参考资料/范文库/*.md)"
+      "Bash(wc -l /Users/lipeng/Documents/Repository/immortal-song-novel/参考资料/范文库/*.md)",
+      "Bash(pip install *)",
+      "Bash(pip3 install *)",
+      "Bash(open *)",
+      "Bash(git rm *)"
     ]
   }
 }

@@ -3,8 +3,7 @@
    Design: "重工大宋 × 星海赛博" Dark Theme
    ============================================================ */
 
-/* --- Google Fonts --- */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap');
+/* --- Local font stack; avoids runtime third-party font requests. --- */
 
 /* --- Design Tokens --- */
 :root {
@@ -33,8 +32,8 @@
   --gradient-hero: linear-gradient(180deg, rgba(10,11,15,0) 0%, rgba(10,11,15,0.6) 50%, #0a0b0f 100%);
 
   /* Typography */
-  --font-serif: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Songti SC', 'STSong', 'SimSun', 'Noto Serif SC', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Inter', sans-serif;
 
   /* Spacing */
   --nav-height: 64px;
@@ -1824,6 +1823,11 @@ img {
   width: 18px;
   height: 18px;
   display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* play/pause 切换用的包装 span */

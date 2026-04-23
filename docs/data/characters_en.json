@@ -2,7 +2,7 @@
   "luchen": {
     "title": "Lu Chen (Lin Mo)",
     "alias": "Sun Mancang → Lin Mo → Lu Chen · Undying Soldier · Civilizational Mentor",
-    "image": "陆辰.png",
+    "image": "陆辰.webp",
     "intro": "Born Sun Mancang in 1933 in Henan, China. In 1945, burned inside Unit 731's incinerator, he mutated — gaining quantum-state reset: undying. In 2056, as humanity's last stand, the only carbon-based lifeform capable of surviving a spacetime leap was sent through the time corridor. After enduring 74,000G tidal forces, he crashed into the mountains of the Southern Song Dynasty. His body rebuilt from zero, his memory shattered — but every muscle fiber was carved with the killing instincts of a 2056 extreme special-forces soldier. Rescued by widow Lu Xiaoxiao, he began rewriting the course of civilization under the name 'Lu Chen.'",
     "type": "character",
     "sections": [
@@ -39,7 +39,7 @@
   "zhangxian": {
     "title": "Zhang Xian",
     "alias": "Yue Family Army Deputy Commander · First General · Lu Chen's Military Mentor",
-    "image": "张宪.png",
+    "image": "张宪.webp",
     "intro": "A renowned general of the Southern Song's anti-Jin resistance and the foremost warrior under Yue Fei. His military expertise is exceptional — the central bridge through which Lu Chen enters the grand strategic theater of the Southern Song. Behind his extreme military discipline stands a true professional soldier, and Lu Chen's guide on the cold-weapon battlefield.",
     "type": "character",
     "sections": [
@@ -76,7 +76,7 @@
   "luxiaoxiao": {
     "title": "Lu Xiaoxiao",
     "alias": "Merchant's Lost Pearl · Village Widow · Soul of Industrial Logistics",
-    "image": "陆晓晓.png",
+    "image": "陆晓晓.webp",
     "intro": "A 19-year-old daughter of a fallen merchant family, struggling to survive under her clan's predatory pressure. As the protagonist's first protector after arriving in the Song Dynasty, she uses tenacity and survival instincts beyond her era to carry back — from a pile of corpses — the spark that will ignite a new civilization.",
     "type": "character",
     "sections": [
@@ -109,7 +109,7 @@
   "zhaohuanhuan": {
     "title": "Zhao Huanhuan",
     "alias": "Song Dynasty Imperial Princess · Ladder to the Stolen Throne · Wielder of Imperial Authority",
-    "image": "赵嬛嬛.png",
+    "image": "赵嬛嬛.webp",
     "intro": "An Imperial Princess of the Song Dynasty — once the most radiant jewel of the royal family, offered as a peace sacrifice by her own father and brothers in the Jingkang Humiliation. After seeing through the rot of the old order, she chose to betray her class, becoming Lu Chen's most ruthless political operator. Holding the imperial seal, she lays the legal groundwork for a new civilization.",
     "type": "character",
     "sections": [
@@ -142,7 +142,7 @@
   "lixianzhong": {
     "title": "Li Xianzhong",
     "alias": "Returned General · Yan'an Li Clan · Lu Chen's Fierce Mirror",
-    "image": "李显忠.png",
+    "image": "李显忠.webp",
     "intro": "Born Li Shibo, a 'returned' Song general. Carrying deep vengeance for his family and nation, he fought his way back from Jin territory to the Song. Bold and unconventional, he is the most steadfast supporter of Lu Chen's asymmetric warfare — and the protagonist's fierce, kindred mirror image within the military system.",
     "type": "character",
     "sections": [
@@ -179,7 +179,7 @@
   "bracelet": {
     "title": "Dimensional Bracelet",
     "alias": "Alien High-Dimensional Folded Space Artifact · Humanity's Last Bet",
-    "image": "次元手环.png",
+    "image": "次元手环.webp",
     "intro": "An absolutely rigid artifact captured from aliens. Inside is folded an independent high-dimensional space — conservatively estimated at the volume of a 20-story office building. Temperature: absolute zero. Pressure: perfect vacuum. Time flow rate: zero. Humanity has sealed within it the crystallization of all its final technology: ultra-precision lathes, cold fusion batteries, supercomputing servers, and the digitized legacy of all human civilization.",
     "type": "item",
     "sections": [
@@ -204,7 +204,7 @@
   "taren": {
     "title": "The Taren",
     "alias": "Last Colonizers · Iron Desperadoes · Exiles of Gaanan",
-    "image": "塔伦人.jpeg",
+    "image": "塔伦人.webp",
     "type": "faction",
     "intro": "A carbon-based civilization from the Taren star system, whose origins and evolutionary path closely parallel humanity — yet they chose a far more radical course of self-modification: mass cyborgification, Dyson spheres, and ultimately the exhaustion of their homeworld Gaanan. With nowhere left to turn, they broadcast a distress signal into the cosmos. Only Earth responded — sparking a thirty-year war.",
     "sections": [

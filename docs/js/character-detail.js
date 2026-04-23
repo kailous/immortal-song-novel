@@ -24,6 +24,32 @@
     '04_特殊监察体系_守望者.md':          'watcher-nezha',
   };
 
+  function escHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function safeHref(rawUrl) {
+    const value = String(rawUrl || '').trim();
+    if (!value || /[\u0000-\u001f\u007f\s]/.test(value)) return '';
+    if (value[0] === '#') return value;
+    try {
+      const url = new URL(value, window.location.href);
+      if (['http:', 'https:', 'mailto:'].includes(url.protocol)) return url.href;
+      if (url.origin === window.location.origin && /^[./\w\u4e00-\u9fa5%-]/.test(value)) return value;
+    } catch (e) {}
+    return '';
+  }
+
+  function safeImageName(value) {
+    const name = String(value || '').split(/[\\/]/).pop();
+    return /^[\w.\-\u4e00-\u9fa5]+\.(png|jpe?g|webp|gif|svg)$/i.test(name) ? name : '';
+  }
+
   // ── 初始化 ──────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     const params = new URLSearchParams(window.location.search);
@@ -106,7 +132,7 @@
     if (entry.sections && entry.sections.length) {
       entry.sections.forEach(s => {
         html += `<div class="glossary-section">`;
-        if (s.heading) html += `<h4>${s.heading}</h4>`;
+        if (s.heading) html += `<h4>${escHtml(s.heading)}</h4>`;
         html += parseMarkdown(s.content || '');
         html += `</div>`;
       });
@@ -150,11 +176,12 @@
     titleEl.textContent = item.title;
     aliasEl.textContent = item.alias;
 
-    if (item.image) {
-      imgEl.src = `images/${item.image}`;
+    const imageName = safeImageName(item.image);
+    if (imageName) {
+      imgEl.src = `images/${encodeURIComponent(imageName)}`;
       imgEl.alt = item.title;
       const heroBg = document.getElementById('hero-bg');
-      heroBg.style.backgroundImage    = `url(images/${item.image})`;
+      heroBg.style.backgroundImage    = `url("images/${encodeURIComponent(imageName)}")`;
       heroBg.style.backgroundSize     = 'cover';
       heroBg.style.backgroundPosition = 'center';
     }
@@ -166,7 +193,7 @@
       const isTimeline = s.heading.includes('生平志');
       html += `
         <div class="detail-section">
-          <h2>${s.heading}</h2>
+          <h2>${escHtml(s.heading)}</h2>
           <div class="detail-body">
             ${isTimeline ? renderTimeline(s.content) : parseMarkdown(s.content)}
           </div>
@@ -211,7 +238,7 @@
         <div class="timeline-item ${isCurrent ? 'active' : ''}">
           <div class="timeline-node"></div>
           <div class="timeline-content">
-            ${time ? `<span class="timeline-time">${time}</span>` : ''}
+            ${time ? `<span class="timeline-time">${escHtml(time)}</span>` : ''}
             <div class="timeline-body">${parseMarkdown(body)}</div>
           </div>
         </div>
@@ -226,7 +253,7 @@
   function parseMarkdown(text) {
     if (!text) return '';
 
-    let html = text.trim();
+    let html = escHtml(text.trim());
 
     // 去掉任务标记 [/] [ ] [x]
     html = html.replace(/\[[\/\sxX]\]\s*/g, '');
@@ -258,7 +285,8 @@
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, url) => {
       // 外部链接
       if (/^https?:\/\//i.test(url)) {
-        return `<a href="${url}" target="_blank" rel="noopener">${label}</a>`;
+        const href = safeHref(url.replace(/&amp;/g, '&'));
+        return href ? `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer">${label}</a>` : label;
       }
       const filename = url.split('/').pop();
       // 跳转到图鉴详情页
@@ -271,7 +299,8 @@
       }
       // 站内 .html 页面新标签页打开
       if (/\.html$/i.test(filename)) {
-        return `<a href="${filename}" class="md-local-link" target="_blank" rel="noopener">${label}</a>`;
+        const href = safeHref(filename);
+        return href ? `<a href="${escHtml(href)}" class="md-local-link" target="_blank" rel="noopener noreferrer">${label}</a>` : label;
       }
       return `<span class="md-local-ref">${label}</span>`;
     });
