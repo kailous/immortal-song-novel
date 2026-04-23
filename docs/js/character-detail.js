@@ -269,6 +269,10 @@
       if (glossaryFileMap[filename]) {
         return `<a href="#" class="glossary-link md-local-link" data-key="${glossaryFileMap[filename]}">${label}</a>`;
       }
+      // 站内 .html 页面直接跳转
+      if (/\.html$/i.test(filename)) {
+        return `<a href="${filename}" class="md-local-link">${label}</a>`;
+      }
       return `<span class="md-local-ref">${label}</span>`;
     });
 
