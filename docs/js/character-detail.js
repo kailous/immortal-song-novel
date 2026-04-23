@@ -64,7 +64,7 @@
 
     function loadAndRender(lang) {
       Promise.all([
-        fetch(lang === 'en' ? 'data/characters_en.json' : 'data/characters.json').then(r => r.json()),
+        fetch('data/characters.json').then(r => r.json()),
         fetch('data/glossary.json').then(r => r.json()).catch(() => ({})),
       ]).then(([chars, glossary]) => {
         glossaryData = glossary;
@@ -73,19 +73,29 @@
           window.location.href = 'characters.html';
           return;
         }
-        if (lang === 'en' || !item.source) {
-          renderDetail(item);
+        const profileMeta = lang === 'en'
+          ? {
+              title: item.title_en || item.title,
+              alias: item.alias_en || item.alias,
+              image: item.image,
+              intro: item.intro_en || item.intro,
+              type: item.type,
+            }
+          : item;
+        const source = lang === 'en' ? (item.source_en || item.source) : item.source;
+        if (!source) {
+          renderDetail(profileMeta);
           return;
         }
-        fetch(item.source)
+        fetch(source)
           .then(r => {
-            if (!r.ok) throw new Error(`Failed to load markdown: ${item.source}`);
+            if (!r.ok) throw new Error(`Failed to load markdown: ${source}`);
             return r.text();
           })
-          .then(text => renderDetail(parseProfileMarkdown(text, item)))
+          .then(text => renderDetail(parseProfileMarkdown(text, profileMeta, lang)))
           .catch(err => {
             console.error('Error loading markdown profile:', err);
-            renderDetail(item);
+            renderDetail(profileMeta);
           });
       }).catch(err => {
         console.error('Error loading data:', err);
@@ -258,7 +268,7 @@
     return html;
   }
 
-  function parseProfileMarkdown(text, meta) {
+  function parseProfileMarkdown(text, meta, lang) {
     const source = String(text || '').replace(/\r\n/g, '\n');
     const parts = source.split(/^##\s+/m);
     const head = parts[0] || '';
@@ -272,13 +282,16 @@
     const imageMatch = source.match(/!\[.*?\]\((.*?)\)/);
     const imageName = meta && meta.image ? meta.image : safeImageName(imageMatch ? imageMatch[1] : '');
 
-    const aliasMatch = source.match(/^\*\s+\*\*(?:大宋化名|本名|姓名|称号|类型)\*\*：\s*(.*?)(?:\*\*)?\s*$/m);
+    const aliasPattern = lang === 'en'
+      ? /^\*\s+\*\*(?:Alias|Name|Title|Type)\*\*[:：]\s*(.*?)(?:\*\*)?\s*$/m
+      : /^\*\s+\*\*(?:大宋化名|本名|姓名|称号|类型)\*\*：\s*(.*?)(?:\*\*)?\s*$/m;
+    const aliasMatch = source.match(aliasPattern);
     const alias = meta && meta.alias ? meta.alias : (aliasMatch ? aliasMatch[1].replace(/\*\*/g, '').trim() : '');
 
     let intro = head
       .replace(/^#.*?\n/m, '')
       .replace(/!\[.*?\]\(.*?\)\n?/g, '')
-      .replace(/^\*\s+\*\*(?:大宋化名|本名|姓名|称号|类型)\*\*：.*(?:\n|$)/gm, '')
+      .replace(/^\*\s+\*\*(?:大宋化名|本名|姓名|称号|类型|Alias|Name|Title|Type)\*\*[:：].*(?:\n|$)/gm, '')
       .replace(/^---+\s*/gm, '')
       .trim();
     if (!intro && meta && meta.intro) intro = meta.intro;

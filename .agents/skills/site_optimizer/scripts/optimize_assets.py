@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 DOCS = ROOT / "docs"
 IMAGES = DOCS / "images"
-DATA_FILES = [DOCS / "data" / "characters.json", DOCS / "data" / "characters_en.json"]
+DATA_FILES = [DOCS / "data" / "characters.json"]
 HTML_FILES = [DOCS / "index.html"]
 MIN_SOURCE_KB = 256
 QUALITY = "82"

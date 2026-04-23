@@ -105,10 +105,6 @@
       var factionGrid = document.getElementById('factions-grid');
       var itemGrid    = document.getElementById('items-grid');
 
-      function dataUrl(lang) {
-        return lang === 'en' ? 'data/characters_en.json' : 'data/characters.json';
-      }
-
       function escHtml(value) {
         return String(value || '')
           .replace(/&/g, '&amp;')
@@ -127,13 +123,15 @@
         var charHtml    = '';
         var factionHtml = '';
         var itemHtml    = '';
+        var lang = window.i18n ? window.i18n.lang() : 'zh';
         for (var id in data) {
           var item = data[id];
           var safeId = encodeURIComponent(id);
           var image = encodeURIComponent(safeImageName(item.image));
-          var title = escHtml(item.title);
-          var alias = escHtml(item.alias);
-          var introText = escHtml((item.intro || '').replace(/\*+/g, '').replace(/\n/g, ' ').trim());
+          var title = escHtml(lang === 'en' ? (item.title_en || item.title) : item.title);
+          var alias = escHtml(lang === 'en' ? (item.alias_en || item.alias) : item.alias);
+          var introSource = lang === 'en' ? (item.intro_en || item.intro) : item.intro;
+          var introText = escHtml((introSource || '').replace(/\*+/g, '').replace(/\n/g, ' ').trim());
           if (item.type === 'character') {
             charHtml += '<a href="character-detail.html?id=' + safeId + '" class="character-card reveal">' +
               '<div class="character-card-image"><img src="images/' + image + '" alt="' + title + '" loading="lazy"></div>' +
@@ -170,8 +168,7 @@
       }
 
       function loadChars() {
-        var lang = window.i18n ? window.i18n.lang() : 'zh';
-        fetch(dataUrl(lang))
+        fetch('data/characters.json')
           .then(function (res) { return res.json(); })
           .then(renderChars)
           .catch(function (e) { console.error('[characters]', e); });
