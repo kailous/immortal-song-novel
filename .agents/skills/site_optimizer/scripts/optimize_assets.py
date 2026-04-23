@@ -8,13 +8,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 DOCS = ROOT / "docs"
 IMAGES = DOCS / "images"
-DATA_FILES = [
-    DOCS / "data" / "characters_zh.json",
-    DOCS / "data" / "characters_en.json",
-]
-HTML_FILES = [DOCS / "index.html"]
 MIN_SOURCE_KB = 256
 QUALITY = "82"
+KEEP_ORIGINALS = {"og-cover.jpg"}
+TEXT_FILE_EXTENSIONS = {".html", ".json", ".md", ".css", ".js", ".txt", ".xml", ".webmanifest"}
 
 
 def convert_image(cwebp, path):
@@ -31,36 +28,30 @@ def convert_image(cwebp, path):
     return target, True
 
 
-def update_json_refs(mapping):
-    changed = []
-    for data_file in DATA_FILES:
-        if not data_file.exists():
-            continue
-        data = json.loads(data_file.read_text(encoding="utf-8"))
-        touched = False
-        for item in data.values():
-            image = item.get("image")
-            if image in mapping:
-                item["image"] = mapping[image]
-                touched = True
-        if touched:
-            data_file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            changed.append(data_file)
-    return changed
+def replace_image_refs(text, mapping):
+    updated = text
+    for old, new in mapping.items():
+        updated = updated.replace(f"images/{old}", f"images/{new}")
+        updated = updated.replace(f"/images/{old}", f"/images/{new}")
+        updated = updated.replace(f'"{old}"', f'"{new}"')
+        updated = updated.replace(f"'{old}'", f"'{new}'")
+    return updated
 
 
-def update_html_refs(mapping):
+def update_text_refs(mapping):
     changed = []
-    for html_file in HTML_FILES:
-        if not html_file.exists():
+    for path in sorted(DOCS.rglob("*")):
+        if not path.is_file() or path.suffix.lower() not in TEXT_FILE_EXTENSIONS:
             continue
-        text = html_file.read_text(encoding="utf-8")
-        updated = text
-        for old, new in mapping.items():
-            updated = updated.replace(f"images/{old}", f"images/{new}")
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        updated = replace_image_refs(text, mapping)
         if updated != text:
-            html_file.write_text(updated, encoding="utf-8")
-            changed.append(html_file)
+            if path.suffix.lower() == ".json":
+                payload = json.loads(updated)
+                path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            else:
+                path.write_text(updated, encoding="utf-8")
+            changed.append(path)
     return changed
 
 
@@ -72,8 +63,11 @@ def main():
 
     mapping = {}
     converted = []
+    deleted = []
     for path in sorted(IMAGES.glob("*")):
         if path.suffix.lower() not in {".png", ".jpg", ".jpeg"}:
+            continue
+        if path.name in KEEP_ORIGINALS:
             continue
         if path.stat().st_size < MIN_SOURCE_KB * 1024:
             continue
@@ -82,13 +76,22 @@ def main():
         if did_convert:
             converted.append(target)
 
-    json_changed = update_json_refs(mapping)
-    html_changed = update_html_refs(mapping)
+    changed_files = update_text_refs(mapping)
+
+    for old_name, new_name in mapping.items():
+        if old_name == new_name:
+            continue
+        source = IMAGES / old_name
+        if source.exists():
+            source.unlink()
+            deleted.append(source)
 
     for target in converted:
         print(f"converted {target.relative_to(ROOT)}")
-    for path in json_changed + html_changed:
+    for path in changed_files:
         print(f"updated refs {path.relative_to(ROOT)}")
+    for path in deleted:
+        print(f"deleted {path.relative_to(ROOT)}")
     print(f"optimized {len(mapping)} image reference(s)")
     return 0
 
