@@ -266,16 +266,29 @@ def build_font(output_dir: str):
     fb2.setupHorizontalHeader(ascent=ASCENDER, descent=DESCENDER)
 
     # 完整 name 表（满足 sfnt 安装要求）
+    # 不传 trademark，避免生成空 nameID 7 导致 macOS 黄色警告
     fb2.setupNameTable({
         "familyName":           "Taren",
         "styleName":            "Regular",
-        "uniqueFontIdentifier": "Taren-Regular;1.0;2026",
+        "uniqueFontIdentifier": "Taren-Regular;1.000;2026",
         "fullName":             "Taren Regular",
-        "version":              "Version 1.0",
+        "version":              "Version 1.000",
         "psName":               "Taren-Regular",
         "copyright":            "Copyright 2026 kailous. Velkor Script Phase 1.",
-        "trademark":            "",
     })
+    # 补充 nameID 16/17（Typographic Family/Subfamily）提升兼容性
+    from fontTools.ttLib.tables._n_a_m_e import NameRecord
+    def add_name(table, nameID, string):
+        for platID, encID, langID in [(3, 1, 0x0409), (1, 0, 0)]:
+            rec = NameRecord()
+            rec.nameID     = nameID
+            rec.platformID = platID
+            rec.platEncID  = encID
+            rec.langID     = langID
+            rec.string     = string.encode('utf-16-be') if platID == 3 else string.encode('latin-1', errors='replace')
+            table.names.append(rec)
+    add_name(fb2.font['name'], 16, "Taren")
+    add_name(fb2.font['name'], 17, "Regular")
 
     # 完整 OS/2 表
     fb2.setupOS2(
@@ -300,8 +313,14 @@ def build_font(output_dir: str):
     # post 表：version 2.0 兼容性最好
     fb2.setupPost(keepGlyphNames=True)
 
-    # head 表
+    # head 表：flags bit0=baseline@y0, bit1=lsb@x0, bit3=force ppem整数
+    import time
+    epoch_1904 = 2082844800  # Mac epoch offset (seconds between 1904-01-01 and 1970-01-01)
+    ts = int(time.time()) + epoch_1904
     fb2.setupHead(unitsPerEm=EM, macStyle=0)
+    fb2.font['head'].flags   = 0x000B  # bits 0,1,3
+    fb2.font['head'].created = ts
+    fb2.font['head'].modified = ts
 
     os.makedirs(output_dir, exist_ok=True)
     # TTF 格式用 .ttf 扩展名，避免 macOS 混淆 OTF/CFF
