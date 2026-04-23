@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>塔伦文字 · 字体预览</title>
+<style>
+  @font-face {
+    font-family: 'Taren';
+    src: url('fonts/taren.woff2') format('woff2'),
+         url('fonts/taren.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --bg: #0a0b0f;
+    --panel: #111318;
+    --gold: #c8a86e;
+    --dim: #5a5040;
+    --text: #c8c0b0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--dim);
+    margin-bottom: 40px;
+  }
+
+  .section-title {
+    font-size: 0.7rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 30px 0 12px;
+    border-bottom: 1px solid #1e2025;
+    padding-bottom: 6px;
+  }
+
+  /* 字形网格 */
+  .glyph-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .glyph-cell {
+    background: var(--panel);
+    border: 1px solid #1e2025;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px 4px;
+    cursor: default;
+    transition: border-color 0.15s;
+  }
+
+  .glyph-cell:hover {
+    border-color: var(--gold);
+  }
+
+  .glyph-char {
+    font-family: 'Taren';
+    font-size: 32px;
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  .glyph-code {
+    font-size: 9px;
+    color: var(--dim);
+    margin-top: 4px;
+    font-family: monospace;
+  }
+
+  /* 文本展示区 */
+  .text-demo {
+    background: var(--panel);
+    border: 1px solid #1e2025;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .taren-text {
+    font-family: 'Taren';
+    color: var(--gold);
+    line-height: 1.8;
+    word-break: break-all;
+  }
+
+  .size-sm  { font-size: 16px; }
+  .size-md  { font-size: 24px; }
+  .size-lg  { font-size: 40px; }
+  .size-xl  { font-size: 64px; }
+
+  .label {
+    font-size: 0.65rem;
+    color: var(--dim);
+    margin-bottom: 6px;
+  }
+
+  /* 混排示例 */
+  .mixed {
+    font-family: 'Noto Serif SC', 'Songti SC', serif;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 2;
+  }
+
+  .mixed .taren-inline {
+    font-family: 'Taren';
+    font-size: 18px;
+    color: var(--gold);
+    vertical-align: middle;
+  }
+
+  .info-box {
+    background: #0d0f14;
+    border: 1px solid #1e2025;
+    border-radius: 6px;
+    padding: 16px;
+    font-size: 0.8rem;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-top: 40px;
+  }
+
+  .info-box strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<h1>塔 伦 文 字</h1>
+<p class="subtitle">Velkor Script · Phase 1 · 300 Glyphs · Style A Angular</p>
+
+<!-- 尺寸展示 -->
+<div class="section-title">字号展示</div>
+<div class="text-demo">
+  <div class="label">64px</div>
+  <div class="taren-text size-xl" id="demo-xl"></div>
+  <br>
+  <div class="label">40px</div>
+  <div class="taren-text size-lg" id="demo-lg"></div>
+  <br>
+  <div class="label">24px</div>
+  <div class="taren-text size-md" id="demo-md"></div>
+  <br>
+  <div class="label">16px</div>
+  <div class="taren-text size-sm" id="demo-sm"></div>
+</div>
+
+<!-- 混排示例 -->
+<div class="section-title">混排示例（中文 + 塔伦文）</div>
+<div class="text-demo">
+  <div class="mixed">
+    手环表面刻有塔伦人的文字：<span class="taren-inline" id="mix1"></span>——那是某种警示，或某种祈祷。<br>
+    通讯频道里传来断续的声音，是塔伦语的某个短语：<span class="taren-inline" id="mix2"></span>，主和派的人曾经翻译过，意思是"共生"。<br>
+    残破的战舰外壁上，喷涂着大块的字符：<span class="taren-inline" id="mix3"></span>
+  </div>
+</div>
+
+<!-- 全字形网格 -->
+<div class="section-title">全字形网格（U+E000 — U+E12B）</div>
+<div class="glyph-grid" id="grid"></div>
+
+<div class="info-box">
+  <strong>字体技术规格</strong><br>
+  字体名称：Taren Regular &nbsp;|&nbsp;
+  字形数量：300（Phase 1）&nbsp;|&nbsp;
+  编码区间：U+E000 – U+E12B（Unicode 私用区）<br>
+  风格：Style A 角线风格（纯直线构成，无曲线）&nbsp;|&nbsp;
+  笔画族：生命 · 战争 · 记忆 · 时间 · 技术 · 熄灭 · 穿越<br>
+  布局：S（单组件）· H（左右）· V（上下）· Q（四象限）<br>
+  格式：WOFF2 + OTF &nbsp;|&nbsp; 生成脚本：taren_font_gen.py
+</div>
+
+<script>
+// 生成字符串（U+E000 开始）
+function tarenStr(start, count) {
+  return Array.from({length: count}, (_, i) => String.fromCodePoint(0xE000 + start + i)).join('');
+}
+
+// 尺寸展示
+document.getElementById('demo-xl').textContent = tarenStr(0, 8);
+document.getElementById('demo-lg').textContent = tarenStr(8, 14);
+document.getElementById('demo-md').textContent = tarenStr(22, 20);
+document.getElementById('demo-sm').textContent = tarenStr(42, 40);
+
+// 混排
+document.getElementById('mix1').textContent = tarenStr(100, 4);
+document.getElementById('mix2').textContent = tarenStr(150, 3);
+document.getElementById('mix3').textContent = tarenStr(200, 8);
+
+// 全字形网格
+const grid = document.getElementById('grid');
+for (let i = 0; i < 300; i++) {
+  const cp = 0xE000 + i;
+  const cell = document.createElement('div');
+  cell.className = 'glyph-cell';
+  cell.innerHTML = `
+    <span class="glyph-char">${String.fromCodePoint(cp)}</span>
+    <span class="glyph-code">E${i.toString(16).padStart(3,'0').toUpperCase()}</span>
+  `;
+  cell.title = `U+${cp.toString(16).toUpperCase()}`;
+  grid.appendChild(cell);
+}
+</script>
+</body>
+</html>
