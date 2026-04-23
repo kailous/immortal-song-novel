@@ -2,7 +2,8 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>塔伦文字 · 字体预览</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>塔伦文字 · 译文工具</title>
 <style>
   @font-face {
     font-family: 'Taren';
@@ -13,11 +14,15 @@
   }
 
   :root {
-    --bg: #0a0b0f;
-    --panel: #111318;
-    --gold: #c8a86e;
-    --dim: #5a5040;
-    --text: #c8c0b0;
+    --bg:      #0a0b0f;
+    --panel:   #111318;
+    --panel2:  #0d0f14;
+    --border:  #1e2025;
+    --gold:    #c8a86e;
+    --gold-d:  #8a6e3a;
+    --dim:     #5a5040;
+    --text:    #c8c0b0;
+    --active:  #1c2030;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,195 +31,614 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'Inter', 'Helvetica Neue', sans-serif;
-    padding: 40px 20px;
     min-height: 100vh;
   }
 
-  h1 {
-    font-size: 1.2rem;
-    color: var(--gold);
-    letter-spacing: 0.2em;
+  /* ── 顶栏 ── */
+  header {
     text-align: center;
-    margin-bottom: 8px;
+    padding: 40px 20px 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    font-size: 1.3rem;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    margin-bottom: 6px;
+  }
+  header p {
+    font-size: 0.72rem;
+    color: var(--dim);
+    letter-spacing: 0.08em;
   }
 
-  .subtitle {
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--dim);
-    margin-bottom: 40px;
+  /* ── 主体布局 ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
   }
 
   .section-title {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     color: var(--dim);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    margin: 30px 0 12px;
-    border-bottom: 1px solid #1e2025;
-    padding-bottom: 6px;
+    margin: 36px 0 14px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 7px;
   }
 
-  /* 字形网格 */
+  /* ── 互译区 ── */
+  .translator {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) {
+    .translator { grid-template-columns: 1fr; }
+  }
+
+  .trans-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .trans-box.active { border-color: var(--gold-d); }
+
+  .trans-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel2);
+  }
+  .trans-lang {
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+  .trans-count {
+    font-size: 0.65rem;
+    color: var(--dim);
+    font-family: monospace;
+  }
+
+  /* 中文输入框 */
+  textarea#zh-input {
+    width: 100%;
+    height: 140px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Noto Serif SC', 'Songti SC', serif;
+    font-size: 18px;
+    line-height: 1.8;
+    padding: 14px;
+    resize: none;
+  }
+  textarea#zh-input::placeholder { color: var(--dim); font-size: 14px; }
+
+  /* 塔伦输出区 */
+  .taren-output {
+    min-height: 140px;
+    padding: 14px;
+    font-family: 'Taren';
+    font-size: 28px;
+    color: var(--gold);
+    line-height: 1.6;
+    word-break: break-all;
+    cursor: default;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    align-content: flex-start;
+  }
+
+  /* 每个字形单元（带 tooltip） */
+  .glyph-tok {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 2px 1px;
+    transition: background 0.1s;
+    position: relative;
+  }
+  .glyph-tok:hover { background: var(--active); }
+  .glyph-tok .gt-char {
+    font-family: 'Taren';
+    font-size: 28px;
+    line-height: 1;
+    color: var(--gold);
+  }
+  .glyph-tok .gt-zh {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 9px;
+    color: var(--dim);
+    line-height: 1;
+    margin-top: 2px;
+    max-width: 36px;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .glyph-tok .gt-tip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2a2d38;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 5px 9px;
+    white-space: nowrap;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 12px;
+    color: var(--text);
+    z-index: 10;
+    pointer-events: none;
+  }
+  .glyph-tok:hover .gt-tip { display: block; }
+
+  /* 空格 token */
+  .glyph-space {
+    display: inline-block;
+    width: 12px;
+  }
+
+  /* 操作栏 */
+  .trans-actions {
+    display: flex;
+    gap: 8px;
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    background: var(--panel2);
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-size: 0.7rem;
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .btn:hover { border-color: var(--gold); color: var(--gold); }
+  .btn.primary {
+    border-color: var(--gold-d);
+    color: var(--gold);
+  }
+
+  /* 对照模式切换 */
+  .mode-toggle {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-left: auto;
+  }
+  .mode-btn {
+    font-size: 0.68rem;
+    padding: 4px 10px;
+    background: transparent;
+    border: none;
+    color: var(--dim);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mode-btn.on { background: var(--active); color: var(--gold); }
+
+  /* ── 示例句 ── */
+  .presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .preset-btn {
+    font-size: 0.72rem;
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--dim);
+    cursor: pointer;
+    font-family: 'Noto Serif SC', serif;
+    transition: all 0.15s;
+  }
+  .preset-btn:hover { border-color: var(--gold); color: var(--text); }
+
+  /* ── 对照表 ── */
+  .dict-filter {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .dict-filter button {
+    font-size: 0.68rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--dim);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .dict-filter button.on { background: var(--active); color: var(--gold); border-color: var(--gold-d); }
+
+  .dict-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+    gap: 5px;
+  }
+  .dict-cell {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px 5px;
+    cursor: default;
+    transition: border-color 0.15s;
+  }
+  .dict-cell:hover { border-color: var(--gold); }
+  .dict-cell .dc-taren {
+    font-family: 'Taren';
+    font-size: 28px;
+    line-height: 1;
+    color: var(--gold);
+  }
+  .dict-cell .dc-zh {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 12px;
+    color: var(--text);
+    margin-top: 4px;
+  }
+  .dict-cell .dc-tag {
+    font-size: 9px;
+    color: var(--dim);
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── 全字形网格 ── */
   .glyph-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    gap: 6px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+    gap: 5px;
   }
-
   .glyph-cell {
     background: var(--panel);
-    border: 1px solid #1e2025;
+    border: 1px solid var(--border);
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 8px 4px 4px;
+    padding: 7px 3px 4px;
     cursor: default;
     transition: border-color 0.15s;
   }
+  .glyph-cell:hover { border-color: var(--gold); }
+  .glyph-char { font-family: 'Taren'; font-size: 26px; line-height: 1; color: var(--gold); }
+  .glyph-code { font-size: 8px; color: var(--dim); margin-top: 3px; font-family: monospace; }
 
-  .glyph-cell:hover {
-    border-color: var(--gold);
-  }
-
-  .glyph-char {
-    font-family: 'Taren';
-    font-size: 32px;
-    line-height: 1;
-    color: var(--gold);
-  }
-
-  .glyph-code {
-    font-size: 9px;
-    color: var(--dim);
-    margin-top: 4px;
-    font-family: monospace;
-  }
-
-  /* 文本展示区 */
-  .text-demo {
-    background: var(--panel);
-    border: 1px solid #1e2025;
-    border-radius: 6px;
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-
-  .taren-text {
-    font-family: 'Taren';
-    color: var(--gold);
-    line-height: 1.8;
-    word-break: break-all;
-  }
-
-  .size-sm  { font-size: 16px; }
-  .size-md  { font-size: 24px; }
-  .size-lg  { font-size: 40px; }
-  .size-xl  { font-size: 64px; }
-
-  .label {
-    font-size: 0.65rem;
-    color: var(--dim);
-    margin-bottom: 6px;
-  }
-
-  /* 混排示例 */
-  .mixed {
-    font-family: 'Noto Serif SC', 'Songti SC', serif;
-    color: var(--text);
-    font-size: 15px;
-    line-height: 2;
-  }
-
-  .mixed .taren-inline {
-    font-family: 'Taren';
-    font-size: 18px;
-    color: var(--gold);
-    vertical-align: middle;
-  }
-
+  /* ── info ── */
   .info-box {
-    background: #0d0f14;
-    border: 1px solid #1e2025;
+    background: var(--panel2);
+    border: 1px solid var(--border);
     border-radius: 6px;
     padding: 16px;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--dim);
-    line-height: 1.8;
+    line-height: 1.9;
     margin-top: 40px;
   }
-
   .info-box strong { color: var(--text); }
 </style>
 </head>
 <body>
 
-<h1>塔 伦 文 字</h1>
-<p class="subtitle">Velkor Script · Phase 1 · 300 Glyphs · Style A Angular</p>
+<header>
+  <h1>塔 伦 文 字</h1>
+  <p>Velkor Script · Phase 1 · 300 Glyphs · Style A Angular</p>
+</header>
 
-<!-- 尺寸展示 -->
-<div class="section-title">字号展示</div>
-<div class="text-demo">
-  <div class="label">64px</div>
-  <div class="taren-text size-xl" id="demo-xl"></div>
-  <br>
-  <div class="label">40px</div>
-  <div class="taren-text size-lg" id="demo-lg"></div>
-  <br>
-  <div class="label">24px</div>
-  <div class="taren-text size-md" id="demo-md"></div>
-  <br>
-  <div class="label">16px</div>
-  <div class="taren-text size-sm" id="demo-sm"></div>
-</div>
+<main>
 
-<!-- 混排示例 -->
-<div class="section-title">混排示例（中文 + 塔伦文）</div>
-<div class="text-demo">
-  <div class="mixed">
-    手环表面刻有塔伦人的文字：<span class="taren-inline" id="mix1"></span>——那是某种警示，或某种祈祷。<br>
-    通讯频道里传来断续的声音，是塔伦语的某个短语：<span class="taren-inline" id="mix2"></span>，主和派的人曾经翻译过，意思是"共生"。<br>
-    残破的战舰外壁上，喷涂着大块的字符：<span class="taren-inline" id="mix3"></span>
+<!-- ── 示例句 ── -->
+<div class="section-title">示例句</div>
+<div class="presets" id="presets"></div>
+
+<!-- ── 互译区 ── -->
+<div class="section-title">中文 ↔ 塔伦文 互译</div>
+<div class="translator">
+
+  <!-- 左：中文输入 -->
+  <div class="trans-box active">
+    <div class="trans-header">
+      <span class="trans-lang">中文</span>
+      <span class="trans-count" id="zh-count">0 字</span>
+    </div>
+    <textarea id="zh-input" placeholder="输入中文，右侧实时显示塔伦译文……&#10;支持任意汉字，每字对应一个固定字形。"></textarea>
+    <div class="trans-actions">
+      <button class="btn" onclick="clearInput()">清空</button>
+      <button class="btn" onclick="copyTaren()">复制译文</button>
+      <div class="mode-toggle">
+        <button class="mode-btn on" id="mode-sub" onclick="setMode('sub')">对照</button>
+        <button class="mode-btn" id="mode-glyph" onclick="setMode('glyph')">纯字形</button>
+      </div>
+    </div>
   </div>
+
+  <!-- 右：塔伦输出 -->
+  <div class="trans-box">
+    <div class="trans-header">
+      <span class="trans-lang">塔伦文 · Velkor</span>
+      <span class="trans-count" id="tr-count">0 字形</span>
+    </div>
+    <div class="taren-output" id="taren-out"></div>
+    <div class="trans-actions">
+      <span style="font-size:0.65rem;color:var(--dim);">悬停字形查看对应汉字</span>
+    </div>
+  </div>
+
 </div>
 
-<!-- 全字形网格 -->
-<div class="section-title">全字形网格（U+E000 — U+E12B）</div>
-<div class="glyph-grid" id="grid"></div>
+<!-- ── 语义词典 ── -->
+<div class="section-title">语义词典（已映射汉字）</div>
+<div class="dict-filter" id="dict-filter"></div>
+<div class="dict-grid" id="dict-grid"></div>
+
+<!-- ── 全字形网格 ── -->
+<div class="section-title">全字形一览（U+E000 — U+E12B）</div>
+<div class="glyph-grid" id="glyph-grid"></div>
 
 <div class="info-box">
-  <strong>字体技术规格</strong><br>
-  字体名称：Taren Regular &nbsp;|&nbsp;
-  字形数量：300（Phase 1）&nbsp;|&nbsp;
-  编码区间：U+E000 – U+E12B（Unicode 私用区）<br>
-  风格：Style A 角线风格（纯直线构成，无曲线）&nbsp;|&nbsp;
-  笔画族：生命 · 战争 · 记忆 · 时间 · 技术 · 熄灭 · 穿越<br>
-  布局：S（单组件）· H（左右）· V（上下）· Q（四象限）<br>
-  格式：WOFF2 + OTF &nbsp;|&nbsp; 生成脚本：taren_font_gen.py
+  <strong>字体规格</strong><br>
+  字体：Taren Regular &nbsp;|&nbsp; 字形数：300（Phase 1）&nbsp;|&nbsp; 编码区间：U+E000–U+E12B（Unicode 私用区 PUA）<br>
+  笔画族：生命 · 战争 · 记忆 · 时间 · 技术 · 熄灭 · 穿越 · 共享 · 家园 &nbsp;|&nbsp; 布局：S · H · V · Q<br>
+  映射规则：已收录汉字使用语义桶映射；未收录汉字按字码哈希到最近义项；标点 / 数字转为空格<br>
+  格式：WOFF2 + OTF &nbsp;|&nbsp; 生成脚本：.agents/skills/novel_creator/scripts/taren_font_gen.py
 </div>
 
+</main>
+
 <script>
-// 生成字符串（U+E000 开始）
-function tarenStr(start, count) {
-  return Array.from({length: count}, (_, i) => String.fromCodePoint(0xE000 + start + i)).join('');
+// ══════════════════════════════════════════════
+//  语义桶定义（glyph index 0-299）
+//  每个桶对应一个笔画族，字形索引区间如下：
+//   0- 39  生命族  40- 79  战争族  80-109  记忆族
+//  110-139  时间族  140-179  技术族  180-209  熄灭族
+//  210-239  穿越族  240-269  共享族  270-299  家园族
+// ══════════════════════════════════════════════
+const BUCKETS = {
+  '生命': { range:[0,39],   color:'#7cb87c', chars:'生命活人身心灵血肉骨气息脉搏存在孕育呼吸成长繁衍哺育医治救愈健康力量强壮生机希望新生本能欲望情感爱恨痛苦喜悦悲哀恐惧温暖' },
+  '战争': { range:[40,79],  color:'#c86e6e', chars:'战争杀攻击防御敌军队武器刀剑矢盾兵戎屠城征伐掠夺侵略抵抗反击破阵冲锋溃败俘虏号令旗帜将领士兵伤亡鲜血誓死殊死决战胜负荣耀' },
+  '记忆': { range:[80,109], color:'#8e7cb8', chars:'记忆历史过往回忆思考知识学习理解智慧铭刻遗忘祭奠传承族谱语言文字典籍经验教训认知意识梦境幻觉真相谎言秘密誓言遗愿执念念想' },
+  '时间': { range:[110,139],color:'#7ca8b8', chars:'时间年月日久永远古今昔今后未来流逝瞬间当下过去轮回循环永恒消逝迟暮盛年幼稚老去凋零重复停滞倒退前进此刻彼时彼刻此后当年' },
+  '技术': { range:[140,179],color:'#b8a87c', chars:'技术机器手环芯片算力计算能源光电磁场量子引力波动跃迁维度空间折叠传送扫描解析合成重组编码解码加密破解网络数据信号通讯接口' },
+  '熄灭': { range:[180,209],color:'#9a7060', chars:'死亡灭绝终结消失毁坏损毁废弃遗忘沉寂枯竭耗尽崩溃崩解瓦解湮没沦陷覆灭陨落凋落失落黑暗虚空寂灭无声沉默永寂断裂割裂分离' },
+  '穿越': { range:[210,239],color:'#7cb8a8', chars:'穿越跨越飞跃通过转移空间门径跳跃传输迁移漂流奔逃逃离出走归来往返迁徙流亡放逐超脱突破冲破逾越超越飞速急速疾驰轨道轨迹路径' },
+  '共享': { range:[240,269],color:'#a8b87c', chars:'共享联合合作互助平和友好共生协议盟约契约信任谈判斡旋中立调停妥协让步共存融合接纳理解宽容善意好意同情悲悯仁慈相助援助' },
+  '家园': { range:[270,299],color:'#b8957c', chars:'家园星球土地根源归属宇宙母星家乡故土领土疆域边界版图山河大地苍穹星空星系银河宇宙洪荒混沌起源创世毁灭再生轮回重生复苏觉醒' },
+};
+
+// 建立汉字 → glyph index 映射表
+const CHAR_MAP = {};   // char → glyph index (0-299)
+const TAG_MAP  = {};   // char → bucket name
+const BUCKET_NAMES = Object.keys(BUCKETS);
+
+for (const [name, info] of Object.entries(BUCKETS)) {
+  const [lo, hi] = info.range;
+  const span = hi - lo + 1;
+  const chars = [...new Set(info.chars.split(''))];
+  chars.forEach((ch, i) => {
+    const idx = lo + (i % span);
+    CHAR_MAP[ch] = idx;
+    TAG_MAP[ch] = name;
+  });
 }
 
-// 尺寸展示
-document.getElementById('demo-xl').textContent = tarenStr(0, 8);
-document.getElementById('demo-lg').textContent = tarenStr(8, 14);
-document.getElementById('demo-md').textContent = tarenStr(22, 20);
-document.getElementById('demo-sm').textContent = tarenStr(42, 40);
+// 未映射汉字的哈希回退（稳定映射）
+function hashChar(ch) {
+  let h = 0;
+  for (let i = 0; i < ch.length; i++) h = (h * 31 + ch.charCodeAt(i)) >>> 0;
+  return h % 300;
+}
 
-// 混排
-document.getElementById('mix1').textContent = tarenStr(100, 4);
-document.getElementById('mix2').textContent = tarenStr(150, 3);
-document.getElementById('mix3').textContent = tarenStr(200, 8);
+function charToGlyph(ch) {
+  if (CHAR_MAP[ch] !== undefined) return CHAR_MAP[ch];
+  // 非汉字
+  const code = ch.codePointAt(0);
+  if (code < 0x4E00 || code > 0x9FFF) return -1;  // 非CJK → 忽略
+  return hashChar(ch);
+}
 
-// 全字形网格
-const grid = document.getElementById('grid');
+function glyphChar(idx) {
+  return String.fromCodePoint(0xE000 + idx);
+}
+
+// ── 翻译引擎 ──────────────────────────────────
+let showSub = true;  // 对照模式：字形下显示汉字
+
+function translate(text) {
+  const out = document.getElementById('taren-out');
+  out.innerHTML = '';
+  let count = 0;
+
+  for (const ch of text) {
+    if (ch === '\n') {
+      out.appendChild(document.createElement('br'));
+      continue;
+    }
+    if (/[\s，。！？、：；""''【】《》（）…—\p{P}]/u.test(ch)) {
+      const sp = document.createElement('span');
+      sp.className = 'glyph-space';
+      out.appendChild(sp);
+      continue;
+    }
+
+    const idx = charToGlyph(ch);
+    if (idx < 0) continue;
+
+    const tok = document.createElement('span');
+    tok.className = 'glyph-tok';
+
+    const gc = document.createElement('span');
+    gc.className = 'gt-char';
+    gc.textContent = glyphChar(idx);
+    tok.appendChild(gc);
+
+    if (showSub) {
+      const gz = document.createElement('span');
+      gz.className = 'gt-zh';
+      gz.textContent = ch;
+      tok.appendChild(gz);
+    }
+
+    const tip = document.createElement('span');
+    tip.className = 'gt-tip';
+    const tag = TAG_MAP[ch] || '（未收录）';
+    tip.textContent = `"${ch}" → ${BUCKETS[tag] ? tag+'族' : '哈希映射'} U+${(0xE000+idx).toString(16).toUpperCase()}`;
+    tok.appendChild(tip);
+
+    out.appendChild(tok);
+    count++;
+  }
+
+  document.getElementById('tr-count').textContent = count + ' 字形';
+}
+
+// ── 输入监听 ──────────────────────────────────
+const input = document.getElementById('zh-input');
+input.addEventListener('input', () => {
+  const text = input.value;
+  const chars = [...text].filter(ch => {
+    const code = ch.codePointAt(0);
+    return code >= 0x4E00 && code <= 0x9FFF;
+  }).length;
+  document.getElementById('zh-count').textContent = chars + ' 字';
+  translate(text);
+});
+
+function setMode(m) {
+  showSub = (m === 'sub');
+  document.getElementById('mode-sub').classList.toggle('on', showSub);
+  document.getElementById('mode-glyph').classList.toggle('on', !showSub);
+  translate(input.value);
+}
+
+function clearInput() {
+  input.value = '';
+  input.dispatchEvent(new Event('input'));
+}
+
+function copyTaren() {
+  const toks = document.querySelectorAll('#taren-out .gt-char');
+  const text = [...toks].map(t => t.textContent).join('');
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '已复制';
+    setTimeout(() => btn.textContent = orig, 1500);
+  });
+}
+
+// ── 示例句 ──────────────────────────────────
+const PRESETS = [
+  '人类，永存',
+  '生命不息，战争不止',
+  '记忆是一种诅咒',
+  '时间没有终点，只有轮回',
+  '技术让我们成为神，也让我们走向灭亡',
+  '我们来自遥远的家园',
+  '共生，还是毁灭',
+];
+
+const presetEl = document.getElementById('presets');
+PRESETS.forEach(s => {
+  const b = document.createElement('button');
+  b.className = 'preset-btn';
+  b.textContent = s;
+  b.onclick = () => {
+    input.value = s;
+    input.dispatchEvent(new Event('input'));
+  };
+  presetEl.appendChild(b);
+});
+
+// ── 语义词典 ──────────────────────────────────
+let dictFilter = null;
+
+function buildDict(filter) {
+  const grid = document.getElementById('dict-grid');
+  grid.innerHTML = '';
+  for (const [name, info] of Object.entries(BUCKETS)) {
+    if (filter && filter !== name) continue;
+    const chars = [...new Set(info.chars.split(''))];
+    chars.forEach(ch => {
+      if (!CHAR_MAP[ch]) return;
+      const cell = document.createElement('div');
+      cell.className = 'dict-cell';
+      cell.style.borderColor = '';
+      cell.innerHTML = `
+        <span class="dc-taren">${glyphChar(CHAR_MAP[ch])}</span>
+        <span class="dc-zh">${ch}</span>
+        <span class="dc-tag" style="color:${info.color}">${name}</span>
+      `;
+      cell.onclick = () => {
+        input.value = ch;
+        input.dispatchEvent(new Event('input'));
+      };
+      cell.title = `点击翻译"${ch}" · ${name}族 U+${(0xE000+CHAR_MAP[ch]).toString(16).toUpperCase()}`;
+      grid.appendChild(cell);
+    });
+  }
+}
+
+// 过滤器按钮
+const filterEl = document.getElementById('dict-filter');
+const allBtn = document.createElement('button');
+allBtn.textContent = '全部';
+allBtn.className = 'on';
+allBtn.onclick = () => {
+  dictFilter = null;
+  document.querySelectorAll('.dict-filter button').forEach(b => b.classList.remove('on'));
+  allBtn.classList.add('on');
+  buildDict(null);
+};
+filterEl.appendChild(allBtn);
+
+for (const [name, info] of Object.entries(BUCKETS)) {
+  const btn = document.createElement('button');
+  btn.textContent = name + '族';
+  btn.style.setProperty('--fc', info.color);
+  btn.onclick = () => {
+    dictFilter = name;
+    document.querySelectorAll('.dict-filter button').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    buildDict(name);
+  };
+  filterEl.appendChild(btn);
+}
+buildDict(null);
+
+// ── 全字形网格 ──────────────────────────────────
+const glGrid = document.getElementById('glyph-grid');
 for (let i = 0; i < 300; i++) {
   const cp = 0xE000 + i;
   const cell = document.createElement('div');
@@ -224,8 +648,12 @@ for (let i = 0; i < 300; i++) {
     <span class="glyph-code">E${i.toString(16).padStart(3,'0').toUpperCase()}</span>
   `;
   cell.title = `U+${cp.toString(16).toUpperCase()}`;
-  grid.appendChild(cell);
+  glGrid.appendChild(cell);
 }
+
+// 初始演示
+input.value = '人类，永存';
+input.dispatchEvent(new Event('input'));
 </script>
 </body>
 </html>
