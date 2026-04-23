@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 DOCS = ROOT / "docs"
-SITE_URL = "https://kailous.github.io/immortal-song-novel/"
+SITE_URL = "https://immortal-song.rainforest.org.cn/"
 OG_IMAGE = SITE_URL + "images/og-cover.jpg"
 
 START = "<!-- SITE_META_START -->"
@@ -93,6 +93,7 @@ def build_block(filename, page):
         '  <link rel="icon" href="icon.png">',
         '  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">',
         '  <link rel="manifest" href="site.webmanifest">',
+        f'  <link rel="canonical" href="{page_url(filename, page)}">',
         '  <meta name="theme-color" content="#0a0b0f">',
         '  <meta name="apple-mobile-web-app-title" content="长生不死">',
         '  <meta name="apple-mobile-web-app-capable" content="yes">',
@@ -100,6 +101,7 @@ def build_block(filename, page):
         f'  <meta property="og:title" content="{attr(page["og_title"])}">',
         f'  <meta property="og:description" content="{attr(page["og_description"])}">',
         f'  <meta property="og:type" content="{attr(page["og_type"])}">',
+        '  <meta property="og:site_name" content="长生不死">',
         f'  <meta property="og:image" content="{OG_IMAGE}">',
         '  <meta property="og:image:width" content="1200">',
         '  <meta property="og:image:height" content="630">',
@@ -108,6 +110,7 @@ def build_block(filename, page):
         f'  <meta name="twitter:title" content="{attr(page["og_title"])}">',
         f'  <meta name="twitter:description" content="{attr(page["og_description"])}">',
         f'  <meta name="twitter:image" content="{OG_IMAGE}">',
+        '  <meta name="twitter:image:alt" content="长生不死的我，在南宋点歪了科技树 分享封面">',
         "  " + END,
     ]
     return "\n".join(lines)

@@ -12,7 +12,7 @@ DOCS = ROOT / "docs"
 MAX_IMAGE_KB = 512
 ALLOWED_EXTERNAL = {
     "https://cusdis.com",
-    "https://kailous.github.io/immortal-song-novel/",
+    "https://immortal-song.rainforest.org.cn/",
 }
 
 
