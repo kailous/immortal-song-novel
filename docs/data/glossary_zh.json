@@ -1,0 +1,37 @@
+{
+  "anti-collapse": {
+    "title": "核心防崩坏铁律",
+    "subtitle": "反套路守则 · 世界观底层护栏",
+    "source": "content/glossary/zh/anti-collapse.md"
+  },
+  "corruption-trial": {
+    "title": "贪腐危机与血亲审判",
+    "subtitle": "法律铁律 · 神明体制的最终代价",
+    "source": "content/glossary/zh/corruption-trial.md"
+  },
+  "gene-mutation": {
+    "title": "基因变异与异能限度",
+    "subtitle": "血脉传承铁律 · 硬科幻异能边界",
+    "source": "content/glossary/zh/gene-mutation.md"
+  },
+  "quantum-reset": {
+    "title": "量子重置与时空变异",
+    "subtitle": "核心机制 · 硬科幻底层逻辑",
+    "source": "content/glossary/zh/quantum-reset.md"
+  },
+  "social-system": {
+    "title": "千年集权与文明跃迁",
+    "subtitle": "社会制度与阶级矛盾 · 永生独裁者的终极乌托邦",
+    "source": "content/glossary/zh/social-system.md"
+  },
+  "tech-colonize": {
+    "title": "技术殖民与和平演变",
+    "subtitle": "仁慈统一准则 · 降维施舍策略",
+    "source": "content/glossary/zh/tech-colonize.md"
+  },
+  "watcher-nezha": {
+    "title": "守望者「哪吒」",
+    "subtitle": "皇族隐秘调查官 · 思维并行异能者",
+    "source": "content/glossary/zh/watcher-nezha.md"
+  }
+}

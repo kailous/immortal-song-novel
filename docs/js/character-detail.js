@@ -4,8 +4,9 @@
 (function () {
   'use strict';
 
-  // 词典数据（由 fetchGlossary 填充）
+  // 词典索引与缓存
   let glossaryData = {};
+  const glossaryContentCache = {};
 
   // 本地 .md 文件名 → 图鉴页 id（跳转）
   const localMdMap = {
@@ -66,7 +67,9 @@
       const dataFile = lang === 'en' ? 'data/characters_en.json' : 'data/characters_zh.json';
       Promise.all([
         fetch(dataFile).then(r => r.json()),
-        fetch('data/glossary.json').then(r => r.json()).catch(() => ({})),
+        fetch(lang === 'en' ? 'data/glossary_en.json' : 'data/glossary_zh.json')
+          .then(r => r.json())
+          .catch(() => ({})),
       ]).then(([chars, glossary]) => {
         glossaryData = glossary;
         const item = chars[id];
@@ -145,27 +148,49 @@
     const entry = glossaryData[key];
     if (!entry) return;
 
+    const overlay = document.getElementById('glossary-overlay');
+    const bodyEl = document.getElementById('glossary-panel-body');
     document.getElementById('glossary-panel-title').textContent = entry.title || '';
     document.getElementById('glossary-panel-subtitle').textContent = entry.subtitle || '';
+    bodyEl.innerHTML = '<p style="opacity:.7;">Loading…</p>';
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
 
-    let html = '';
-    if (entry.sections && entry.sections.length) {
-      entry.sections.forEach(s => {
+    const renderEntry = parsed => {
+      document.getElementById('glossary-panel-title').textContent = parsed.title || entry.title || '';
+      document.getElementById('glossary-panel-subtitle').textContent = parsed.subtitle || entry.subtitle || '';
+
+      let html = '';
+      parsed.sections.forEach(s => {
         html += `<div class="glossary-section">`;
         if (s.heading) html += `<h4>${escHtml(s.heading)}</h4>`;
         html += parseMarkdown(s.content || '');
         html += `</div>`;
       });
-    } else if (entry.content) {
-      html = parseMarkdown(entry.content);
+
+      bodyEl.innerHTML = html;
+      bodyEl.scrollTop = 0;
+    };
+
+    if (glossaryContentCache[entry.source]) {
+      renderEntry(glossaryContentCache[entry.source]);
+      return;
     }
 
-    document.getElementById('glossary-panel-body').innerHTML = html;
-    document.getElementById('glossary-panel-body').scrollTop = 0;
-
-    const overlay = document.getElementById('glossary-overlay');
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    fetch(entry.source)
+      .then(r => {
+        if (!r.ok) throw new Error(`Failed to load glossary markdown: ${entry.source}`);
+        return r.text();
+      })
+      .then(text => {
+        const parsed = parseGlossaryMarkdown(text, entry);
+        glossaryContentCache[entry.source] = parsed;
+        renderEntry(parsed);
+      })
+      .catch(err => {
+        console.error('Error loading glossary markdown:', err);
+        bodyEl.innerHTML = '<p style="color:var(--accent-red);">词典条目读取失败</p>';
+      });
   }
 
   function closeGlossary() {
@@ -311,6 +336,25 @@
       intro: intro || '',
       sections,
       type: meta && meta.type ? meta.type : 'character',
+    };
+  }
+
+  function parseGlossaryMarkdown(text, meta) {
+    const source = String(text || '').replace(/\r\n/g, '\n');
+    const titleMatch = source.match(/^#\s+(.*)$/m);
+    const subtitleMatch = source.match(/^>\s+(.*)$/m);
+    const parts = source.split(/^##\s+/m);
+    const sections = parts.slice(1).map(part => {
+      const lines = part.split('\n');
+      const heading = (lines.shift() || '').trim();
+      const content = lines.join('\n').trim();
+      return { heading, content };
+    }).filter(section => section.heading);
+
+    return {
+      title: titleMatch ? titleMatch[1].trim() : (meta.title || ''),
+      subtitle: subtitleMatch ? subtitleMatch[1].trim() : (meta.subtitle || ''),
+      sections,
     };
   }
 

@@ -130,6 +130,24 @@ def check_chapters():
     return errors
 
 
+def check_glossary():
+    errors = 0
+    for locale in ("zh", "en"):
+        index_path = DOCS / "data" / f"glossary_{locale}.json"
+        entries = json.loads(index_path.read_text(encoding="utf-8"))
+        for glossary_id, entry in entries.items():
+            source = entry.get("source", "")
+            if not source:
+                errors += fail(f"glossary index missing source: {index_path.relative_to(ROOT)} -> {glossary_id}")
+                continue
+            path = DOCS / source
+            if not path.exists():
+                errors += fail(f"glossary index references missing file: {path.relative_to(ROOT)}")
+    if not errors:
+        ok("Glossary index references exist")
+    return errors
+
+
 def main():
     errors = 0
     errors += check_json()
@@ -138,6 +156,7 @@ def main():
     errors += check_images()
     errors += check_character_images()
     errors += check_chapters()
+    errors += check_glossary()
     if errors:
         print(f"\nAudit failed with {errors} error(s).")
         return 1

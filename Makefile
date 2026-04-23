@@ -1,7 +1,7 @@
 # 长生不死 · 小说工程 Makefile
 # 用法: make <target>
 
-.PHONY: publish sync-chars sync-chapters check report audit optimize-assets sync-head help
+.PHONY: publish sync-chars sync-glossary sync-chapters check report audit optimize-assets sync-head help
 
 ## 规范化公开章节 Markdown 并重建章节索引（章节定稿后必须执行）
 publish:
@@ -14,6 +14,10 @@ validate:
 ## 基于公开图鉴 Markdown 重建 zh/en 角色轻索引
 sync-chars:
 	python3 .agents/skills/docs_ui_optimizer/scripts/sync_characters.py
+
+## 基于公开词典 Markdown 重建 zh/en 词典索引
+sync-glossary:
+	python3 .agents/skills/docs_ui_optimizer/scripts/sync_glossary.py
 
 ## 同步章节到网站（等效 publish）
 sync-chapters:
@@ -40,12 +44,13 @@ sync-head:
 	python3 .agents/skills/site_optimizer/scripts/sync_site_head.py
 
 ## 一键完整发布（同步章节 + 同步角色）
-all: publish sync-chars
+all: publish sync-chars sync-glossary
 
 help:
 	@echo ""
 	@echo "  make publish      规范化公开章节 Markdown 并重建章节索引"
 	@echo "  make sync-chars   基于公开图鉴 Markdown 重建角色索引"
+	@echo "  make sync-glossary 基于公开词典 Markdown 重建词典索引"
 	@echo "  make check        检查设定资料结构完整性"
 	@echo "  make report       生成设定资料报告"
 	@echo "  make audit        发布前站点审计"

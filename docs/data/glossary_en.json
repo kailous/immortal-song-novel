@@ -1,0 +1,37 @@
+{
+  "anti-collapse": {
+    "title": "Core Anti-Collapse Rules",
+    "subtitle": "Anti-Cliché Guardrails · Worldbuilding Safety Rails",
+    "source": "content/glossary/en/anti-collapse.md"
+  },
+  "corruption-trial": {
+    "title": "Corruption Crisis and the Trial of Blood",
+    "subtitle": "Legal Iron Law · The Final Price of a Godlike Regime",
+    "source": "content/glossary/en/corruption-trial.md"
+  },
+  "gene-mutation": {
+    "title": "Genetic Mutation and the Limits of “Powers”",
+    "subtitle": "Bloodline Inheritance Law · Hard-SF Boundaries for Extraordinary Traits",
+    "source": "content/glossary/en/gene-mutation.md"
+  },
+  "quantum-reset": {
+    "title": "Quantum Reset and Spacetime Mutation",
+    "subtitle": "Core Mechanism · Hard-SF Foundational Logic",
+    "source": "content/glossary/en/quantum-reset.md"
+  },
+  "social-system": {
+    "title": "A Millennium of Centralized Rule and Civilizational Leap",
+    "subtitle": "Social Structure and Class Conflict · The Ultimate Utopia of an Immortal Autocrat",
+    "source": "content/glossary/en/social-system.md"
+  },
+  "tech-colonize": {
+    "title": "Technological Colonization and Peaceful Evolution",
+    "subtitle": "Merciful Unification Doctrine · A Strategy of Dimensional Advantage",
+    "source": "content/glossary/en/tech-colonize.md"
+  },
+  "watcher-nezha": {
+    "title": "Watcher “Ne-Zha”",
+    "subtitle": "Secret Imperial Investigator · Parallel-Cognition Mutant",
+    "source": "content/glossary/en/watcher-nezha.md"
+  }
+}
