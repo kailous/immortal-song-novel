@@ -227,6 +227,10 @@
       {
         "heading": "V. Relations with Humanity",
         "content": "*   **Language**: Peace faction Taren have mastered human languages; full mutual translation possible. The Taren spoken tongue is called Velkor; their writing is a logographic ideographic system\n*   **Technology Transfer**: Humanity gained high-density storage chips, compute chips, and neural-network chip technology during the war; spatial technology remains beyond reach due to a fundamental conceptual gap\n*   **Legacy**: The dimensional bracer contains the peace faction's advice on sustainable development; partial energy weapon principles have been absorbed by humanity\n*   **Biological Intersection**: Reproductive systems are analogous to humans; Taren military codes forbid contact — motivated by cross-species disease risk, not morality\n"
+      },
+      {
+        "heading": "Appendix · Velkor Script",
+        "content": "*   The Taren use a logographic writing system — each glyph encodes a semantic concept, not a sound.\n*   Script family: **Style A Angular** (straight lines only, no curves), derived from ancestral four-arm pictographs.\n*   Encoding: Unicode Private Use Area, U+E000 and above.\n\n[Open Velkor Script Tool →](taren-font-preview.html)\n"
       }
     ]
   }
