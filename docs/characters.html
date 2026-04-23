@@ -105,6 +105,10 @@
       var factionGrid = document.getElementById('factions-grid');
       var itemGrid    = document.getElementById('items-grid');
 
+      function dataUrl(lang) {
+        return lang === 'en' ? 'data/characters_en.json' : 'data/characters_zh.json';
+      }
+
       function escHtml(value) {
         return String(value || '')
           .replace(/&/g, '&amp;')
@@ -168,7 +172,8 @@
       }
 
       function loadChars() {
-        fetch('data/characters.json')
+        var lang = window.i18n ? window.i18n.lang() : 'zh';
+        fetch(dataUrl(lang))
           .then(function (res) { return res.json(); })
           .then(renderChars)
           .catch(function (e) { console.error('[characters]', e); });

@@ -63,8 +63,9 @@
     initGlossaryPopover();
 
     function loadAndRender(lang) {
+      const dataFile = lang === 'en' ? 'data/characters_en.json' : 'data/characters_zh.json';
       Promise.all([
-        fetch('data/characters.json').then(r => r.json()),
+        fetch(dataFile).then(r => r.json()),
         fetch('data/glossary.json').then(r => r.json()).catch(() => ({})),
       ]).then(([chars, glossary]) => {
         glossaryData = glossary;

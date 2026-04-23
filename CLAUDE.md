@@ -79,7 +79,7 @@ make all           # publish + sync-chars
 纯静态站点，无构建步骤，直接部署 GitHub Pages。
 
 - 章节内容：`docs/chapters/chapter-N.json`，由 `reader.js` 通过 `fetch()` 加载
-- 角色索引：`docs/data/characters.json`，列表页读取；中文详情页再直读 `docs/content/profiles/*.md`
+- 角色索引：`docs/data/characters_zh.json` / `docs/data/characters_en.json`，列表页按语言读取；中文详情页直读 `docs/content/profiles/zh/*.md`，英文详情页直读 `docs/content/profiles/en/*.md`
 - 设计主题：深色 `#0a0b0f` + 古金色 `#c8a86e`；正文 `Noto Serif SC`，界面 `Inter`
 
 ---

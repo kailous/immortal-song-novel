@@ -11,7 +11,7 @@ publish:
 validate:
 	python3 .agents/skills/novel_creator/scripts/md_to_json.py --check
 
-## 同步角色轻索引到网站，并公开 Markdown 档案
+## 同步角色轻索引到网站，并公开 zh/en Markdown 档案
 sync-chars:
 	python3 .agents/skills/docs_ui_optimizer/scripts/sync_characters.py
 

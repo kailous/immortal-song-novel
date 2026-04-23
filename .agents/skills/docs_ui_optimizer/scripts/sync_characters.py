@@ -11,8 +11,9 @@ WORLD_DIR = ROOT / '设定库' / '世界观设定'
 DOC_IMAGES_DIR = ROOT / 'docs' / 'images'
 DATA_DIR = ROOT / 'docs' / 'data'
 PUBLIC_MD_DIR = ROOT / 'docs' / 'content' / 'profiles'
+PUBLIC_ZH_MD_DIR = PUBLIC_MD_DIR / 'zh'
 PUBLIC_EN_MD_DIR = PUBLIC_MD_DIR / 'en'
-JSON_FILE = DATA_DIR / 'characters.json'
+ZH_JSON_FILE = DATA_DIR / 'characters_zh.json'
 EN_JSON_FILE = DATA_DIR / 'characters_en.json'
 
 MANUAL_ENTRIES = [
@@ -111,7 +112,7 @@ def parse_markdown_profile(content):
 def render_markdown_profile(title, alias, image, intro, sections, lang):
     lines = [f'# {title}', '']
     if image:
-        image_path = f'../../images/{image}' if lang == 'zh' else f'../../../images/{image}'
+        image_path = f'../../../images/{image}'
         lines.append(f'![{title}]({image_path})')
         lines.append('')
     if alias:
@@ -162,6 +163,17 @@ def sync_image(entry_path, content, image_override=''):
     return img_name
 
 
+def normalize_public_markdown(content, image_name):
+    if not image_name:
+        return content
+    return re.sub(
+        r'!\[(.*?)\]\((.*?)\)',
+        lambda match: f'![{match.group(1)}](../../../images/{image_name})',
+        content,
+        count=1,
+    )
+
+
 def parse_profile_entry(entry_path, entry_type, title_override='', alias_override='', image_override=''):
     content = read_text(entry_path)
     parsed = parse_markdown_profile(content)
@@ -194,20 +206,15 @@ def parse_english_profile(entry_id):
     return None
 
 
-def build_combined_entry(entry_id, zh_profile, en_profile, entry_type):
-    entry = {
-        'title': zh_profile['title'],
-        'alias': zh_profile['alias'],
-        'title_en': en_profile['title'] if en_profile else zh_profile['title'],
-        'alias_en': en_profile['alias'] if en_profile else zh_profile['alias'],
-        'image': zh_profile['image'],
-        'intro': zh_profile['intro'],
-        'intro_en': en_profile['intro'] if en_profile else zh_profile['intro'],
+def build_language_entry(profile, entry_type, source_path, image_name):
+    return {
+        'title': profile['title'],
+        'alias': profile['alias'],
+        'image': image_name,
+        'intro': profile['intro'],
         'type': entry_type,
-        'source': f'content/profiles/{entry_id}.md',
-        'source_en': f'content/profiles/en/{entry_id}.md',
+        'source': source_path,
     }
-    return entry
 
 
 def iter_auto_entries():
@@ -228,20 +235,13 @@ def iter_auto_entries():
             }
 
 
-def load_english_source():
-    if EN_JSON_FILE.exists():
-        with EN_JSON_FILE.open('r', encoding='utf-8') as file_obj:
-            return json.load(file_obj)
-    return None
-
-
 def sync():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    PUBLIC_MD_DIR.mkdir(parents=True, exist_ok=True)
+    PUBLIC_ZH_MD_DIR.mkdir(parents=True, exist_ok=True)
     PUBLIC_EN_MD_DIR.mkdir(parents=True, exist_ok=True)
 
-    english_source = load_english_source()
-    combined = {}
+    zh_data = {}
+    en_data = {}
 
     for entry in list(iter_auto_entries()) + MANUAL_ENTRIES:
         entry_id = entry['id']
@@ -255,34 +255,44 @@ def sync():
             alias_override=entry.get('alias', ''),
             image_override=entry.get('image', ''),
         )
-        write_text_if_changed(PUBLIC_MD_DIR / f'{entry_id}.md', zh_profile['content'])
+        write_text_if_changed(
+            PUBLIC_ZH_MD_DIR / f'{entry_id}.md',
+            normalize_public_markdown(zh_profile['content'], zh_profile['image']),
+        )
+        zh_data[entry_id] = build_language_entry(
+            zh_profile,
+            entry['type'],
+            f'content/profiles/zh/{entry_id}.md',
+            zh_profile['image'],
+        )
 
         en_profile = None
-        if english_source and entry_id in english_source:
-            source_item = english_source[entry_id]
-            english_markdown = render_markdown_profile(
-                title=source_item.get('title', zh_profile['title']),
-                alias=source_item.get('alias', zh_profile['alias']),
-                image=source_item.get('image', zh_profile['image']),
-                intro=source_item.get('intro', zh_profile['intro']),
-                sections=source_item.get('sections', zh_profile['sections']),
-                lang='en',
-            )
-            write_text_if_changed(PUBLIC_EN_MD_DIR / f'{entry_id}.md', english_markdown)
-            en_profile = {
-                'title': source_item.get('title', zh_profile['title']),
-                'alias': source_item.get('alias', zh_profile['alias']),
-                'intro': source_item.get('intro', zh_profile['intro']),
-            }
-        else:
+        en_source_path = PUBLIC_EN_MD_DIR / f'{entry_id}.md'
+        if en_source_path.exists():
             en_profile = parse_english_profile(entry_id)
+            if en_profile is not None:
+                en_profile['content'] = read_text(en_source_path)
+                en_data[entry_id] = build_language_entry(
+                    en_profile,
+                    entry['type'],
+                    f'content/profiles/en/{entry_id}.md',
+                    zh_profile['image'],
+                )
+        else:
+            en_data[entry_id] = build_language_entry(
+                zh_profile,
+                entry['type'],
+                f'content/profiles/en/{entry_id}.md',
+                zh_profile['image'],
+            )
 
-        combined[entry_id] = build_combined_entry(entry_id, zh_profile, en_profile, entry['type'])
+    with ZH_JSON_FILE.open('w', encoding='utf-8') as file_obj:
+        json.dump(zh_data, file_obj, ensure_ascii=False, indent=2)
+    with EN_JSON_FILE.open('w', encoding='utf-8') as file_obj:
+        json.dump(en_data, file_obj, ensure_ascii=False, indent=2)
 
-    with JSON_FILE.open('w', encoding='utf-8') as file_obj:
-        json.dump(combined, file_obj, ensure_ascii=False, indent=2)
-
-    print(f'Successfully synced {len(combined)} entries to {JSON_FILE.relative_to(ROOT)}')
+    print(f'Successfully synced {len(zh_data)} zh entries to {ZH_JSON_FILE.relative_to(ROOT)}')
+    print(f'Successfully synced {len(en_data)} en entries to {EN_JSON_FILE.relative_to(ROOT)}')
 
 
 if __name__ == '__main__':

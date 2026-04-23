@@ -1,0 +1,58 @@
+{
+  "luchen": {
+    "title": "陆辰",
+    "alias": "孙满仓 → 林默 → 陆辰 · 不死兵王 · 文明导师",
+    "image": "陆辰.webp",
+    "intro": "本名孙满仓，1933年生于河南。1945年在731部队焚化炉中异变获得量子态重置能力——不死。 在2056年人类末日之际，作为唯一能承受超时空跃迁的碳基生物，被送入时间通道。 经历七万四千G潮汐力的无尽撕裂后，坠入南宋绍兴年间的深山。 肉体从零重建，记忆断层，但2056年极道特种兵的杀戮本能刻入了每一根肌纤维。 被寡妇陆晓晓所救后，以“陆辰”之名开始了改写文明轨迹的征程。",
+    "type": "character",
+    "source": "content/profiles/zh/luchen.md"
+  },
+  "zhangxian": {
+    "title": "张宪",
+    "alias": "张宪",
+    "image": "张宪.webp",
+    "intro": "南宋抗金名将，岳飞麾下第一猛将。其军事素养极高，是陆辰进入南宋宏观战局的核心桥梁。在极度严谨的军职背后，他是一位真正的职业军人，也是陆辰在冷兵器战场上的引路人。",
+    "type": "character",
+    "source": "content/profiles/zh/zhangxian.md"
+  },
+  "luxiaoxiao": {
+    "title": "陆晓晓",
+    "alias": "陆家遗珠 · 山村寡妇 · 工业后勤之魂",
+    "image": "陆晓晓.webp",
+    "intro": "19岁的没落商贾千金，在宗族“吃绝户”的逼迫下艰难求生。作为主角降临大宋后的第一个保护者，她以超越时代的坚韧和生存本能，从死人堆里背回了开启新文明的火种。",
+    "type": "character",
+    "source": "content/profiles/zh/luxiaoxiao.md"
+  },
+  "zhaohuanhuan": {
+    "title": "赵嬛嬛",
+    "alias": "大宋长公主 · 窃国天梯 · 皇权执剑者",
+    "image": "赵嬛嬛.webp",
+    "intro": "大宋长公主（帝姬），本是皇家最璀璨的琉璃，却在靖康之耻中被父兄当作求和的祭品。在看透旧时代的腐朽后，她选择背叛阶级，成为陆辰最冷酷的政治操盘手，手握传国玉玺，为未来的新文明铺设法理天梯。",
+    "type": "character",
+    "source": "content/profiles/zh/zhaohuanhuan.md"
+  },
+  "lixianzhong": {
+    "title": "李显忠",
+    "alias": "李显忠",
+    "image": "李显忠.webp",
+    "intro": "原名李世辅，归正人将领。身负家仇国恨，从金国杀回大宋。他性格豪放且不拘一格，是陆辰非对称作战最坚定的支持者，也是主角在暴力系统中志同道合的狂暴镜像。",
+    "type": "character",
+    "source": "content/profiles/zh/lixianzhong.md"
+  },
+  "bracelet": {
+    "title": "次元手环",
+    "alias": "外星高维折叠空间器物 · 人类文明最后的赌注",
+    "image": "次元手环.webp",
+    "intro": "从外星人手中缴获的绝对刚体。内部折叠了一个独立的高维空间，保守估计容积相当于一栋二十层写字楼。 温度：绝对零度。气压：绝对真空。时间流速：零。 人类将最后的科技结晶——最高精度车床、冷核聚变电池、超级算力服务器、全人类文明的数字化遗产——全部封存其中。",
+    "type": "item",
+    "source": "content/profiles/zh/bracelet.md"
+  },
+  "taren": {
+    "title": "塔伦人",
+    "alias": "末路殖民者 · 钢铁亡命徒 · 伽南遗民",
+    "image": "塔伦人.webp",
+    "intro": "本文件记录入侵地球的外星文明的完整背景设定。所有内容均为已确认的世界观事实，后续创作不得与之矛盾。",
+    "type": "faction",
+    "source": "content/profiles/zh/taren.md"
+  }
+}
