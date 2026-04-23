@@ -3,7 +3,7 @@
 
 .PHONY: publish sync-chars sync-chapters check report audit optimize-assets sync-head help
 
-## 将正文 Markdown 同步发布到网站公开目录与章节索引（章节定稿后必须执行）
+## 规范化公开章节 Markdown 并重建章节索引（章节定稿后必须执行）
 publish:
 	python3 .agents/skills/novel_creator/scripts/md_to_json.py
 
@@ -11,7 +11,7 @@ publish:
 validate:
 	python3 .agents/skills/novel_creator/scripts/md_to_json.py --check
 
-## 同步角色轻索引到网站，并公开 zh/en Markdown 档案
+## 基于公开图鉴 Markdown 重建 zh/en 角色轻索引
 sync-chars:
 	python3 .agents/skills/docs_ui_optimizer/scripts/sync_characters.py
 
@@ -19,7 +19,7 @@ sync-chars:
 sync-chapters:
 	python3 .agents/skills/novel_creator/scripts/md_to_json.py
 
-## 检查正文与设定库之间的逻辑冲突
+## 检查设定资料结构完整性
 check:
 	python3 .agents/skills/novel_creator/scripts/context_manager.py --check
 

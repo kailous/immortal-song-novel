@@ -19,9 +19,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 常用命令
 
 ```bash
-make publish       # 将正文 Markdown 发布到网站 JSON（章节定稿后必须执行）
-make sync-chars    # 同步角色轻索引到网站，并公开 Markdown 档案
-make check         # 扫描正文与设定库的逻辑冲突
+make publish       # 规范化公开章节 Markdown 并重建章节索引
+make sync-chars    # 基于公开图鉴 Markdown 重建角色轻索引
+make check         # 检查设定资料结构完整性
 make report        # 生成设定库简要报告
 make all           # publish + sync-chars
 ```
@@ -33,9 +33,10 @@ make all           # publish + sync-chars
 | 目录 | 职责 |
 |------|------|
 | `_工作台/` | **创作驾驶舱**（当前状态、铁律速查、章节简报模板）——每次会话入口 |
-| `正文/` | 章节正文草稿（Markdown），命名格式：`第N章_标题.md` |
+| `docs/content/chapters/zh/` | 中文正文章节 Markdown（唯一中文源） |
+| `docs/content/chapters/en/` | 英文章节 Markdown（唯一英文源） |
 | `大纲/` | 未来规划、卷/章大纲、战役路线图（**只存未来，不存已发生事实**） |
-| `设定库/` | 已发生事实的 Log（时间线、角色档案、世界观、道具）——**只存 Log** |
+| `设定库/` | 已发生事实的 Log（时间线、内部世界观补充）——**只存 Log** |
 | `会议记录/` | 智囊团联席会议纪要 |
 | `写手/` | 写手角色人设（司马迁/刘慈欣/曹雪芹） |
 | `智囊团/` | 领域专家角色（历史学家/物理学家/化学家/地缘战略专家） |
@@ -64,10 +65,10 @@ make all           # publish + sync-chars
 ## 正文 → 网站发布流程
 
 ```
-正文/第N章_标题.md 定稿
+docs/content/chapters/zh/chapter-N.md 定稿
   → 更新 _工作台/当前状态.md
   → 更新 设定库/00_全局时间线.md
-  → 更新 相关角色生平志（附节末尾）
+  → 更新相关公开图鉴条目的生平志（附节末尾）
   → make publish   → 同步 docs/content/chapters/zh|en/*.md + docs/data/chapters_zh.json / chapters_en.json
   → make sync-chars（如有角色变动）
 ```
