@@ -62,13 +62,9 @@
 
     initGlossaryPopover();
 
-    function charUrl(lang) {
-      return lang === 'en' ? 'data/characters_en.json' : 'data/characters.json';
-    }
-
     function loadAndRender(lang) {
       Promise.all([
-        fetch(charUrl(lang)).then(r => r.json()),
+        fetch(lang === 'en' ? 'data/characters_en.json' : 'data/characters.json').then(r => r.json()),
         fetch('data/glossary.json').then(r => r.json()).catch(() => ({})),
       ]).then(([chars, glossary]) => {
         glossaryData = glossary;
@@ -77,7 +73,20 @@
           window.location.href = 'characters.html';
           return;
         }
-        renderDetail(item);
+        if (lang === 'en' || !item.source) {
+          renderDetail(item);
+          return;
+        }
+        fetch(item.source)
+          .then(r => {
+            if (!r.ok) throw new Error(`Failed to load markdown: ${item.source}`);
+            return r.text();
+          })
+          .then(text => renderDetail(parseProfileMarkdown(text, item)))
+          .catch(err => {
+            console.error('Error loading markdown profile:', err);
+            renderDetail(item);
+          });
       }).catch(err => {
         console.error('Error loading data:', err);
         document.getElementById('loader').innerHTML =
@@ -249,6 +258,48 @@
     return html;
   }
 
+  function parseProfileMarkdown(text, meta) {
+    const source = String(text || '').replace(/\r\n/g, '\n');
+    const parts = source.split(/^##\s+/m);
+    const head = parts[0] || '';
+
+    const titleMatch = source.match(/^#\s+(.*?)(?:\s+\(.*\))?$/m);
+    let title = meta && meta.title ? meta.title : '';
+    if (!title && titleMatch) {
+      title = titleMatch[1].split('——').pop().trim();
+    }
+
+    const imageMatch = source.match(/!\[.*?\]\((.*?)\)/);
+    const imageName = meta && meta.image ? meta.image : safeImageName(imageMatch ? imageMatch[1] : '');
+
+    const aliasMatch = source.match(/^\*\s+\*\*(?:大宋化名|本名|姓名|称号|类型)\*\*：\s*(.*?)(?:\*\*)?\s*$/m);
+    const alias = meta && meta.alias ? meta.alias : (aliasMatch ? aliasMatch[1].replace(/\*\*/g, '').trim() : '');
+
+    let intro = head
+      .replace(/^#.*?\n/m, '')
+      .replace(/!\[.*?\]\(.*?\)\n?/g, '')
+      .replace(/^\*\s+\*\*(?:大宋化名|本名|姓名|称号|类型)\*\*：.*(?:\n|$)/gm, '')
+      .replace(/^---+\s*/gm, '')
+      .trim();
+    if (!intro && meta && meta.intro) intro = meta.intro;
+
+    const sections = parts.slice(1).map(part => {
+      const lines = part.split('\n');
+      const heading = (lines.shift() || '').trim();
+      const content = lines.join('\n').replace(/---+\s*$/g, '').trim();
+      return { heading, content };
+    }).filter(section => section.heading);
+
+    return {
+      title: title || '',
+      alias: alias || '',
+      image: imageName || '',
+      intro: intro || '',
+      sections,
+      type: meta && meta.type ? meta.type : 'character',
+    };
+  }
+
   // ── Markdown 解析 ────────────────────────────────────────
   function parseMarkdown(text) {
     if (!text) return '';
@@ -274,6 +325,21 @@
       (_, type, content) =>
         `<div class="alert alert-${type.toLowerCase()}"><strong>${type}:</strong> ${content}</div>`
     );
+
+    // Markdown 表格
+    html = html.replace(/((?:^\|.*\|\n?){2,})/gm, block => {
+      const rows = block.trim().split('\n').map(line => line.trim()).filter(Boolean);
+      if (rows.length < 2) return block;
+      const cells = rows.map(line => line.replace(/^\||\|$/g, '').split('|').map(cell => cell.trim()));
+      const separator = /^:?-{3,}:?$/;
+      if (!cells[1] || !cells[1].every(cell => separator.test(cell))) return block;
+
+      const headerHtml = '<tr>' + cells[0].map(cell => `<th>${cell}</th>`).join('') + '</tr>';
+      const bodyHtml = cells.slice(2).map(row =>
+        '<tr>' + row.map(cell => `<td>${cell}</td>`).join('') + '</tr>'
+      ).join('');
+      return `<div class="md-table-wrap"><table class="md-table"><thead>${headerHtml}</thead><tbody>${bodyHtml}</tbody></table></div>`;
+    });
 
     // 引用块 > 文字
     html = html.replace(/^((?:>\s?.*\n?)+)/gm, match => {
@@ -330,7 +396,7 @@
     html = paragraphs.map(p => {
       const t = p.trim();
       if (!t) return '';
-      if (/^<(ul|ol|blockquote|div|hr|h[1-6])/.test(t)) return t;
+      if (/^<(ul|ol|blockquote|div|hr|h[1-6]|table)/.test(t)) return t;
       return `<p>${t.replace(/\n/g, '<br>')}</p>`;
     }).join('');
 

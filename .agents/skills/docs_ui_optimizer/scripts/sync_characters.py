@@ -1,161 +1,174 @@
-import os
 import json
+import os
 import re
 import shutil
+from pathlib import Path
 
-# Configuration
-CHARACTER_DIR = '设定库/角色'
-ITEM_DIR = '设定库/特殊道具'
-DOC_IMAGES_DIR = 'docs/images'
-DATA_DIR = 'docs/data'
-JSON_FILE = os.path.join(DATA_DIR, 'characters.json')
+ROOT = Path(__file__).resolve().parents[4]
+CHARACTER_DIR = ROOT / '设定库' / '角色'
+ITEM_DIR = ROOT / '设定库' / '特殊道具'
+WORLD_DIR = ROOT / '设定库' / '世界观设定'
+DOC_IMAGES_DIR = ROOT / 'docs' / 'images'
+DATA_DIR = ROOT / 'docs' / 'data'
+PUBLIC_MD_DIR = ROOT / 'docs' / 'content' / 'profiles'
+JSON_FILE = DATA_DIR / 'characters.json'
+
+MANUAL_ENTRIES = [
+    {
+        'id': 'taren',
+        'type': 'faction',
+        'path': WORLD_DIR / '外星文明档案.md',
+        'title': '塔伦人',
+        'alias': '末路殖民者 · 钢铁亡命徒 · 伽南遗民',
+        'image': '塔伦人.webp',
+    }
+]
+
 
 def clean_text(text):
-    """Clean up text: remove markdown artifacts, handle line numbers if any."""
     text = re.sub(r'^\d+:\s*', '', text, flags=re.MULTILINE)
     return text.strip()
 
+
 def extract_id(filename):
-    """Extract a clean ID from the filename (e.g., '01_主角_陆辰.md' -> 'luchen')."""
-    name = os.path.splitext(filename)[0]
-    # Remove numbering like '01_'
+    name = Path(filename).stem
     name = re.sub(r'^\d+_', '', name)
-    # Remove classification like '主角_' or '核心配角_'
     name = re.sub(r'^(主角|核心配角|第一女主|第二女主|初始外挂)_', '', name)
-    
-    # Simple mapping for common characters
     mapping = {
         '陆辰': 'luchen',
         '陆晓晓': 'luxiaoxiao',
         '赵嬛嬛': 'zhaohuanhuan',
         '张宪': 'zhangxian',
         '李显忠': 'lixianzhong',
-        '次元手环': 'bracelet'
+        '次元手环': 'bracelet',
     }
     return mapping.get(name, name)
 
-def parse_profile(file_path, type='character'):
-    with open(file_path, 'r', encoding='utf-8') as f:
-        content = f.read()
 
-    # Extract Title (e.g., # 主角核心档案：【时空守望者】—— 陆辰 (Lu Chen))
-    title_match = re.search(r'^#\s+(.*?)(?:\s+\(.*\))?$', content, re.MULTILINE)
-    if title_match:
-        title = title_match.group(1).split('——')[-1].strip()
-        # Remove metadata like '02_核心配角_将领_'
-        title = re.sub(r'^\d+_', '', title)
-        title = re.sub(r'^(主角|核心配角|第一女主|第二女主|初始外挂|将领)_', '', title, flags=re.MULTILINE)
-        title = re.sub(r'^(主角|核心配角|第一女主|第二女主|初始外挂|将领)_', '', title, flags=re.MULTILINE)
-        title = title.strip('_')
-    else:
-        title = ""
-    
-    # Extract Alias/Subtitle
-    alias = ""
-    # Look for known metadata keys: 大宋化名, 本名, 姓名, 称号, 类型
-    alias_match = re.search(r'\*\s+\*\*(?:大宋化名|本名|姓名|称号|类型)\*\*：\s*(.*?)(?:\*\*)?\s*$', content, re.MULTILINE)
+def detect_alias(content):
+    alias_match = re.search(
+        r'^\*\s+\*\*(?:大宋化名|本名|姓名|称号|类型)\*\*：\s*(.*?)(?:\*\*)?\s*$',
+        content,
+        re.MULTILINE,
+    )
     if alias_match:
-        # Clean up possible trailing bold markers and leading/trailing whitespace
-        alias = alias_match.group(1).replace('**', '').strip()
-    
-    if not alias:
-        # Fallback for simple items that don't use the metadata list
-        # Skip headers, images, and empty lines
-        lines = content.split('\n')
-        for line in lines:
-            line = line.strip()
-            if line and not line.startswith('#') and not line.startswith('!') and not line.startswith('---'):
-                alias = line
-                break
+        return alias_match.group(1).replace('**', '').strip()
 
-    # Image handling: Copy image to docs/images
-    img_match = re.search(r'!\[.*?\]\((.*?)\)', content)
-    img_path = img_match.group(1) if img_match else ""
-    img_name = os.path.basename(img_path) if img_path else ""
-    
-    if img_path and img_name:
-        # Resolve path relative to the md file
-        full_img_src = os.path.normpath(os.path.join(os.path.dirname(file_path), img_path))
-        if os.path.exists(full_img_src):
-            target_path = os.path.join(DOC_IMAGES_DIR, img_name)
-            # Only copy if it doesn't exist or is newer
-            if not os.path.exists(target_path) or os.path.getmtime(full_img_src) > os.path.getmtime(target_path):
-                print(f"  Copying image: {img_name}")
-                shutil.copy2(full_img_src, target_path)
-        else:
-            print(f"  Warning: Image not found at {full_img_src}")
+    for line in content.splitlines():
+        value = line.strip()
+        if value and not value.startswith(('#', '!', '---')):
+            return value
+    return ''
 
-    # Split into sections
-    sections = []
-    # Split by ## headers, keeping headers
+
+def extract_intro(content):
     raw_sections = re.split(r'^##\s+', content, flags=re.MULTILINE)
-    
-    # Summary/Intro (before first ##)
-    intro = ""
-    if len(raw_sections) > 0:
-        # Remove the # title and image before intro
-        intro = raw_sections[0]
-        intro = re.sub(r'^#.*?\n', '', intro, flags=re.MULTILINE)
-        intro = re.sub(r'!\[.*?\]\(.*?\)\n', '', intro, flags=re.MULTILINE)
-        # Remove alias/本名 lines from intro if they were already extracted
-        intro = re.sub(r'^\*\s+\*\*(大宋化名|本名|姓名)\*\*：.*?\n', '', intro, flags=re.MULTILINE)
-        intro = clean_text(intro)
-        # Strip trailing/leading separators
-        intro = re.sub(r'^---+\s*', '', intro)
-        intro = re.sub(r'---+\s*$', '', intro)
-        intro = intro.strip()
+    intro = raw_sections[0] if raw_sections else content
+    intro = re.sub(r'^#.*?\n', '', intro, flags=re.MULTILINE)
+    intro = re.sub(r'!\[.*?\]\(.*?\)\n?', '', intro, flags=re.MULTILINE)
+    intro = re.sub(r'^\*\s+\*\*(大宋化名|本名|姓名|称号|类型)\*\*：.*(?:\n|$)', '', intro, flags=re.MULTILINE)
+    intro = clean_text(intro)
+    intro = re.sub(r'^---+\s*', '', intro)
+    intro = re.sub(r'---+\s*$', '', intro)
+    return intro.strip()
 
-    for s in raw_sections[1:]:
-        lines = s.split('\n')
-        heading = lines[0].strip()
-        body = clean_text("\n".join(lines[1:]))
-        
-        # Strip trailing "---" if found (separator in some files)
-        body = re.sub(r'---+\s*$', '', body)
-        
-        sections.append({
-            "heading": heading,
-            "content": body
-        })
+
+def detect_title(content, fallback=''):
+    title_match = re.search(r'^#\s+(.*?)(?:\s+\(.*\))?$', content, re.MULTILINE)
+    if not title_match:
+        return fallback
+    title = title_match.group(1).split('——')[-1].strip()
+    title = re.sub(r'^\d+_', '', title)
+    title = re.sub(r'^(主角|核心配角|第一女主|第二女主|初始外挂|将领)_', '', title)
+    title = re.sub(r'^将领_', '', title)
+    return title.strip('_') or fallback
+
+
+def sync_image(entry_path, content, image_override=''):
+    if image_override:
+        return image_override
+
+    img_match = re.search(r'!\[.*?\]\((.*?)\)', content)
+    img_path = img_match.group(1) if img_match else ''
+    img_name = os.path.basename(img_path) if img_path else ''
+    if not img_path or not img_name:
+        return ''
+
+    full_img_src = (entry_path.parent / img_path).resolve()
+    if not full_img_src.exists():
+        print(f'  Warning: Image not found at {full_img_src}')
+        return img_name
+
+    DOC_IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+    webp_name = f'{Path(img_name).stem}.webp'
+    if (DOC_IMAGES_DIR / webp_name).exists():
+        return webp_name
+    target_path = DOC_IMAGES_DIR / img_name
+    if not target_path.exists() or full_img_src.stat().st_mtime > target_path.stat().st_mtime:
+        print(f'  Copying image: {img_name}')
+        shutil.copy2(full_img_src, target_path)
+    return img_name
+
+
+def build_index_entry(entry_id, entry_path, entry_type, overrides=None):
+    overrides = overrides or {}
+    content = entry_path.read_text(encoding='utf-8')
+    image_name = sync_image(entry_path, content, overrides.get('image', ''))
+    public_filename = f'{entry_id}.md'
+    public_path = PUBLIC_MD_DIR / public_filename
+    public_path.parent.mkdir(parents=True, exist_ok=True)
+    public_path.write_text(content, encoding='utf-8')
 
     return {
-        "title": title,
-        "alias": alias,
-        "image": img_name,
-        "intro": intro,
-        "sections": sections,
-        "type": type
+        'title': overrides.get('title') or detect_title(content, entry_id),
+        'alias': overrides.get('alias') or detect_alias(content),
+        'image': image_name,
+        'intro': extract_intro(content),
+        'type': entry_type,
+        'source': f'content/profiles/{public_filename}',
     }
 
+
+def iter_auto_entries():
+    if CHARACTER_DIR.exists():
+        for path in sorted(CHARACTER_DIR.glob('*.md')):
+            yield {
+                'id': extract_id(path.name),
+                'type': 'character',
+                'path': path,
+            }
+
+    if ITEM_DIR.exists():
+        for path in sorted(ITEM_DIR.glob('*.md')):
+            yield {
+                'id': extract_id(path.name),
+                'type': 'item',
+                'path': path,
+            }
+
+
 def sync():
-    if not os.path.exists(DATA_DIR):
-        os.makedirs(DATA_DIR)
-    if not os.path.exists(DOC_IMAGES_DIR):
-        os.makedirs(DOC_IMAGES_DIR)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    PUBLIC_MD_DIR.mkdir(parents=True, exist_ok=True)
 
     all_data = {}
 
-    # Process Characters
-    if os.path.exists(CHARACTER_DIR):
-        for f in sorted(os.listdir(CHARACTER_DIR)):
-            if f.endswith('.md'):
-                char_id = extract_id(f)
-                print(f"Processing character: {f} -> {char_id}")
-                all_data[char_id] = parse_profile(os.path.join(CHARACTER_DIR, f), type='character')
+    for entry in list(iter_auto_entries()) + MANUAL_ENTRIES:
+        entry_id = entry['id']
+        entry_path = Path(entry['path'])
+        print(f'Processing profile: {entry_path.relative_to(ROOT)} -> {entry_id}')
+        all_data[entry_id] = build_index_entry(
+            entry_id=entry_id,
+            entry_path=entry_path,
+            entry_type=entry['type'],
+            overrides=entry,
+        )
 
-    # Process Items
-    if os.path.exists(ITEM_DIR):
-        for f in sorted(os.listdir(ITEM_DIR)):
-            if f.endswith('.md'):
-                item_id = extract_id(f)
-                print(f"Processing item: {f} -> {item_id}")
-                all_data[item_id] = parse_profile(os.path.join(ITEM_DIR, f), type='item')
+    with JSON_FILE.open('w', encoding='utf-8') as file_obj:
+        json.dump(all_data, file_obj, ensure_ascii=False, indent=2)
 
-    # Save to JSON
-    with open(JSON_FILE, 'w', encoding='utf-8') as f:
-        json.dump(all_data, f, ensure_ascii=False, indent=2)
+    print(f'Successfully synced {len(all_data)} entries to {JSON_FILE.relative_to(ROOT)}')
 
-    print(f"Successfully synced {len(all_data)} entries to {JSON_FILE}")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sync()

@@ -171,6 +171,38 @@
       box-shadow: 0 0 10px var(--accent-gold);
     }
 
+    .md-table-wrap {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .md-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+
+    .md-table th,
+    .md-table td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--border-glass);
+    }
+
+    .md-table th {
+      color: var(--accent-gold);
+      font-weight: 700;
+      background: rgba(200, 168, 110, 0.06);
+    }
+
+    .md-table tr:last-child td {
+      border-bottom: none;
+    }
+
     /* Back Button */
     .back-btn {
       position: fixed;

@@ -20,7 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 make publish       # 将正文 Markdown 发布到网站 JSON（章节定稿后必须执行）
-make sync-chars    # 同步角色设定到网站 characters.json
+make sync-chars    # 同步角色轻索引到网站，并公开 Markdown 档案
 make check         # 扫描正文与设定库的逻辑冲突
 make report        # 生成设定库简要报告
 make all           # publish + sync-chars
@@ -40,7 +40,7 @@ make all           # publish + sync-chars
 | `写手/` | 写手角色人设（司马迁/刘慈欣/曹雪芹） |
 | `智囊团/` | 领域专家角色（历史学家/物理学家/化学家/地缘战略专家） |
 | `参考资料/` | 历史文献、科学论文、宏观背景资料（只读引用，不修改） |
-| `docs/` | GitHub Pages 静态网站（HTML/CSS/JS + JSON 数据） |
+| `docs/` | GitHub Pages / Vercel 静态网站（HTML/CSS/JS + 公开内容文件） |
 | `交付/` | 最终发布文件 |
 | `.agents/skills/` | Skill 定义及自动化脚本 |
 
@@ -79,7 +79,7 @@ make all           # publish + sync-chars
 纯静态站点，无构建步骤，直接部署 GitHub Pages。
 
 - 章节内容：`docs/chapters/chapter-N.json`，由 `reader.js` 通过 `fetch()` 加载
-- 角色数据：`docs/data/characters.json`，由 `character-detail.js` 读取
+- 角色索引：`docs/data/characters.json`，列表页读取；中文详情页再直读 `docs/content/profiles/*.md`
 - 设计主题：深色 `#0a0b0f` + 古金色 `#c8a86e`；正文 `Noto Serif SC`，界面 `Inter`
 
 ---
