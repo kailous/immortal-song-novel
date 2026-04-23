@@ -10,7 +10,10 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[4]
 DOCS = ROOT / "docs"
 MAX_IMAGE_KB = 512
-ALLOWED_EXTERNAL = {"https://cusdis.com"}
+ALLOWED_EXTERNAL = {
+    "https://cusdis.com",
+    "https://kailous.github.io/immortal-song-novel/",
+}
 
 
 def fail(message):
