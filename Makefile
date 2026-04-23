@@ -23,7 +23,7 @@ sync-chapters:
 check:
 	python3 .agents/skills/novel_creator/scripts/context_manager.py --check
 
-## 生成设定库简要报告
+## 生成设定资料简要报告
 report:
 	python3 .agents/skills/novel_creator/scripts/context_manager.py --summary
 
@@ -44,10 +44,10 @@ all: publish sync-chars
 
 help:
 	@echo ""
-	@echo "  make publish      同步正文到 docs/content/chapters 与章节索引"
-	@echo "  make sync-chars   同步角色设定到网站"
-	@echo "  make check        扫描设定冲突"
-	@echo "  make report       生成设定库报告"
+	@echo "  make publish      规范化公开章节 Markdown 并重建章节索引"
+	@echo "  make sync-chars   基于公开图鉴 Markdown 重建角色索引"
+	@echo "  make check        检查设定资料结构完整性"
+	@echo "  make report       生成设定资料报告"
 	@echo "  make audit        发布前站点审计"
 	@echo "  make optimize-assets 压缩图片并更新发布引用"
 	@echo "  make sync-head    同步公共 head 元信息"

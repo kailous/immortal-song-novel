@@ -94,4 +94,4 @@ Maldacena-Susskind 认为，早期Hawking辐射粒子（已逃逸）与其纠缠
 
 - [Einstein-Rosen 1935](./PAPER_The_Particle_Problem_Einstein_Rosen_1935.md)：ER 桥的原始数学框架
 - [Hawking 1974](./PAPER_Black_hole_explosions_Hawking_1974.md)：黑洞辐射与信息守恒问题的起源
-- [硬科幻理论_空间虫洞与相对论.md](../../参考资料/硬科幻理论_空间虫洞与相对论.md)：穿越设定汇总
+- [硬科幻理论_空间虫洞与相对论.md](../../资料/03_研究/硬科幻理论_空间虫洞与相对论.md)：穿越设定汇总

@@ -23,9 +23,9 @@ def main():
     parser = argparse.ArgumentParser(description="Novel Context Manager")
     parser.add_argument('--summary', action='store_true', help="Show settings summary")
     parser.add_argument('--check', action='store_true', help="Run consistency check")
-    parser.add_argument('--dir', default=os.path.join(PROJECT_ROOT, '设定库'), help="Settings directory")
-    parser.add_argument('--think-tank', default=os.path.join(PROJECT_ROOT, '智囊团'), help="Think Tank directory")
-    parser.add_argument('--writers', default=os.path.join(PROJECT_ROOT, '写手'), help="Writers directory")
+    parser.add_argument('--dir', default=os.path.join(PROJECT_ROOT, '创作', '02_设定'), help="Settings directory")
+    parser.add_argument('--think-tank', default=os.path.join(PROJECT_ROOT, '创作', '03_团队', '智囊团'), help="Think Tank directory")
+    parser.add_argument('--writers', default=os.path.join(PROJECT_ROOT, '创作', '03_团队', '写手'), help="Writers directory")
 
     args = parser.parse_args()
 
