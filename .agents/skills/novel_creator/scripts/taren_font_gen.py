@@ -264,27 +264,57 @@ def build_font(output_dir: str):
     fb2.setupGlyf(glyphs_data)
     fb2.setupHorizontalMetrics(metrics)
     fb2.setupHorizontalHeader(ascent=ASCENDER, descent=DESCENDER)
+
+    # 完整 name 表（满足 sfnt 安装要求）
     fb2.setupNameTable({
-        "familyName": "Taren",
-        "styleName":  "Regular",
+        "familyName":           "Taren",
+        "styleName":            "Regular",
+        "uniqueFontIdentifier": "Taren-Regular;1.0;2026",
+        "fullName":             "Taren Regular",
+        "version":              "Version 1.0",
+        "psName":               "Taren-Regular",
+        "copyright":            "Copyright 2026 kailous. Velkor Script Phase 1.",
+        "trademark":            "",
     })
-    fb2.setupOS2(sTypoAscender=ASCENDER, sTypoDescender=DESCENDER,
-                 usWinAscent=ASCENDER, usWinDescent=abs(DESCENDER),
-                 fsType=0)
-    fb2.setupPost()
-    fb2.setupHead(unitsPerEm=EM)
+
+    # 完整 OS/2 表
+    fb2.setupOS2(
+        sTypoAscender=ASCENDER,
+        sTypoDescender=DESCENDER,
+        sTypoLineGap=0,
+        usWinAscent=ASCENDER,
+        usWinDescent=abs(DESCENDER),
+        sxHeight=500,
+        sCapHeight=700,
+        usWeightClass=400,       # Regular
+        usWidthClass=5,          # Medium / Normal
+        fsType=0,                # 可自由嵌入
+        fsSelection=0x40,        # bit 6 = REGULAR
+        ulUnicodeRange1=0,
+        ulUnicodeRange2=0,
+        ulUnicodeRange3=0,
+        ulUnicodeRange4=0,
+        achVendID="KAIL",
+    )
+
+    # post 表：version 2.0 兼容性最好
+    fb2.setupPost(keepGlyphNames=True)
+
+    # head 表
+    fb2.setupHead(unitsPerEm=EM, macStyle=0)
 
     os.makedirs(output_dir, exist_ok=True)
-    otf_path  = os.path.join(output_dir, "taren.otf")
+    # TTF 格式用 .ttf 扩展名，避免 macOS 混淆 OTF/CFF
+    ttf_path   = os.path.join(output_dir, "taren.ttf")
     woff2_path = os.path.join(output_dir, "taren.woff2")
 
-    fb2.font.save(otf_path)
-    print(f"[OK] 已生成 {otf_path}  ({len(glyph_order)-1} 字形)")
+    fb2.font.save(ttf_path)
+    print(f"[OK] 已生成 {ttf_path}  ({len(glyph_order)-1} 字形)")
 
-    compress(otf_path, woff2_path)
+    compress(ttf_path, woff2_path)
     print(f"[OK] 已生成 {woff2_path}")
 
-    return otf_path, woff2_path
+    return ttf_path, woff2_path
 
 if __name__ == "__main__":
     import sys
