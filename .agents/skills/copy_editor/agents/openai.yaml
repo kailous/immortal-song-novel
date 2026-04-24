@@ -1,0 +1,4 @@
+interface:
+  display_name: "Copy Editor"
+  short_description: "检查错别字病句并在确认后做精确脚本替换"
+  default_prompt: "Use $copy_editor to review a text file, list numbered issues first, and only apply confirmed replacements afterward."
