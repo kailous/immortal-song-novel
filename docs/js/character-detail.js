@@ -46,9 +46,17 @@
     return '';
   }
 
-  function safeImageName(value) {
-    const name = String(value || '').split(/[\\/]/).pop();
-    return /^[\w.\-\u4e00-\u9fa5]+\.(png|jpe?g|webp|gif|svg)$/i.test(name) ? name : '';
+  function safeImagePath(value) {
+    const path = String(value || '').replace(/^\/+/, '').replace(/\\/g, '/');
+    return /^(?:[\w\-\u4e00-\u9fa5]+\/)*[\w.\-\u4e00-\u9fa5]+\.(png|jpe?g|webp|gif|svg)$/i.test(path) ? path : '';
+  }
+
+  function encodeAssetPath(path) {
+    return String(path || '')
+      .split('/')
+      .filter(Boolean)
+      .map(encodeURIComponent)
+      .join('/');
   }
 
   // ── 初始化 ──────────────────────────────────────────────
@@ -221,12 +229,13 @@
     titleEl.textContent = item.title;
     aliasEl.textContent = item.alias;
 
-    const imageName = safeImageName(item.image);
-    if (imageName) {
-      imgEl.src = `images/${encodeURIComponent(imageName)}`;
+    const imagePath = safeImagePath(item.image);
+    if (imagePath) {
+      const encodedImagePath = encodeAssetPath(imagePath);
+      imgEl.src = `images/${encodedImagePath}`;
       imgEl.alt = item.title;
       const heroBg = document.getElementById('hero-bg');
-      heroBg.style.backgroundImage    = `url("images/${encodeURIComponent(imageName)}")`;
+      heroBg.style.backgroundImage    = `url("images/${encodedImagePath}")`;
       heroBg.style.backgroundSize     = 'cover';
       heroBg.style.backgroundPosition = 'center';
     }
@@ -306,7 +315,12 @@
     }
 
     const imageMatch = source.match(/!\[.*?\]\((.*?)\)/);
-    const imageName = meta && meta.image ? meta.image : safeImageName(imageMatch ? imageMatch[1] : '');
+    let imagePath = meta && meta.image ? meta.image : '';
+    if (!imagePath && imageMatch) {
+      const rawImage = imageMatch[1].trim();
+      imagePath = rawImage.includes('images/') ? rawImage.split('images/', 1)[1] : rawImage;
+    }
+    imagePath = safeImagePath(imagePath);
 
     const aliasPattern = lang === 'en'
       ? /^\*\s+\*\*(?:Alias|Name|Title|Type)\*\*[:：]\s*(.*?)(?:\*\*)?\s*$/m
@@ -332,7 +346,7 @@
     return {
       title: title || '',
       alias: alias || '',
-      image: imageName || '',
+      image: imagePath || '',
       intro: intro || '',
       sections,
       type: meta && meta.type ? meta.type : 'character',

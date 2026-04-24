@@ -1,6 +1,6 @@
 # Lu Xiaoxiao
 
-![Lu Xiaoxiao](../../../images/陆晓晓.webp)
+![Lu Xiaoxiao](../../../images/characters/陆晓晓.webp)
 
 *   **Alias**：**Merchant's Lost Pearl · Village Widow · Soul of Industrial Logistics**
 

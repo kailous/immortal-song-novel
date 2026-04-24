@@ -1,6 +1,6 @@
 # Zhang Xian
 
-![Zhang Xian](../../../images/张宪.webp)
+![Zhang Xian](../../../images/characters/张宪.webp)
 
 *   **Alias**：**Yue Family Army Deputy Commander · First General · Lu Chen's Military Mentor**
 

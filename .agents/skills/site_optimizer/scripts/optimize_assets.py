@@ -10,7 +10,7 @@ DOCS = ROOT / "docs"
 IMAGES = DOCS / "images"
 MIN_SOURCE_KB = 256
 QUALITY = "82"
-KEEP_ORIGINALS = {"og-cover.jpg"}
+KEEP_ORIGINALS = {"branding/og-cover.jpg"}
 TEXT_FILE_EXTENSIONS = {".html", ".json", ".md", ".css", ".js", ".txt", ".xml", ".webmanifest"}
 
 
@@ -64,15 +64,18 @@ def main():
     mapping = {}
     converted = []
     deleted = []
-    for path in sorted(IMAGES.glob("*")):
+    for path in sorted(IMAGES.rglob("*")):
+        if not path.is_file():
+            continue
         if path.suffix.lower() not in {".png", ".jpg", ".jpeg"}:
             continue
-        if path.name in KEEP_ORIGINALS:
+        relative_name = str(path.relative_to(IMAGES)).replace("\\", "/")
+        if relative_name in KEEP_ORIGINALS:
             continue
         if path.stat().st_size < MIN_SOURCE_KB * 1024:
             continue
         target, did_convert = convert_image(cwebp, path)
-        mapping[path.name] = target.name
+        mapping[relative_name] = str(target.relative_to(IMAGES)).replace("\\", "/")
         if did_convert:
             converted.append(target)
 

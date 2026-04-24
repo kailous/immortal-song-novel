@@ -1,6 +1,6 @@
 # The Taren
 
-![The Taren](../../../images/塔伦人.webp)
+![The Taren](../../../images/characters/塔伦人.webp)
 
 *   **Alias**：**Last Colonizers · Iron Desperadoes · Exiles of Gaanan**
 

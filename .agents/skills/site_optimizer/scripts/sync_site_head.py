@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 DOCS = ROOT / "docs"
 SITE_URL = "https://immortal-song.rainforest.org.cn/"
-OG_IMAGE = SITE_URL + "images/og-cover.jpg"
+OG_IMAGE = SITE_URL + "images/branding/og-cover.jpg"
 
 START = "<!-- SITE_META_START -->"
 END = "<!-- SITE_META_END -->"

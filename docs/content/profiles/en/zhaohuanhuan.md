@@ -1,6 +1,6 @@
 # Zhao Huanhuan
 
-![Zhao Huanhuan](../../../images/赵嬛嬛.webp)
+![Zhao Huanhuan](../../../images/characters/赵嬛嬛.webp)
 
 *   **Alias**：**Song Dynasty Imperial Princess · Ladder to the Stolen Throne · Wielder of Imperial Authority**
 

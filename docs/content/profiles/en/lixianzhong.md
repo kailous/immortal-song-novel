@@ -1,6 +1,6 @@
 # Li Xianzhong
 
-![Li Xianzhong](../../../images/李显忠.webp)
+![Li Xianzhong](../../../images/characters/李显忠.webp)
 
 *   **Alias**：**Returned General · Yan'an Li Clan · Lu Chen's Fierce Mirror**
 

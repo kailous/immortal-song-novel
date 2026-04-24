@@ -1,6 +1,6 @@
 # Lu Chen (Lin Mo)
 
-![Lu Chen (Lin Mo)](../../../images/陆辰.webp)
+![Lu Chen (Lin Mo)](../../../images/characters/陆辰.webp)
 
 *   **Alias**：**Sun Mancang → Lin Mo → Lu Chen · Undying Soldier · Civilizational Mentor**
 

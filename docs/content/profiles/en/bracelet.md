@@ -1,6 +1,6 @@
 # Dimensional Bracelet
 
-![Dimensional Bracelet](../../../images/次元手环.webp)
+![Dimensional Bracelet](../../../images/characters/次元手环.webp)
 
 *   **Alias**：**Alien High-Dimensional Folded Space Artifact · Humanity's Last Bet**
 

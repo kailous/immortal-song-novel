@@ -62,7 +62,14 @@ def parse_markdown_profile(content):
     alias = alias_match.group(1).replace("**", "").strip() if alias_match else ""
 
     image_match = re.search(r"!\[.*?\]\((.*?)\)", source)
-    image = Path(image_match.group(1)).name if image_match else ""
+    image = ""
+    if image_match:
+        raw_image = image_match.group(1).strip()
+        marker = "images/"
+        if marker in raw_image:
+            image = raw_image.split(marker, 1)[1]
+        else:
+            image = Path(raw_image).name
 
     intro = head
     intro = re.sub(r"^#.*?\n", "", intro, flags=re.MULTILINE)
