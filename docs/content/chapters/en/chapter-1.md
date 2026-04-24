@@ -46,7 +46,7 @@ A hundred years earlier, scrounging food from wild dogs on the Yellow River flat
 
 None of that mattered now.
 
-![Chapter One · Engine Room Departure Still](images/chapters/chapter-001/scene-engine-room-poster.png "Chapter One · Engine Room Departure")
+![Chapter One · Engine Room Departure Still](images/chapters/chapter-001/scene-engine-room.png "Chapter One · Engine Room Departure")
 
 ## III
 
