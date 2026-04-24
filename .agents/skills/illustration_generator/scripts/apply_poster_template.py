@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_TEMPLATE = ROOT / "资源" / "品牌" / "插图模板.png"
+DEFAULT_TEMPLATE = ROOT / "资源" / "品牌" / "poster-template-overlay.png"
 
 
 def find_magick() -> str:
