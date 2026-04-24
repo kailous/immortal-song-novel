@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prose Collector"
+  short_description: "搜集高质量范文样本，并沉淀到长期可复用的参考资料库"
+  default_prompt: "Use $prose_collector to collect prose examples for a specific scene, tone, or author reference."

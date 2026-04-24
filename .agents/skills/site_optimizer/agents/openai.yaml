@@ -1,0 +1,4 @@
+interface:
+  display_name: "Site Optimizer"
+  short_description: "维护静态站点发布质量，统一处理资源压缩、元信息与审计流程"
+  default_prompt: "Use $site_optimizer to audit, optimize, and prepare the static site for release."

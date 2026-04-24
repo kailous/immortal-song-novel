@@ -1,0 +1,4 @@
+interface:
+  display_name: "Docs UI Optimizer"
+  short_description: "维护 docs 站点前端与 Markdown 同步链路"
+  default_prompt: "Use $docs_ui_optimizer to update the docs site UI, Markdown renderers, or content sync scripts."

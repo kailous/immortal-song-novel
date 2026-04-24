@@ -1,0 +1,4 @@
+interface:
+  display_name: "Novel Creator"
+  short_description: "控制整套小说创作流程，并同步正文、图鉴与词典公开内容"
+  default_prompt: "Use $novel_creator to plan, draft, or sync public-facing novel content with the current workflow."
