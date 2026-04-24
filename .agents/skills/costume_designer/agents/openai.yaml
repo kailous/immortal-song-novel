@@ -1,0 +1,4 @@
+interface:
+  display_name: "Costume Designer"
+  short_description: "为角色生成稳定可复用的服装设定与提示词片段"
+  default_prompt: "Use $costume_designer to create a consistent character outfit spec that can be reused by $illustration_generator."
