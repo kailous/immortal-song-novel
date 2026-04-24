@@ -12,12 +12,14 @@
     {
       "name": "陆晓晓",
       "role": "foreground",
-      "traits": ["十九岁", "瘦削", "坚韧", "寒地求生感"]
+      "traits": ["十九岁", "瘦削", "坚韧", "寒地求生感"],
+      "reference": "docs/content/profiles/zh/luxiaoxiao.md"
     },
     {
       "name": "林默",
       "role": "midground",
-      "traits": ["高壮", "昏迷", "冷硬", "左腕佩戴黑色圆环"]
+      "traits": ["高壮", "昏迷", "冷硬", "左腕佩戴黑色圆环"],
+      "reference": "docs/content/profiles/zh/luchen.md"
     }
   ],
   "moment": "陆晓晓在雪夜山路上艰难背起昏迷的林默",
@@ -35,6 +37,11 @@
     "现代妆容",
     "网红古偶感",
     "过亮蓝色科幻光效"
+  ],
+  "style": "写实电影风格",
+  "review_notes": [
+    "人物外形要尽量贴近角色档案中的公开形象图",
+    "不要把雪夜山路画成唯美古偶海报"
   ]
 }
 ```
