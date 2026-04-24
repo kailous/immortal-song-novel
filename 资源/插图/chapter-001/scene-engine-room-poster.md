@@ -5,7 +5,7 @@
 - 章节：第一章
 - 场景：引擎室送行前
 - 目标成片：16:9 写实电影风格剧照海报
-- 已归档源图：`scene-engine-room-poster.png`
+- 已归档清洁底图：`scene-engine-room-clean.png`
 - 目标发布文件名：`scene-engine-room.webp`
 
 ## 画面 brief
@@ -39,7 +39,7 @@
 - 不得画成机甲英雄海报或赛博霓虹宣传图
 
 ## 备注
-- 当前仓库中已保存归档源图：`资源/插图/chapter-001/scene-engine-room-poster.png`
+- 当前仓库中已保存归档清洁底图：`资源/插图/chapter-001/scene-engine-room-clean.png`
 - 若要作为站点发布素材，导出文件应保存到：
   - `docs/images/chapters/chapter-001/scene-engine-room.webp`
 - 若保留源图或多版本，可存到：
