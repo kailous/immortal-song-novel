@@ -5,7 +5,8 @@
 - 章节：第一章
 - 场景：引擎室送行前
 - 目标成片：16:9 写实电影风格剧照海报
-- 目标文件名：`scene-engine-room.webp`
+- 已归档源图：`scene-engine-room-poster.png`
+- 目标发布文件名：`scene-engine-room.webp`
 
 ## 画面 brief
 - 主体人物：林默
@@ -38,8 +39,8 @@
 - 不得画成机甲英雄海报或赛博霓虹宣传图
 
 ## 备注
-- 当前仓库中没有这张剧照海报的实际导出文件。
-- 正式出图后，发布文件应保存到：
+- 当前仓库中已保存归档源图：`资源/插图/chapter-001/scene-engine-room-poster.png`
+- 若要作为站点发布素材，导出文件应保存到：
   - `docs/images/chapters/chapter-001/scene-engine-room.webp`
 - 若保留源图或多版本，可存到：
   - `资源/插图/chapter-001/`

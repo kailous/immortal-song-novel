@@ -47,6 +47,6 @@
 `no cyberpunk neon, no mech armor plates, no glowing trims, no latex fetish look, no cape, no ceremonial epaulettes, no idol styling, no fashion runway design`
 
 ## 备注
-- 当前仓库中还没有这张服装设定图的导出文件；后续正式出图时，建议保存到：
-  - `资源/服装设定/林默/`
+- 当前服装设定图已归档：`资源/服装设定/林默/chapter-001-engine-room-uniform-sheet.png`
+- 若后续导出发布版章节素材，建议同步保存到：
   - `docs/images/chapters/chapter-001/`
