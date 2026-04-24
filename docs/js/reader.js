@@ -51,6 +51,33 @@
     return '';
   }
 
+  function safeImageSrc(rawUrl) {
+    var value = String(rawUrl || '').trim();
+    if (!value || /[\u0000-\u001f\u007f]/.test(value)) return '';
+    try {
+      var url = new URL(value, window.location.href);
+      if (url.origin !== window.location.origin) return '';
+      if (/^(?:https?:)?\/\//.test(value) && url.origin !== window.location.origin) return '';
+      if (!/^([./]|images\/)/.test(value) && url.origin === window.location.origin) {
+        return '';
+      }
+      return url.href;
+    } catch (e) {}
+    return '';
+  }
+
+  function parseStandaloneImage(markdown) {
+    var match = String(markdown || '').trim().match(/^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)$/);
+    if (!match) return null;
+    var src = safeImageSrc(match[2]);
+    if (!src) return null;
+    return {
+      alt: match[1] || '',
+      src: src,
+      caption: match[3] || match[1] || ''
+    };
+  }
+
   function fmtDate(iso) {
     var d = new Date(iso);
     return d.getFullYear() + '.' +
@@ -378,6 +405,16 @@
         // 但段落里如果残留 --- 也兜底处理）
         if (trimmed === '---') {
           html += '<hr class="section-hr">';
+          return;
+        }
+        var standaloneImage = parseStandaloneImage(trimmed);
+        if (standaloneImage) {
+          html += '<figure class="reader-figure">' +
+            '<img src="' + escHtml(standaloneImage.src) + '" alt="' + escHtml(standaloneImage.alt) + '" loading="lazy">' +
+            (standaloneImage.caption
+              ? '<figcaption>' + escHtml(standaloneImage.caption) + '</figcaption>'
+              : '') +
+          '</figure>';
           return;
         }
         var processed = renderInline(escapeHtml(p));

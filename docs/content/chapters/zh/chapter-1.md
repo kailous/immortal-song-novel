@@ -54,6 +54,8 @@
 再往前数个一百年，在中原黄河滩上跟野狗抢食的时候，他叫孙满仓。
 现在都不重要了。
 
+![第一章 · 引擎室送行前剧照](images/chapters/chapter-001/scene-engine-room-poster.png "第一章 · 引擎室送行前")
+
 ---
 
 ## 三
