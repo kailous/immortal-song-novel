@@ -1,7 +1,7 @@
 # 长生不死 · 小说工程 Makefile
 # 用法: make <target>
 
-.PHONY: publish sync-chars sync-glossary sync-chapters check report audit optimize-assets sync-head help
+.PHONY: publish sync-chars sync-glossary sync-chapters check report audit optimize-assets sync-head compose-poster help
 
 ## 规范化公开章节 Markdown 并重建章节索引（章节定稿后必须执行）
 publish:
@@ -43,6 +43,10 @@ optimize-assets:
 sync-head:
 	python3 .agents/skills/site_optimizer/scripts/sync_site_head.py
 
+## 用透明插图模板合成统一版式，需传入 SRC=... OUT=...
+compose-poster:
+	python3 .agents/skills/illustration_generator/scripts/apply_poster_template.py "$(SRC)" "$(OUT)"
+
 ## 一键完整发布（同步章节 + 同步角色）
 all: publish sync-chars sync-glossary
 
@@ -56,5 +60,6 @@ help:
 	@echo "  make audit        发布前站点审计"
 	@echo "  make optimize-assets 压缩图片并更新发布引用"
 	@echo "  make sync-head    同步公共 head 元信息"
+	@echo "  make compose-poster SRC=... OUT=... 叠加透明插图模板"
 	@echo "  make all          publish + sync-chars"
 	@echo ""
