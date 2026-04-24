@@ -296,6 +296,20 @@ img {
   background-clip: text;
 }
 
+.hero-logo-wrap {
+  width: min(100%, 980px);
+  margin: 0 auto 1rem;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s var(--ease-out) 0.6s forwards;
+}
+
+.hero-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .hero-tagline {
   font-family: var(--font-serif);
   font-size: 1rem;
