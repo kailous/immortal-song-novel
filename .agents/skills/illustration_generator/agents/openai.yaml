@@ -1,0 +1,4 @@
+interface:
+  display_name: "Illustration Generator"
+  short_description: "为长生不死生成 16:9 电影感插图 brief 与提示词"
+  default_prompt: "Use $illustration_generator to turn a chapter scene into a 16:9 cinematic illustration brief and prompt."
