@@ -216,6 +216,8 @@ She looked again.
 
 Then snapped her eyes shut. Working entirely by feel, she maneuvered the half-jacket toward his waist and hips. Her wrist slipped into empty air, and her fingertips grazed something cold-hard as cast iron yet threaded through with an unsettling warmth. She yanked her hand back as if burned. Xiaoxiao clenched her back teeth, shut her eyes, fingers trembling uncontrollably, and through the oily sheepskin, blindly worked that troublesome stretch of him into some semblance of order and covered it properly.
 
+![Chapter One · The Moment Lu Xiaoxiao Covers Lin Mo with the Sheepskin](images/chapters/chapter-001/scene-xiaoxiao-covering-linmo.png "Chapter One · Lu Xiaoxiao Covers Lin Mo")
+
 The jacket was finally on. She sank down beside the murky red mud, her pulse hammering so loud it filled both ears, heart taking a long while to settle. Nothing to it, she told herself, swallowing mouthfuls of ice-cold mountain air that tasted of blood. He's just a person. What's the matter with that? But then she found, with a bleak dismay, that her fingertips still carried the exact grain of that skin — its cold smoothness, its faint roughness — and the weight of the man's slow, faint breathing had already been pressed, without her permission, into the center of her palm, in the dark.
 
 The mountain chicken eggs in the basket — left behind. The mulberry pole she kept for self-defense — abandoned.
