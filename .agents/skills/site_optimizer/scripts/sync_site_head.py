@@ -7,6 +7,8 @@ ROOT = Path(__file__).resolve().parents[4]
 DOCS = ROOT / "docs"
 SITE_URL = "https://immortal-song.rainforest.org.cn/"
 OG_IMAGE = SITE_URL + "images/branding/og-cover.jpg"
+VERCEL_ANALYTICS_ENABLED = True
+VERCEL_ANALYTICS_SCRIPT_SRC = "/_vercel/insights/script.js"
 
 START = "<!-- SITE_META_START -->"
 END = "<!-- SITE_META_END -->"
@@ -111,8 +113,15 @@ def build_block(filename, page):
         f'  <meta name="twitter:description" content="{attr(page["og_description"])}">',
         f'  <meta name="twitter:image" content="{OG_IMAGE}">',
         '  <meta name="twitter:image:alt" content="长生不死的我，在南宋点歪了科技树 分享封面">',
-        "  " + END,
     ]
+    if VERCEL_ANALYTICS_ENABLED:
+        lines.extend([
+            "  <script>",
+            "    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };",
+            "  </script>",
+            f'  <script defer src="{attr(VERCEL_ANALYTICS_SCRIPT_SRC)}"></script>',
+        ])
+    lines.append("  " + END)
     return "\n".join(lines)
 
 
