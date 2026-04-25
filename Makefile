@@ -1,7 +1,7 @@
 # 长生不死 · 小说工程 Makefile
 # 用法: make <target>
 
-.PHONY: publish sync-chars sync-glossary sync-chapters check report audit optimize-assets sync-head compose-poster sync-posters help
+.PHONY: publish sync-chars sync-glossary sync-chapters check report audit optimize-assets sync-head compose-poster sync-posters export-social-covers help
 
 ## 规范化公开章节 Markdown 并重建章节索引（章节定稿后必须执行）
 publish:
@@ -51,6 +51,10 @@ compose-poster:
 sync-posters:
 	python3 .agents/skills/illustration_generator/scripts/sync_chapter_posters.py
 
+## 从竖版封面导出抖音与小红书分享尺寸
+export-social-covers:
+	python3 .agents/skills/illustration_generator/scripts/export_social_covers.py
+
 ## 一键完整发布（同步章节 + 同步角色）
 all: publish sync-chars sync-glossary
 
@@ -66,5 +70,6 @@ help:
 	@echo "  make sync-head    同步公共 head 元信息"
 	@echo "  make compose-poster SRC=... OUT=... 叠加透明插图模板"
 	@echo "  make sync-posters 从资源/插图批量生成章节发布海报"
+	@echo "  make export-social-covers 从竖版封面导出抖音与小红书尺寸"
 	@echo "  make all          publish + sync-chars"
 	@echo ""

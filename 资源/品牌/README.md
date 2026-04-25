@@ -19,3 +19,4 @@
 - 平台延展图统一从 `book-cover-portrait-realistic.png` 导出，当前已固定：
   - `社交分享/douyin-share-1080x1920.png`
   - `社交分享/xiaohongshu-share-1242x1660.png`
+- 需要重导时，直接执行 `make export-social-covers`。
