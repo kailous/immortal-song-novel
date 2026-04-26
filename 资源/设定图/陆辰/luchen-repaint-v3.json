@@ -1,0 +1,29 @@
+{
+  "subject": "Lu Chen character concept art",
+  "image_type": "1:1 square character setting portrait, single-character dossier image",
+  "view": "front-facing near-full-body portrait, centered, neutral archive pose",
+  "composition": "1:1 square frame, single character centered, readable face and wrist accessory silhouette, no action scene",
+  "structure": "lean East Asian male, visually around 30, strong jawline, calm dangerous eyes, sinewy build, younger age feeling locked to current public image",
+  "materials": "worn Southern Song rough cloth layers, patched brown and charcoal fabric, frayed hems, realistic coarse fiber texture, left-wrist black seamless dimensional bracelet with dense silver-gray micro-engraved circuit lines",
+  "equipment": "no flashy weapons required, no armor, no modern accessories except the bracelet",
+  "lighting": "controlled neutral low-key lighting, realistic skin depth, enough wrist light to read the bracelet pattern",
+  "background": "minimal dark low-distraction ruined shelter context",
+  "style": "realistic concept art, premium dossier image, 1:1 square pure image only, no text overlays, not a poster",
+  "retain": "current public Lu Chen face, hairstyle, younger age feeling, restrained expression, ragged layered clothing silhouette, left-wrist bracelet",
+  "enhance": "bracelet readability and fidelity to the public dimensional bracelet design, preserve youthfulness, preserve exact character recognition",
+  "avoid": [
+    "older 40s look",
+    "deep age lines",
+    "weathered old-man face",
+    "different face",
+    "right-wrist bracelet",
+    "plain leather cuff",
+    "plain black band",
+    "idol look",
+    "hero poster pose",
+    "anime style",
+    "text labels",
+    "ui frames",
+    "landscape ratio"
+  ]
+}
