@@ -1,0 +1,4 @@
+interface:
+  display_name: "Setting Art Generator"
+  short_description: "为长生不死生成角色、种族、道具等设定图提示词"
+  default_prompt: "Use $setting_art_generator to create or reverse-engineer a concept art prompt for a setting image."
