@@ -1,0 +1,4 @@
+interface:
+  display_name: "Content Workstation"
+  short_description: "将自然语言目标路由到写作、出图、视频物料与发布工作流"
+  default_prompt: "Use $content_workstation to route my natural-language request to the right project workflow and carry it through to the final files or publish steps."

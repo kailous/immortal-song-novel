@@ -97,6 +97,7 @@
 | Skill | 作用 |
 |---|---|
 | `novel_creator` | 控制小说创作主流程。进入驾驶舱、拆大纲、写正文、同步状态与发布。 |
+| `content_workstation` | 内容工作站总控 skill，负责把自然语言目标路由到写作、出图、视频素材和发布链路。 |
 | `copy_editor` | 审校正文、图鉴、词典等 Markdown 文稿。先给问题清单，确认后再精确替换。 |
 | `docs_ui_optimizer` | 维护 `docs/` 站点前端、双语索引、详情页渲染与内容同步脚本。 |
 | `site_optimizer` | 负责发布前质量控制：JSON/JS 校验、图片优化、引用审计、head 同步。 |
@@ -109,6 +110,7 @@
 本地 skills 路径：
 
 - `.agents/skills/novel_creator/`
+- `.agents/skills/content_workstation/`
 - `.agents/skills/copy_editor/`
 - `.agents/skills/docs_ui_optimizer/`
 - `.agents/skills/site_optimizer/`
