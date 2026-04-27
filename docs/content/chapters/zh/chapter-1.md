@@ -54,6 +54,8 @@
 再往前数个一百年，在中原黄河滩上跟野狗抢食的时候，他叫孙满仓。
 现在都不重要了。
 
+![第一章 · 次元手环特写分享图](images/chapters/chapter-001/scene-bracelet-closeup-share.png "第一章 · 次元手环特写分享图")
+
 ![第一章 · 引擎室送行前剧照](images/chapters/chapter-001/scene-engine-room.png "第一章 · 引擎室送行前")
 
 ---
@@ -95,6 +97,8 @@
 “人类，永存！”
 
 隔着防爆门，林默也缓缓抬起了胳膊，左手叩合右臂，右拳如铁桩般竖在肩侧。两人无言对视，隔着那扇门，各自死死撑住自己的重心。
+
+![第一章 · 女军官军礼分享图](images/chapters/chapter-001/scene-humanity-salute-share.png "第一章 · 女军官军礼分享图")
 
 轰。
 
@@ -139,6 +143,8 @@
 
 一枚不起眼的黑色臂环，裹着最后一簇还微弱搏动、形若芥子的血肉屑，被爆炸的余波从时空的疮疤里挤了出去，直直坠入那绵延不绝的历史黑夜里。
 
+![第一章 · 时间通道撕裂分享图](images/chapters/chapter-001/scene-time-rift-share.png "第一章 · 时间通道撕裂分享图")
+
 ---
 
 ## 五
@@ -151,6 +157,8 @@
 
 静得出奇。
 半空中忽地传来极轻的一声。
+
+![第一章 · 南宋雪夜发现分享图](images/chapters/chapter-001/scene-southern-song-discovery-share.png "第一章 · 南宋雪夜发现分享图")
 
 “砰。”
 
@@ -225,6 +233,8 @@
 一下。
 复一下。
 沉闷地、毫不留情地，深深砸在她单薄的后腰上。
+
+![第一章 · 封面式收束分享图](images/chapters/chapter-001/scene-cover-final-share.png "第一章 · 封面式收束分享图")
 
 ---
 

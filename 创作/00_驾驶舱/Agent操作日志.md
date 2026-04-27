@@ -92,5 +92,15 @@
 - 产物：更详尽的日志模板与明确的上下文读取边界。
 - 命令/流程：调整日志格式 -> 更新仓库规则 -> 更新创作 skill 入口约束 -> 提交。
 - 结果：日志更适合事后复盘，同时不会干扰日常上下文收集。
-- 提交：待提交
+- 提交：`e3e2bfb`
 - 备注：后续只在需要追溯动作链时读取本文件。
+
+## 2026-04-27 02:02
+- 任务：将预告片水印分享图同步进章节插图链路，并插入正文。
+- 动作：把 `资源/社交分享/预告片/分镜头/分享/01-06.png` 同步到 `资源/插图/chapter-001/` 与 `docs/images/chapters/chapter-001/`；在 `docs/content/chapters/zh/chapter-1.md` 中补入 5 个合适落点。
+- 影响范围：`资源/插图/chapter-001/`、`docs/images/chapters/chapter-001/`、`docs/content/chapters/zh/chapter-1.md`、`docs/data/chapters_zh.json`、`docs/data/chapters_en.json`
+- 产物：第一章新增手环特写、女军官军礼、时间通道撕裂、南宋雪夜发现、封面式收束等水印分享图引用。
+- 命令/流程：复制分享图 -> 插入 Markdown -> `make publish` -> 提交。
+- 结果：分享图已纳入插图链路，并在第一章正文形成多落点展示。
+- 提交：待提交
+- 备注：保留原有两张清洁插图，不做替换。
