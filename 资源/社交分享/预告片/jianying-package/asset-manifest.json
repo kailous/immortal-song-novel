@@ -1,0 +1,133 @@
+{
+  "title": "预告片 v1.0",
+  "aspect_ratio": "9:16",
+  "source_dir": "资源/社交分享/预告片/分镜头",
+  "assets": [
+    {
+      "id": "shot-01-video-main",
+      "shot": "01",
+      "type": "video",
+      "path": "资源/社交分享/预告片/分镜头/01.mp4",
+      "role": "main"
+    },
+    {
+      "id": "shot-01-image-poster",
+      "shot": "01",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/01.png",
+      "role": "poster"
+    },
+    {
+      "id": "shot-02-video-main",
+      "shot": "02",
+      "type": "video",
+      "path": "资源/社交分享/预告片/分镜头/02.mp4",
+      "role": "main"
+    },
+    {
+      "id": "shot-02-image-poster",
+      "shot": "02",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/02.png",
+      "role": "poster"
+    },
+    {
+      "id": "shot-03-video-main",
+      "shot": "03",
+      "type": "video",
+      "path": "资源/社交分享/预告片/分镜头/03.mp4",
+      "role": "main"
+    },
+    {
+      "id": "shot-03-image-poster",
+      "shot": "03",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/03.png",
+      "role": "poster"
+    },
+    {
+      "id": "shot-04-video-main",
+      "shot": "04",
+      "type": "video",
+      "path": "资源/社交分享/预告片/分镜头/04.mp4",
+      "role": "main"
+    },
+    {
+      "id": "shot-04-image-poster",
+      "shot": "04",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/04.png",
+      "role": "poster"
+    },
+    {
+      "id": "shot-05-video-main",
+      "shot": "05",
+      "type": "video",
+      "path": "资源/社交分享/预告片/分镜头/05.mp4",
+      "role": "main"
+    },
+    {
+      "id": "shot-05-image-poster",
+      "shot": "05",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/05.png",
+      "role": "poster"
+    },
+    {
+      "id": "shot-06-video-main",
+      "shot": "06",
+      "type": "video",
+      "path": "资源/社交分享/预告片/分镜头/06.mp4",
+      "role": "main"
+    },
+    {
+      "id": "shot-06-image-poster",
+      "shot": "06",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/06.png",
+      "role": "poster"
+    },
+    {
+      "id": "shot-01-image-share",
+      "shot": "01",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/分享/01.png",
+      "role": "share"
+    },
+    {
+      "id": "shot-02-image-share",
+      "shot": "02",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/分享/02.png",
+      "role": "share"
+    },
+    {
+      "id": "shot-03-image-share",
+      "shot": "03",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/分享/03.png",
+      "role": "share"
+    },
+    {
+      "id": "shot-04-image-share",
+      "shot": "04",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/分享/04.png",
+      "role": "share"
+    },
+    {
+      "id": "shot-05-image-share",
+      "shot": "05",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/分享/05.png",
+      "role": "share"
+    },
+    {
+      "id": "shot-06-image-share",
+      "shot": "06",
+      "type": "image",
+      "path": "资源/社交分享/预告片/分镜头/分享/06.png",
+      "role": "share"
+    }
+  ]
+}

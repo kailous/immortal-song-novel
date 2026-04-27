@@ -1,0 +1,50 @@
+[
+  {
+    "shot": "01",
+    "asset_ref": "shot-01-video-main",
+    "subtitle": "",
+    "voiceover": "",
+    "suggested_duration_sec": null,
+    "notes": ""
+  },
+  {
+    "shot": "02",
+    "asset_ref": "shot-02-video-main",
+    "subtitle": "",
+    "voiceover": "",
+    "suggested_duration_sec": null,
+    "notes": ""
+  },
+  {
+    "shot": "03",
+    "asset_ref": "shot-03-video-main",
+    "subtitle": "",
+    "voiceover": "",
+    "suggested_duration_sec": null,
+    "notes": ""
+  },
+  {
+    "shot": "04",
+    "asset_ref": "shot-04-video-main",
+    "subtitle": "",
+    "voiceover": "",
+    "suggested_duration_sec": null,
+    "notes": ""
+  },
+  {
+    "shot": "05",
+    "asset_ref": "shot-05-video-main",
+    "subtitle": "",
+    "voiceover": "",
+    "suggested_duration_sec": null,
+    "notes": ""
+  },
+  {
+    "shot": "06",
+    "asset_ref": "shot-06-video-main",
+    "subtitle": "",
+    "voiceover": "",
+    "suggested_duration_sec": null,
+    "notes": ""
+  }
+]

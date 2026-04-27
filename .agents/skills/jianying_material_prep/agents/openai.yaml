@@ -1,0 +1,4 @@
+interface:
+  display_name: "Jianying Material Prep"
+  short_description: "整理预告片分镜、字幕和素材为可喂给 jianying-editor 的输入包"
+  default_prompt: "Use $jianying_material_prep to turn existing trailer assets into a jianying-package with manifest, storyboard, subtitles, and voiceover files."

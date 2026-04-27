@@ -102,6 +102,7 @@
 | `site_optimizer` | 负责发布前质量控制：JSON/JS 校验、图片优化、引用审计、head 同步。 |
 | `setting_art_generator` | 生成角色、种族、道具、建筑等 1:1 设定图，或基于旧图反推重绘。 |
 | `illustration_generator` | 生成 16:9 写实电影风格章节插图与宣传图，并审核人物一致性。 |
+| `jianying_material_prep` | 为预告片和短视频整理可喂给剪映自动化的素材包，输出 manifest、storyboard、SRT 和口播文本。 |
 | `costume_designer` | 为角色建立结构化服装设定，输出可复用的服装约束与提示词片段。 |
 | `prose_collector` | 联网搜集高质量小说范文，按写法与用途沉淀到参考资料库。 |
 
@@ -113,6 +114,7 @@
 - `.agents/skills/site_optimizer/`
 - `.agents/skills/setting_art_generator/`
 - `.agents/skills/illustration_generator/`
+- `.agents/skills/jianying_material_prep/`
 - `.agents/skills/costume_designer/`
 - `.agents/skills/prose_collector/`
 
