@@ -234,8 +234,6 @@
 复一下。
 沉闷地、毫不留情地，深深砸在她单薄的后腰上。
 
-![第一章 · 封面式收束分享图](images/chapters/chapter-001/scene-cover-final-share.png "第一章 · 封面式收束分享图")
-
 ---
 
 **（第一章 完）**
