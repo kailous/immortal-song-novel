@@ -112,5 +112,15 @@
 - 产物：第一章保留 4 张分享图，不再使用封面式收束图。
 - 命令/流程：删除引用 -> 删除图片副本 -> `make publish` -> 提交。
 - 结果：`scene-cover-final-share.png` 已退出章节插图链路。
-- 提交：待提交
+- 提交：`449cc58`
 - 备注：其余分享图保持不变。
+
+## 2026-04-27 02:14
+- 任务：修正第一章分享图的图片注释。
+- 动作：把 `scene-engine-room-share`、`scene-humanity-salute-share`、`scene-bracelet-closeup-share` 的注释名改成对应图片内容。
+- 影响范围：`docs/content/chapters/zh/chapter-1.md`
+- 产物：第一章分享图注释与实际图片内容重新对齐。
+- 命令/流程：修改 Markdown 图片注释 -> 提交。
+- 结果：分享图注释不再串图。
+- 提交：待提交
+- 备注：不改插图位置，不改图片文件本身。
