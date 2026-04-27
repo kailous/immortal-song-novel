@@ -16,6 +16,8 @@ The female officer slapped the old man's hand away. Her thin, bony fingers had g
 
 "He is the only one with a chance. We don't know if there are any other timelines out there — but if there is even one where humanity can live with its head held high, we have to fight to open it."
 
+![Chapter One · The Argument Before Departure](images/chapters/chapter-001/01.png "Chapter One · The Argument Before Departure")
+
 Her finger stabbed at the red numbers pulsing at the edge of the screen. Her voice came out like sandpaper crushed underfoot:
 
 "Forty-seven seconds. Tidal force peak, seventy-four thousand G-band. The stable window for the spatial corridor is forty-seven seconds."
@@ -46,7 +48,7 @@ A hundred years earlier, scrounging food from wild dogs on the Yellow River flat
 
 None of that mattered now.
 
-![Chapter One · Engine Room Departure Still](images/chapters/chapter-001/scene-engine-room.png "Chapter One · Engine Room Departure")
+![Chapter One · The Engine Room](images/chapters/chapter-001/02.png "Chapter One · The Engine Room")
 
 ## III
 
@@ -84,6 +86,8 @@ She raised her head, looking directly toward the engine room beyond the blast do
 
 "Humanity — endures!"
 
+![Chapter One · Humanity Endures](images/chapters/chapter-001/03.png "Chapter One · Humanity Endures")
+
 On the other side of the blast door, Lin Mo slowly raised his arm, left hand sealed against his right, right fist rising like a stake beside his shoulder. The two of them stood in silent communion across that door, each holding their own center of gravity in place.
 
 Boom.
@@ -100,9 +104,13 @@ Footsteps thundering in the outer corridor. Countless. Closing in.
 
 "Engine activated."
 
+![Chapter One · The Base Is Breached](images/chapters/chapter-001/04.png "Chapter One · The Base Is Breached")
+
 ## IV
 
 No light. Or rather, light was torn apart.
+
+![Chapter One · The Crossing Begins](images/chapters/chapter-001/05.png "Chapter One · The Crossing Begins")
 
 The bones of space lay exposed, like flayed blood vessels. In the first Planck instant of the corridor's opening, a gravitational differential of seventy-four thousand G shredded Lin Mo's body into molecular fragments.
 
@@ -143,6 +151,8 @@ A strange, absolute stillness.
 Without warning, a faint pop sounded in the air above — as light and hollow as a phantom string of bubbles bursting at the bottom of a glass vessel.
 
 A thud.
+
+![Chapter One · Lu Xiaoxiao Drapes the Sheepskin Coat Over Lin Mo](images/chapters/chapter-001/06.png "Chapter One · Lu Xiaoxiao Drapes the Sheepskin Coat Over Lin Mo")
 
 A heavy, muffled impact — something had snapped several rotted branches clean off and embedded itself straight down into a heap of damp, cold dead leaves that had lain undisturbed for years.
 
@@ -215,8 +225,6 @@ She stripped the ragged sheepskin jacket from her own body — it still held a f
 She looked again.
 
 Then snapped her eyes shut. Working entirely by feel, she maneuvered the half-jacket toward his waist and hips. Her wrist slipped into empty air, and her fingertips grazed something cold-hard as cast iron yet threaded through with an unsettling warmth. She yanked her hand back as if burned. Xiaoxiao clenched her back teeth, shut her eyes, fingers trembling uncontrollably, and through the oily sheepskin, blindly worked that troublesome stretch of him into some semblance of order and covered it properly.
-
-![Chapter One · The Moment Lu Xiaoxiao Covers Lin Mo with the Sheepskin](images/chapters/chapter-001/scene-xiaoxiao-covering-linmo.png "Chapter One · Lu Xiaoxiao Covers Lin Mo")
 
 The jacket was finally on. She sank down beside the murky red mud, her pulse hammering so loud it filled both ears, heart taking a long while to settle. Nothing to it, she told herself, swallowing mouthfuls of ice-cold mountain air that tasted of blood. He's just a person. What's the matter with that? But then she found, with a bleak dismay, that her fingertips still carried the exact grain of that skin — its cold smoothness, its faint roughness — and the weight of the man's slow, faint breathing had already been pressed, without her permission, into the center of her palm, in the dark.
 
